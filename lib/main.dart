@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/router.dart';
 import 'package:provider/provider.dart';
 import 'core/managers/alert_manager.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
-        title: 'Online China',
+        title: APP_NAME,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           backgroundColor: Colors.transparent,

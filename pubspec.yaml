@@ -32,6 +32,8 @@ dependencies:
   get: ^2.11.3
   rflutter_alert: ^1.0.3
   flushbar: ^1.10.4
+  flutter_secure_storage: ^3.3.1+1
+  http: ^0.12.1
 
 
 
