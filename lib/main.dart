@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/router.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'core/managers/alert_manager.dart';
 import 'core/managers/dialog_manager.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           backgroundColor: Colors.transparent,
-          primaryColor: Color(0xff2ECC71),
+          primaryColor: primaryColor,
           accentColor: Color(0xff2ECC71),
           hintColor: Color(0xff707070),
         ),
