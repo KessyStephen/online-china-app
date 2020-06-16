@@ -101,7 +101,7 @@ class HomeTabView extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             return CategoryGridItem(
                               title: "Sports",
-                              imageUrl: "",
+                              imageUrl: "https://onlinechina.co/logo.png",
                             );
                           }),
                     ),
@@ -117,7 +117,7 @@ class HomeTabView extends StatelessWidget {
                             return ProductGridItem(
                               title: "Go-Pro Full set with 23 Macro lenses",
                               price: "TZS 750,000",
-                              imageUrl: "",
+                              imageUrl: "https://onlinechina.co/logo.png",
                             );
                           }),
                     ),
@@ -133,7 +133,7 @@ class HomeTabView extends StatelessWidget {
                             return ProductGridItem(
                               title: "Go-Pro Full set with 23 Macro lenses",
                               price: "TZS 750,000",
-                              imageUrl: "",
+                              imageUrl: "https://onlinechina.co/logo.png",
                             );
                           }),
                     )

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProductGridItem extends StatelessWidget {
@@ -5,7 +6,7 @@ class ProductGridItem extends StatelessWidget {
   final String price;
   final String imageUrl;
   final Function onPressed;
-  
+
   const ProductGridItem(
       {Key key, this.title, this.price, this.imageUrl, this.onPressed})
       : super(key: key);
@@ -16,7 +17,7 @@ class ProductGridItem extends StatelessWidget {
       onTap: this.onPressed,
       child: Container(
         width: 150,
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,22 +25,22 @@ class ProductGridItem extends StatelessWidget {
             Container(
               height: 150,
               width: 150,
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black54, width: 1.0)),
-              child: Image.asset(
-                "assets/images/logo.png",
-                fit: BoxFit.fill,
+              child: CachedNetworkImage(
+                imageUrl: this.imageUrl,
+                fit: BoxFit.contain,
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.symmetric(vertical: 6),
               child: Text(this.title, style: TextStyle(fontSize: 14)),
             ),
             Text(
               this.price,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             )
           ],
         ),

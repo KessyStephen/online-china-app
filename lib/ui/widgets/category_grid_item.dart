@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CategoryGridItem extends StatelessWidget {
@@ -14,7 +15,7 @@ class CategoryGridItem extends StatelessWidget {
       onTap: this.onPressed,
       child: Container(
         width: 64,
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,12 +27,12 @@ class CategoryGridItem extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black54, width: 1.0)),
-              child: Image.asset(
-                "assets/images/logo.png",
+              child: CachedNetworkImage(
+                imageUrl: this.imageUrl,
                 fit: BoxFit.contain,
               ),
             ),
-            Text(this.title, style: TextStyle(fontSize: 14)),
+            Text(this.title, style: const TextStyle(fontSize: 14)),
           ],
         ),
       ),

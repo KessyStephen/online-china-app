@@ -19,6 +19,7 @@ class CategoryTabView extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return CategoryListItem(
                   title: model.categories[index].name,
+                  imageUrl: "https://onlinechina.co/logo.png",
                 );
               }),
         ),

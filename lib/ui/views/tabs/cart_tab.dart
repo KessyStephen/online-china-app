@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:online_china_app/ui/widgets/product_list_item.dart';
 
 class CartTabView extends StatelessWidget {
   @override
@@ -8,11 +9,19 @@ class CartTabView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("My Items")),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Center(
-            child: Text("CART"),
-          ),
+        child: ListView.builder(
+          itemCount: 6,
+          shrinkWrap: false,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          itemBuilder: (BuildContext context, int index) {
+            return ProductListItem(
+              title:
+                  "Go-Pro Full set with 23 Macro lenses 24MP, 48MP with Tripod Stand",
+              price: "TZS 750,000",
+              imageUrl: "https://onlinechina.co/logo.png",
+              hideQuantityInput: false,
+            );
+          },
         ),
       ),
     );

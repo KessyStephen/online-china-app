@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CategoryListItem extends StatelessWidget {
@@ -20,12 +21,12 @@ class CategoryListItem extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.black54, width: 1.0)),
-            child: Image.asset(
-              "assets/images/logo.png",
+            child: CachedNetworkImage(
+              imageUrl: this.imageUrl,
               fit: BoxFit.contain,
             )),
         title: Text(this.title),
-        trailing: Icon(Icons.chevron_right),
+        trailing: const Icon(Icons.chevron_right),
       ),
     );
   }
