@@ -223,4 +223,51 @@ class Api {
       };
     }
   }
+
+  Future<Map> getTrendingCategories() async {
+    try {
+      var client = createClient();
+      var uri = uriForPath("/api/categories_trending", null);
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getNewArrivalProducts() async {
+    try {
+      var client = createClient();
+      var uri = uriForPath("/api/products_new_arrivals", null);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getBestSellingProducts() async {
+    try {
+      var client = createClient();
+      var uri = uriForPath("/api/products_best_selling", null);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
 }

@@ -7,6 +7,7 @@ import 'package:online_china_app/ui/views/tabs/cart_tab.dart';
 import 'package:online_china_app/ui/views/tabs/category_tab.dart';
 import 'package:online_china_app/ui/views/tabs/home_tab.dart';
 import 'package:online_china_app/ui/views/tabs/orders_tab.dart';
+import 'package:provider/provider.dart';
 
 import 'base_view.dart';
 import 'busy_overlay.dart';
@@ -22,7 +23,9 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-      model: HomeModel(),
+      model: HomeModel(
+          categoryService: Provider.of(context),
+          productService: Provider.of(context)),
       onModelReady: (model) async {
         // await model.handleStartUpLogic();
       },

@@ -15,8 +15,10 @@ class CategoryService {
   List<Category> _categories = [];
   List<Category> get categories => _categories;
 
+  List<Category> _trendingCategories = [];
+  List<Category> get trendingCategories => _trendingCategories;
+
   Future<bool> getCategories({parentId: String}) async {
-    
     var response = await this._api.getCategories(parentId: parentId);
     if (response != null && response['success']) {
       var categoriesArray = response['data'];
@@ -31,6 +33,31 @@ class CategoryService {
         _categories.add(Category.fromMap(categoriesArray[i]));
       }
 
+      return true;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
+    }
+  }
+
+  Future<bool> getTrendingCategories() async {
+    var response = await this._api.getTrendingCategories();
+    if (response != null && response['success']) {
+      var categoriesArray = response['data'];
+
+      if (categoriesArray.length == 0) {
+        return false;
+      }
+
+      _trendingCategories.clear();
+
+      for (int i = 0; i < categoriesArray.length; i++) {
+        _trendingCategories.add(Category.fromMap(categoriesArray[i]));
+      }
 
       return true;
     } else {

@@ -18,12 +18,13 @@ class CategoryGridItem extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               height: 64,
               width: 64,
               // padding: EdgeInsets.only(left: 10),
+              margin: EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black54, width: 1.0)),
@@ -32,7 +33,7 @@ class CategoryGridItem extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            Text(this.title, style: const TextStyle(fontSize: 14)),
+            Text(this.title, style: const TextStyle(fontSize: 12)),
           ],
         ),
       ),

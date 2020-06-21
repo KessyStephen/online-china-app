@@ -31,6 +31,10 @@ class Product extends TranslatedModel {
     return getTranslatedValue("description", lang, FALLBACK_LANG);
   }
 
+  String get priceLabel {
+    return currency + " " + price.toString();
+  }
+
   Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
     id = map['_id'];
     type = map['type'];
