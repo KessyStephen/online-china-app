@@ -9,6 +9,7 @@ class Product extends TranslatedModel {
   String currency;
   String categoryId;
   String quality;
+  int quantity = 0;
   String sku;
 
   Product({
@@ -18,6 +19,7 @@ class Product extends TranslatedModel {
     this.currency,
     this.categoryId,
     this.quality,
+    this.quantity,
     this.sku,
   }) : super();
 
