@@ -205,9 +205,10 @@ class Api {
     }
   }
 
-  Future<Map> getCategories({parentId: String}) async {
+  Future<Map> getCategories({parentId = "", all = ""}) async {
     Map<String, String> params = {
       'parentId': parentId,
+      'all': all,
     };
     var client = createClient();
     params.removeWhere((key, value) => value == null);
@@ -240,12 +241,13 @@ class Api {
   }
 
   Future<Map> getProducts(
-      {perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
+      {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
     try {
       Map<String, String> params = {
         'page': page.toString(),
         'perPage': perPage.toString(),
         'sort': sort,
+        'categoryIds': categoryIds
       };
       var client = createClient();
       params.removeWhere((key, value) => value == null);

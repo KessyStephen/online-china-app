@@ -128,7 +128,7 @@ class HomeTabView extends StatelessWidget {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.bestSellingProducts.length > 0)
                         SizedBox(
-                          height: 250,
+                          height: 180,
                           child: ListView.builder(
                               itemCount: model.bestSellingProducts.length,
                               shrinkWrap: false,
@@ -148,7 +148,7 @@ class HomeTabView extends StatelessWidget {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.newArrivalProducts.length > 0)
                         SizedBox(
-                          height: 250,
+                          height: 180,
                           child: ListView.builder(
                               itemCount: model.newArrivalProducts.length,
                               shrinkWrap: false,

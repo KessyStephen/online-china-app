@@ -26,18 +26,17 @@ class ProductService {
   List<Product> get bestSellingProducts => _bestSellingProducts;
 
   Future<bool> getProducts(
-      {perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
-    var response =
-        await this._api.getProducts(perPage: perPage, page: page, sort: sort);
+      {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
+    if (page == 1) {
+      _products.clear();
+    }
+    var response = await this._api.getProducts(
+        perPage: perPage, page: page, sort: sort, categoryIds: categoryIds);
     if (response != null && response['success']) {
       var tmpArray = response['data'];
 
       if (tmpArray.length == 0) {
         return false;
-      }
-
-      if (page == 1) {
-        _products.clear();
       }
 
       for (int i = 0; i < tmpArray.length; i++) {
