@@ -25,7 +25,7 @@ class CategoryListItem extends StatelessWidget {
               imageUrl: this.imageUrl,
               fit: BoxFit.contain,
             )),
-        title: Text(this.title),
+        title: Text(this.title != null ? this.title : ""),
         trailing: const Icon(Icons.chevron_right),
       ),
     );

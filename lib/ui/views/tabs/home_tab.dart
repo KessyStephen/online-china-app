@@ -104,8 +104,10 @@ class HomeTabView extends StatelessWidget {
                           }).toList(),
                         ),
                       ),
-                      Text("Trending Categories",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      if (model.trendingCategories.length > 0)
+                        Text("Trending Categories",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.trendingCategories.length > 0)
                         SizedBox(
                           height: 120,
@@ -120,11 +122,13 @@ class HomeTabView extends StatelessWidget {
                                 );
                               }),
                         ),
-                      Text("Best Selling Products",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      if (model.bestSellingProducts.length > 0)
+                        Text("Best Selling Products",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.bestSellingProducts.length > 0)
                         SizedBox(
-                          height: 250,
+                          height: 180,
                           child: ListView.builder(
                               itemCount: model.bestSellingProducts.length,
                               shrinkWrap: false,
@@ -138,11 +142,13 @@ class HomeTabView extends StatelessWidget {
                                 );
                               }),
                         ),
-                      Text("New Arrivals",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      if (model.newArrivalProducts.length > 0)
+                        Text("New Arrivals",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.newArrivalProducts.length > 0)
                         SizedBox(
-                          height: 250,
+                          height: 180,
                           child: ListView.builder(
                               itemCount: model.newArrivalProducts.length,
                               shrinkWrap: false,
@@ -153,6 +159,9 @@ class HomeTabView extends StatelessWidget {
                                   title: product.name,
                                   price: product.priceLabel,
                                   imageUrl: "https://onlinechina.co/logo.png",
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, "/product_detail",
+                                      arguments: product),
                                 );
                               }),
                         )

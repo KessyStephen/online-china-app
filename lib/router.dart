@@ -6,6 +6,10 @@ import 'package:online_china_app/ui/views/registration/register_phone.dart';
 import 'package:online_china_app/ui/views/registration/user_info.dart';
 import 'package:online_china_app/ui/views/registration/verify_otp.dart';
 import 'package:online_china_app/ui/views/reset_password.dart';
+import 'package:online_china_app/ui/views/product_detail_view.dart';
+import 'package:online_china_app/ui/views/product_list_view.dart';
+import 'package:online_china_app/ui/views/subcategory_view.dart';
+import 'package:online_china_app/ui/widgets/product_list_item.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -35,6 +39,21 @@ class Router {
       case '/country_code_picker':
         return MaterialPageRoute(builder: (_) => CountryCodePicker());
 
+      case '/product_detail':
+        return MaterialPageRoute(
+            builder: (_) => ProductDetailView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/product_list':
+        return MaterialPageRoute(
+            builder: (_) => ProductListView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/subcategories':
+        return MaterialPageRoute(
+            builder: (_) => SubCategoryView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

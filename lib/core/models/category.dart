@@ -5,6 +5,7 @@ import 'package:online_china_app/core/models/translated_model.dart';
 class Category extends TranslatedModel {
   String id;
   String parentId;
+  List<Category> children;
   Category({
     this.id,
     this.parentId,
@@ -21,7 +22,7 @@ class Category extends TranslatedModel {
     // if (_currentLang == lang) {
     //   return _name;
     // }
-    
+
     _name = getTranslatedValue("name", lang, FALLBACK_LANG);
     _currentLang = lang;
     return _name;
@@ -56,5 +57,21 @@ class Category extends TranslatedModel {
     data['parentId'] = this.parentId;
     data['translations'] = this.translations;
     return data;
+  }
+
+  static List<Category> getChildren(
+      String parentId, List<Category> allCategories) {
+    if (allCategories == null || allCategories.length == 0) {
+      return null;
+    }
+
+    List<Category> results = [];
+    allCategories.forEach((element) {
+      if (element.parentId == parentId) {
+        results.add(element);
+      }
+    });
+
+    return results;
   }
 }

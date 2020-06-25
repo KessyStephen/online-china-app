@@ -207,9 +207,10 @@ class Api {
     }
   }
 
-  Future<Map> getCategories({parentId: String}) async {
+  Future<Map> getCategories({parentId = "", all = ""}) async {
     Map<String, String> params = {
       'parentId': parentId,
+      'all': all,
     };
     var client = createClient();
     params.removeWhere((key, value) => value == null);
@@ -230,6 +231,54 @@ class Api {
     try {
       var client = createClient();
       var uri = uriForPath("/api/categories_trending", null);
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getProducts(
+      {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
+    try {
+      Map<String, String> params = {
+        'page': page.toString(),
+        'perPage': perPage.toString(),
+        'sort': sort,
+        'categoryIds': categoryIds
+      };
+      var client = createClient();
+      params.removeWhere((key, value) => value == null);
+      var uri = uriForPath("/api/products", params);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> searchProducts(
+      {query = "", perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
+    try {
+      Map<String, String> params = {
+        "query": query,
+        'page': page.toString(),
+        'perPage': perPage.toString(),
+        'sort': sort,
+      };
+      var client = createClient();
+      params.removeWhere((key, value) => value == null);
+      var uri = uriForPath("/api/search", params);
+
       var response = await client.get(uri);
       return json.decode(response.body);
     } catch (e) {
@@ -277,6 +326,28 @@ class Api {
     try {
       var client = createClient();
       var uri = uriForPath("/api/country_codes", null);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getOrders({perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
+    try {
+      Map<String, String> params = {
+        'page': page.toString(),
+        'perPage': perPage.toString(),
+        'sort': sort,
+      };
+      var client = createClient();
+      params.removeWhere((key, value) => value == null);
+      var uri = uriForPath("/api/orders", params);
 
       var response = await client.get(uri);
       return json.decode(response.body);
