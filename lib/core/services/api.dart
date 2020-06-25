@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/api_client.dart';
 import 'package:online_china_app/core/services/alert_service.dart';
 import 'package:online_china_app/core/services/navigation_service.dart';
 import 'package:online_china_app/core/services/secure_storage_service.dart';
-import 'package:http/http.dart' as http;
 
 /// The service responsible for networking requests
 class Api {
@@ -116,7 +116,7 @@ class Api {
   }
 
   // Verify OTP
-  Future<Map> verifyOtp(code, countryCode, phone, otpFor) async {
+  Future<Map> verifyOtp(code, phone, countryCode, otpFor) async {
     try {
       Map<String, String> map = {
         "phoneNumber": phone,
@@ -124,6 +124,7 @@ class Api {
         "otpFor": otpFor,
         'code': code
       };
+      print(map);
       var client = await createClient();
       var uri = uriForPath("/api/verify_otp", null);
       var response = await client.post(uri, body: jsonEncode(map));
@@ -138,7 +139,7 @@ class Api {
   }
 
   // Register User
-  Future<Map> registerUser(name, countryCode, phone, password, confirmPassword,
+  Future<Map> registerUser(name, phone, countryCode, password, confirmPassword,
       verificationId) async {
     try {
       Map<String, String> map = {
@@ -149,8 +150,9 @@ class Api {
         'confirmPassword': confirmPassword,
         'verificationId': verificationId
       };
+      var client = await createClient();
       var uri = uriForPath("/api/register", null);
-      var response = await http.post(uri, body: jsonEncode(map));
+      var response = await client.post(uri, body: jsonEncode(map));
       return json.decode(response.body);
     } catch (e) {
       print(e);
@@ -259,6 +261,22 @@ class Api {
     try {
       var client = createClient();
       var uri = uriForPath("/api/products_best_selling", null);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getCountryCodes() async {
+    try {
+      var client = createClient();
+      var uri = uriForPath("/api/country_codes", null);
 
       var response = await client.get(uri);
       return json.decode(response.body);
