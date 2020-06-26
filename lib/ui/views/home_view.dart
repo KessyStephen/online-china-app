@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
+import 'package:online_china_app/core/viewmodels/views/startup_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/tabs/cart_tab.dart';
 import 'package:online_china_app/ui/views/tabs/category_tab.dart';
@@ -22,12 +23,12 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<HomeModel>(
-      model: HomeModel(
-          categoryService: Provider.of(context),
-          productService: Provider.of(context)),
+    return BaseView<StartUpModel>(
+      model: StartUpModel(
+        startUpService: Provider.of(context),
+      ),
       onModelReady: (model) async {
-        // await model.handleStartUpLogic();
+        await model.handleStartUpLogic();
       },
       builder: (context, model, child) => BusyOverlay(
         show: model.state == ViewState.Busy,

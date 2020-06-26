@@ -53,13 +53,13 @@ class AuthenticationService {
   Stream<User> get user => userController.stream;
 
   Future<bool> login(String phone, String password) async {
-    Map response = await _api.login('TZ', phone, password);
+    Map response = await _api.login(_selectedCountryCode.code, phone, password);
     if (response != null && response['success']) {
       await _storageService.storeUserInformation(
           id: response['id'].toString(),
           name: response['name'],
-          accessToken: response['access_token'],
-          refreshToken: response['refresh_token'],
+          accessToken: response['accessToken'],
+          refreshToken: response['refreshToken'],
           phone: phone);
       return addUserToStream();
     } else {

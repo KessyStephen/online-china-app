@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 class CountryCodePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> nextDestination = ModalRoute.of(context).settings.arguments;
+    print(nextDestination);
     return BaseView<AuthModel>(
       model: AuthModel(authenticationService: Provider.of(context)),
       onModelReady: (model) async {
@@ -45,7 +47,7 @@ class CountryCodePicker extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/register');
+                      Navigator.pushReplacementNamed(context, "/${nextDestination['next']}");
                     },
                   )
                 ],
@@ -54,7 +56,7 @@ class CountryCodePicker extends StatelessWidget {
                 child: TextField(
                   onChanged: (String value) {
 //                    if(value.length >=3){
-                      model.searchForCountry(value);
+                    model.searchForCountry(value);
 //                    }
                   },
                 ),
@@ -66,7 +68,10 @@ class CountryCodePicker extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         child: Container(
-                          color: model.countryCode?.country == model.searchResults[index].country ? Colors.redAccent : Colors.transparent,
+                          color: model.countryCode?.country ==
+                                  model.searchResults[index].country
+                              ? Colors.redAccent
+                              : Colors.transparent,
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

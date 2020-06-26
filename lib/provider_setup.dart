@@ -5,12 +5,14 @@ import 'package:online_china_app/core/services/product_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'core/models/user.dart';
 import 'core/services/alert_service.dart';
 import 'core/services/api.dart';
 import 'core/services/authentication_service.dart';
 import 'core/services/dialog_service.dart';
 import 'core/services/navigation_service.dart';
 import 'core/services/secure_storage_service.dart';
+import 'core/services/startup_service.dart';
 
 List<SingleChildWidget> providers = [
   ...independentServices,
@@ -51,6 +53,10 @@ List<SingleChildWidget> dependentServices = [
             storageService: storageService,
             navigationService: navigationService),
   ),
+  ProxyProvider<AuthenticationService, StartUpService>(
+    update: (context, authenticationService, startupService) =>
+        StartUpService(authenticationService: authenticationService),
+  ),
   ProxyProvider2<Api, AlertService, OrderService>(
     update: (context, api, alertService, orderService) =>
         OrderService(api: api, alertService: alertService),
@@ -61,4 +67,11 @@ List<SingleChildWidget> dependentServices = [
   ),
 ];
 
-List<SingleChildWidget> uiConsumableProviders = [];
+List<SingleChildWidget> uiConsumableProviders = [
+  StreamProvider<User>(
+    updateShouldNotify: (User var1, User var2) => true,
+    initialData: User.initial(),
+    create: (context) =>
+        Provider.of<AuthenticationService>(context, listen: false).user,
+  )
+];

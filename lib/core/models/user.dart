@@ -1,5 +1,5 @@
 class User {
-  int id;
+  String id;
   String name;
   String phone;
   String email;
@@ -8,13 +8,13 @@ class User {
   User({this.id, this.name, this.phone, this.email, this.isLoggedIn});
 
   User.initial()
-      : id = 0,
+      : id = '',
         name = '',
         phone = '',
         isLoggedIn = false;
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'] is String ? int.parse(json['id']) : json['id'];
+    id = json['id'];
     name = json['name'];
     email = json['email'];
     phone = json['phone'];

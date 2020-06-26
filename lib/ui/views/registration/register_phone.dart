@@ -62,7 +62,8 @@ class RegisterView extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, '/country_code_picker');
+                        Navigator.pushNamed(context, '/country_code_picker',
+                            arguments: {'next': 'register'});
                       },
                       child: Container(
                         width: 200,

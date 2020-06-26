@@ -175,8 +175,9 @@ class Api {
         'confirmPassword': confirmPassword,
         'verificationId': verificationId
       };
+      var client = await createClient();
       var uri = uriForPath("/api/reset_password", null);
-      var response = await http.post(uri, body: jsonEncode(map));
+      var response = await client.post(uri, body: jsonEncode(map));
       return json.decode(response.body);
     } catch (e) {
       print(e);
@@ -196,8 +197,9 @@ class Api {
         'countryCode': countryCode,
         'password': password
       };
+      var client = await createClient();
       var uri = uriForPath("/api/login", null);
-      var response = await http.post(uri, body: jsonEncode(map));
+      var response = await client.post(uri, body: jsonEncode(map));
       return json.decode(response.body);
     } catch (e) {
       return {

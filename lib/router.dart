@@ -9,7 +9,6 @@ import 'package:online_china_app/ui/views/reset_password.dart';
 import 'package:online_china_app/ui/views/product_detail_view.dart';
 import 'package:online_china_app/ui/views/product_list_view.dart';
 import 'package:online_china_app/ui/views/subcategory_view.dart';
-import 'package:online_china_app/ui/widgets/product_list_item.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -37,7 +36,9 @@ class Router {
         return MaterialPageRoute(builder: (_) => ResetPassword());
 
       case '/country_code_picker':
-        return MaterialPageRoute(builder: (_) => CountryCodePicker());
+        return MaterialPageRoute(
+            builder: (_) => CountryCodePicker(),
+            settings: RouteSettings(arguments: settings.arguments));
 
       case '/product_detail':
         return MaterialPageRoute(

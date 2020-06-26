@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/auth_model.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,9 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return BaseView<AuthModel>(
       model: AuthModel(authenticationService: Provider.of(context)),
-      onModelReady: (model) => {},
+      onModelReady: (model) async {
+        if (model.countryCode == null) await model.getCountryCodes();
+      },
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -72,19 +75,50 @@ class _LoginViewState extends State<LoginView> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 18.0),
-                        child: TextFormField(
-                          controller: _phoneController,
-                          keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter phone number';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              labelText: 'Phone',
-                              labelStyle: TextStyle(
-                                  fontSize: 14.0, fontWeight: FontWeight.w500)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/country_code_picker',
+                                      arguments: {'next': 'login'});
+                                },
+                                child: Container(
+                                  width: 200,
+                                  margin: EdgeInsets.only(top: 12),
+                                  padding: EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1.0, color: primaryColor)),
+                                  child: model.countryCode != null
+                                      ? Text(model.countryCode.phonePrefix)
+                                      : Text('+255'),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter phone number';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                    labelText: 'Phone',
+                                    labelStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(
@@ -159,7 +193,7 @@ class _LoginViewState extends State<LoginView> {
                       InkWell(
                         onTap: () {
                           model.setNotResetPasswordFlag();
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushReplacementNamed(context, '/');
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(vertical: 15.0),
