@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           accentColor: Color(0xff2ECC71),
           hintColor: Color(0xff707070),
         ),
-        initialRoute: '/login',
+        initialRoute: '/',
         navigatorKey: Get.key,
         onGenerateRoute: Router.generateRoute,
         builder: (context, widget) => Navigator(
