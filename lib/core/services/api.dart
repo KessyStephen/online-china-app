@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/api_client.dart';
+import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/alert_service.dart';
 import 'package:online_china_app/core/services/navigation_service.dart';
 import 'package:online_china_app/core/services/secure_storage_service.dart';
@@ -352,6 +353,42 @@ class Api {
       var uri = uriForPath("/api/orders", params);
 
       var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> createOrder({List<Product> products}) async {
+    try {
+      if (products == null) {
+        products = [];
+      }
+
+      List<Map<String, dynamic>> items = [];
+      for (var i = 0; i < products.length; i++) {
+        var product = products[i];
+        Map<String, dynamic> tmpMap = {
+          'productId': product.id,
+          'name': product.name,
+          'price': product.price,
+          'currency': product.currency,
+        };
+        items.add(tmpMap);
+      }
+
+      Map<String, dynamic> params = {'items': items};
+      var client = createClient();
+      params.removeWhere((key, value) => value == null);
+      var uri = uriForPath("/api/orders", null);
+
+      print(params);
+
+      var response = await client.post(uri, jsonEncode(params));
       return json.decode(response.body);
     } catch (e) {
       print(e);

@@ -10,6 +10,7 @@ class CartModel extends BaseModel {
   CartModel({@required CartService cartService}) : _cartService = cartService;
 
   List<Product> get products => _cartService.products;
+  double get total => _cartService.total;
 
   Future<bool> addToCart(Product product) async {
     setState(ViewState.Busy);

@@ -13,7 +13,7 @@ class BigButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: FlatButton(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(15.0),
         color: primaryColor,
         child: Text(
           buttonTitle,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/order.dart';
+import 'package:online_china_app/core/models/product.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -35,6 +36,20 @@ class OrderService {
         _orders.add(Order.fromMap(tmpArray[i]));
       }
 
+      return true;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
+    }
+  }
+
+  Future<bool> createOrder({List<Product> products}) async {
+    var response = await this._api.createOrder(products: products);
+    if (response != null && response['success']) {
       return true;
     } else {
       _alertService.showAlert(

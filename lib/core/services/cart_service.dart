@@ -15,6 +15,15 @@ class CartService {
   List<Product> _products = [];
   List<Product> get products => _products;
 
+  double get total {
+    var sum = 0.0;
+    _products.forEach((element) {
+      sum = sum + element.price * element.quantity;
+    });
+
+    return sum;
+  }
+
   Future<bool> addToCart(Product product) async {
     var found = _products.firstWhere((item) => item.id == product.id,
         orElse: () => null);
