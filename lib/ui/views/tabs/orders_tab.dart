@@ -28,6 +28,10 @@ class OrdersTabView extends StatelessWidget {
                       paymentStatus: order.status,
                       itemCount: "X 4 Items",
                       price: "TZS 720,000",
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/order_detail",
+                            arguments: {"order": order});
+                      },
                     );
 
                     //        return OrderListItem(

@@ -4,6 +4,7 @@ import 'package:online_china_app/ui/views/country_code_picker.dart';
 import 'package:online_china_app/ui/views/home_view.dart';
 import 'package:online_china_app/ui/views/login_view.dart';
 import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
+import 'package:online_china_app/ui/views/order/order_detail_view.dart';
 import 'package:online_china_app/ui/views/product_search_view.dart';
 import 'package:online_china_app/ui/views/registration/register_phone.dart';
 import 'package:online_china_app/ui/views/registration/user_info.dart';
@@ -61,6 +62,11 @@ class Router {
       case '/confirm_order':
         return MaterialPageRoute(
             builder: (_) => ConfirmOrderView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/order_detail':
+        return MaterialPageRoute(
+            builder: (_) => OrderDetailView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
       case '/account':
