@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 
 class ProductGridItem extends StatelessWidget {
   final String title;
@@ -30,8 +31,12 @@ class ProductGridItem extends StatelessWidget {
                   color: Colors.white,
                   border: Border.all(color: Colors.black54, width: 1.0)),
               child: CachedNetworkImage(
-                imageUrl: this.imageUrl,
+                imageUrl: this.imageUrl != null ? this.imageUrl : "",
                 fit: BoxFit.contain,
+                placeholder: (context, url) => Image.asset(
+                  PLACEHOLDER_IMAGE,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             Padding(

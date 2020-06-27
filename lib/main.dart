@@ -9,16 +9,12 @@ import 'core/managers/dialog_manager.dart';
 import 'provider_setup.dart';
 
 void main() {
-  
-  
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
       providers: providers,
       child: MaterialApp(

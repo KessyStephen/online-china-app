@@ -1,3 +1,4 @@
+import 'package:online_china_app/core/services/account_service.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 import 'package:online_china_app/core/services/category_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
@@ -64,6 +65,16 @@ List<SingleChildWidget> dependentServices = [
   ProxyProvider2<Api, AlertService, CartService>(
     update: (context, api, alertService, cartService) =>
         CartService(api: api, alertService: alertService),
+  ),
+  ProxyProvider4<OrderService, CartService, SecureStorageService,
+      AuthenticationService, AccountService>(
+    update: (context, orderService, cartService, storageService,
+            authenticationService, accountService) =>
+        AccountService(
+            orderService: orderService,
+            storageService: storageService,
+            cartService: cartService,
+            authenticationService: authenticationService),
   ),
 ];
 

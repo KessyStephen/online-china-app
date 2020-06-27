@@ -386,9 +386,7 @@ class Api {
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/orders", null);
 
-      print(params);
-
-      var response = await client.post(uri, jsonEncode(params));
+      var response = await client.post(uri, body: jsonEncode(params));
       return json.decode(response.body);
     } catch (e) {
       print(e);

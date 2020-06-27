@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
@@ -47,31 +48,31 @@ class CartTabView extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
-                height: 90,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "Total Amount",
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            model.total.toString(),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "Total Amount",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          model.total.toString(),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    BigButton(
-                      buttonTitle: "CHECKOUT",
-                      functionality: () {
+                  ),
+                  BigButton(
+                    color: model.total > 0 ? primaryColor : Colors.grey,
+                    buttonTitle: "CHECKOUT",
+                    functionality: () {
+                      if (model.total > 0) {
                         Map<String, dynamic> params = {
                           'items': model.products,
                           'total': model.total,
@@ -79,10 +80,10 @@ class CartTabView extends StatelessWidget {
 
                         Navigator.pushNamed(context, '/confirm_order',
                             arguments: params);
-                      },
-                    )
-                  ],
-                ),
+                      }
+                    },
+                  )
+                ],
               )
             ],
           ),

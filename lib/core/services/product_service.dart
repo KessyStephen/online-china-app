@@ -83,6 +83,10 @@ class ProductService {
     }
   }
 
+  void clearSearchData() {
+    this._searchedProducts.clear();
+  }
+
   Future<bool> getNewArrivalProducts() async {
     var response = await this._api.getNewArrivalProducts();
     if (response != null && response['success']) {

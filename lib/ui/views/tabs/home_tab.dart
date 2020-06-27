@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
-import 'package:online_china_app/ui/widgets/category_grid_item.dart';
+import 'package:online_china_app/ui/widgets/category_row.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +14,8 @@ class HomeTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-      model: HomeModel(
-          categoryService: Provider.of(context),
-          productService: Provider.of(context)),
+      model: HomeModel(productService: Provider.of(context)),
       onModelReady: (model) {
-        model.getTrendingCategories();
         model.getNewArrivalProducts();
         model.getBestSellingProducts();
       },
@@ -53,7 +50,15 @@ class HomeTabView extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          Expanded(flex: 1, child: SearchBar()),
+                          Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child: SearchBar(
+                                  disableTextField: true,
+                                ),
+                                onTap: () =>
+                                    Navigator.pushNamed(context, "/search"),
+                              )),
                           Container(
                               height: 50,
                               width: 50,
@@ -62,10 +67,12 @@ class HomeTabView extends StatelessWidget {
                                   border: Border.all(
                                       color: Colors.grey, width: 1.0)),
                               child: IconButton(
+                                  onPressed: () =>
+                                      Navigator.pushNamed(context, "/account"),
                                   icon: Icon(
-                                Icons.account_circle,
-                                color: primaryColor,
-                              )))
+                                    Icons.account_circle,
+                                    color: primaryColor,
+                                  )))
                         ],
                       ),
                     ],
@@ -104,24 +111,9 @@ class HomeTabView extends StatelessWidget {
                           }).toList(),
                         ),
                       ),
-                      if (model.trendingCategories.length > 0)
-                        Text("Trending Categories",
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                      if (model.trendingCategories.length > 0)
-                        SizedBox(
-                          height: 120,
-                          child: ListView.builder(
-                              itemCount: model.trendingCategories.length,
-                              shrinkWrap: false,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                return CategoryGridItem(
-                                  title: model.trendingCategories[index].name,
-                                  imageUrl: "https://onlinechina.co/logo.png",
-                                );
-                              }),
-                        ),
+                      CategoryRow(
+                        title: "Trending Categories",
+                      ),
                       if (model.bestSellingProducts.length > 0)
                         Text("Best Selling Products",
                             style:
@@ -139,6 +131,9 @@ class HomeTabView extends StatelessWidget {
                                   title: product.name,
                                   price: product.priceLabel,
                                   imageUrl: "https://onlinechina.co/logo.png",
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, "/product_detail",
+                                      arguments: product),
                                 );
                               }),
                         ),

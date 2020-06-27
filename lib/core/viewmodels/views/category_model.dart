@@ -12,6 +12,7 @@ class CategoryModel extends BaseModel {
 
   List<Category> get categories => _categoryService.categories;
   List<Category> get allCategories => _categoryService.allCategories;
+  List<Category> get trendingCategories => _categoryService.trendingCategories;
 
   Future<bool> getAllCategories({hideLoading = false}) async {
     if (hideLoading) {
@@ -27,6 +28,15 @@ class CategoryModel extends BaseModel {
       setState(ViewState.Busy);
     }
     bool response = await _categoryService.getCategories(parentId: parentId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<bool> getTrendingCategories({parentId, hideLoading = false}) async {
+    if (hideLoading) {
+      setState(ViewState.Busy);
+    }
+    bool response = await _categoryService.getTrendingCategories();
     setState(ViewState.Idle);
     return response;
   }

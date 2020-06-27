@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:online_china_app/ui/views/account_view.dart';
 import 'package:online_china_app/ui/views/country_code_picker.dart';
 import 'package:online_china_app/ui/views/home_view.dart';
 import 'package:online_china_app/ui/views/login_view.dart';
 import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
+import 'package:online_china_app/ui/views/product_search_view.dart';
 import 'package:online_china_app/ui/views/registration/register_phone.dart';
 import 'package:online_china_app/ui/views/registration/user_info.dart';
 import 'package:online_china_app/ui/views/registration/verify_otp.dart';
@@ -59,6 +61,16 @@ class Router {
       case '/confirm_order':
         return MaterialPageRoute(
             builder: (_) => ConfirmOrderView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/account':
+        return MaterialPageRoute(
+            builder: (_) => AccountView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/search':
+        return MaterialPageRoute(
+            builder: (_) => ProductSearchView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
       default:

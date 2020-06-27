@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 
 class ProductListItem extends StatelessWidget {
   final String title;
@@ -38,8 +39,12 @@ class ProductListItem extends StatelessWidget {
                   color: Colors.white,
                   border: Border.all(color: Colors.black54, width: 1.0)),
               child: CachedNetworkImage(
-                imageUrl: this.imageUrl,
+                imageUrl: this.imageUrl != null ? this.imageUrl : "",
                 fit: BoxFit.contain,
+                placeholder: (context, url) => Image.asset(
+                  PLACEHOLDER_IMAGE,
+                  fit: BoxFit.contain,
+                ),
               )),
           Expanded(
             flex: 1,
@@ -48,7 +53,7 @@ class ProductListItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(this.title),
+                  Text(this.title != null ? this.title : ""),
                   SizedBox(
                     height: 5,
                   ),
@@ -57,7 +62,7 @@ class ProductListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          this.price,
+                          this.price != null ? this.price : "",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),

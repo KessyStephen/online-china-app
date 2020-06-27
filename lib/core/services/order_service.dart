@@ -50,6 +50,7 @@ class OrderService {
   Future<bool> createOrder({List<Product> products}) async {
     var response = await this._api.createOrder(products: products);
     if (response != null && response['success']) {
+      _alertService.showAlert(text: "Order successfully placed", error: false);
       return true;
     } else {
       _alertService.showAlert(
@@ -59,5 +60,9 @@ class OrderService {
           error: true);
       return false;
     }
+  }
+
+  void clearOrderData({bool removeOrders = false}) {
+    if (removeOrders) this._orders = [];
   }
 }

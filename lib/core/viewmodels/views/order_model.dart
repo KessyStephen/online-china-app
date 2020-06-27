@@ -30,7 +30,7 @@ class OrderModel extends BaseModel {
 
   Future<bool> createOrder({List<Product> products}) async {
     setState(ViewState.Busy);
-    bool response = await _orderService.getOrders();
+    bool response = await _orderService.createOrder(products: products);
     setState(ViewState.Idle);
     return response;
   }

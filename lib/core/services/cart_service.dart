@@ -55,4 +55,8 @@ class CartService {
 
     return false;
   }
+
+  void clearCart() {
+    this._products.clear();
+  }
 }

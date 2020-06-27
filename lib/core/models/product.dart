@@ -10,6 +10,7 @@ class Product extends TranslatedModel {
   String categoryId;
   String quality;
   int quantity = 0;
+  int minOrderQuantity = 0;
   String sku;
 
   Product({
@@ -20,6 +21,7 @@ class Product extends TranslatedModel {
     this.categoryId,
     this.quality,
     this.quantity,
+    this.minOrderQuantity,
     this.sku,
   }) : super();
 
@@ -44,6 +46,8 @@ class Product extends TranslatedModel {
     currency = map['currency'];
     categoryId = map['categoryId'];
     quality = map['quality'];
+    minOrderQuantity =
+        map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
   }
 
@@ -55,6 +59,7 @@ class Product extends TranslatedModel {
     data['currency'] = this.currency;
     data['categoryId'] = this.categoryId;
     data['quality'] = this.quality;
+    data['minOrderQuantity'] = this.minOrderQuantity;
     data['sku'] = this.sku;
     data['translations'] = this.translations;
     return data;

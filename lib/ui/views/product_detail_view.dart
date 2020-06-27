@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
+import 'package:online_china_app/ui/widgets/details_header.dart';
+import 'package:online_china_app/ui/widgets/product_attribute.dart';
 import 'package:provider/provider.dart';
 
 import '../base_widget.dart';
@@ -40,12 +42,42 @@ class ProductDetailView extends StatelessWidget {
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5.0),
-                    child: Text(
-                      "Min Order: 50 pc",
-                      style: const TextStyle(fontSize: 18),
+                  if (product.minOrderQuantity > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: Text(
+                        "Min Order: ${product.minOrderQuantity} pc",
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ),
+                  DetailsHeader(
+                    title: "About",
+                    rightText: "See all >",
+                  ),
+                  ProductAttribute(
+                    leftText: "Condition",
+                    rightText: "New",
+                  ),
+                  ProductAttribute(
+                    leftText: "Brand",
+                    rightText: "Apple",
+                  ),
+                  ProductAttribute(
+                    leftText: "Screen Size",
+                    rightText: "5.5",
+                  ),
+                  ProductAttribute(
+                    leftText: "Model",
+                    rightText: "iPhone 8 Plus",
+                  ),
+                  DetailsHeader(
+                    title: "Description",
+                    rightText: "See all >",
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                        product.description != null ? product.description : ""),
                   ),
                   InkWell(
                     child: Text("ADD"),

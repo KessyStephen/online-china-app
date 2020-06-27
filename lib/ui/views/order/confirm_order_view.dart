@@ -53,37 +53,38 @@ class ConfirmOrderView extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
-                height: 90,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "Total Amount",
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            total.toString(),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "Total Amount",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          total.toString(),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    BigButton(
-                      buttonTitle: "CONFIRM",
-                      functionality: () {
-                        model.createOrder(products: products);
-                        // Navigator.pushNamed(context, '/confirm_order');
-                      },
-                    )
-                  ],
-                ),
+                  ),
+                  BigButton(
+                    buttonTitle: "CONFIRM",
+                    functionality: () async {
+                      bool success =
+                          await model.createOrder(products: products);
+                      if (success) {
+                        // model.clearCart();
+                        // Navigator.pushNamed(context, '/');
+                      }
+                    },
+                  )
+                ],
               )
             ],
           ),
