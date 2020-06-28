@@ -38,7 +38,12 @@ class CategoryGridItem extends StatelessWidget {
                 ),
               ),
             ),
-            Text(this.title, style: const TextStyle(fontSize: 12)),
+            Text(
+              this.title,
+              style: const TextStyle(fontSize: 12),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),

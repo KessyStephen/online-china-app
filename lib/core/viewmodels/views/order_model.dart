@@ -34,4 +34,8 @@ class OrderModel extends BaseModel {
     setState(ViewState.Idle);
     return response;
   }
+
+  void clearCartData() async {
+    _orderService.clearCartData();
+  }
 }

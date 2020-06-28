@@ -79,8 +79,8 @@ class ConfirmOrderView extends StatelessWidget {
                       bool success =
                           await model.createOrder(products: products);
                       if (success) {
-                        // model.clearCart();
-                        // Navigator.pushNamed(context, '/');
+                        model.clearCartData();
+                        Navigator.pushNamed(context, '/');
                       }
                     },
                   )

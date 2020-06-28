@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/services/cart_service.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -9,10 +10,15 @@ import 'api.dart';
 class OrderService {
   final Api _api;
   final AlertService _alertService;
+  final CartService _cartService;
 
-  OrderService({@required Api api, @required AlertService alertService})
+  OrderService(
+      {@required Api api,
+      @required AlertService alertService,
+      @required CartService cartService})
       : _api = api,
-        _alertService = alertService;
+        _alertService = alertService,
+        _cartService = cartService;
 
   List<Order> _orders = [];
   List<Order> get orders => _orders;
@@ -64,5 +70,9 @@ class OrderService {
 
   void clearOrderData({bool removeOrders = false}) {
     if (removeOrders) this._orders = [];
+  }
+
+  void clearCartData() {
+    _cartService.clearCartData();
   }
 }

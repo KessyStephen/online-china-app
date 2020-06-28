@@ -93,10 +93,12 @@ class HomeTabView extends StatelessWidget {
                                 Border.all(color: Colors.black54, width: 1.0)),
                         child: CarouselSlider(
                           options: CarouselOptions(
-                            height: 170.0,
-                            initialPage: 0,
-                            scrollDirection: Axis.horizontal,
-                          ),
+                              height: 170.0,
+                              initialPage: 0,
+                              scrollDirection: Axis.horizontal,
+                              viewportFraction: 1.0,
+                              enableInfiniteScroll: false,
+                              autoPlay: false),
                           items: [1, 2, 3, 4, 5].map((i) {
                             return Builder(
                               builder: (BuildContext context) {
@@ -119,11 +121,14 @@ class HomeTabView extends StatelessWidget {
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.bestSellingProducts.length > 0)
-                        SizedBox(
-                          height: 180,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 180.0,
+                            maxHeight: 220.0,
+                          ),
                           child: ListView.builder(
                               itemCount: model.bestSellingProducts.length,
-                              shrinkWrap: false,
+                              shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
                                 var product = model.bestSellingProducts[index];
@@ -142,8 +147,11 @@ class HomeTabView extends StatelessWidget {
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                       if (model.newArrivalProducts.length > 0)
-                        SizedBox(
-                          height: 180,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 180.0,
+                            maxHeight: 220.0,
+                          ),
                           child: ListView.builder(
                               itemCount: model.newArrivalProducts.length,
                               shrinkWrap: false,

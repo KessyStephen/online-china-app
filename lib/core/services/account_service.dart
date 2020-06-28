@@ -22,7 +22,7 @@ class AccountService {
 
   void clearData() async {
     await _storageService.clearAllData();
-    _cartService.clearCart();
+    _cartService.clearCartData();
     _orderService.clearOrderData(removeOrders: true);
     await _authenticationService.addUserToStream();
     Get.offNamed('/login');

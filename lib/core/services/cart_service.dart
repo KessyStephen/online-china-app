@@ -56,7 +56,7 @@ class CartService {
     return false;
   }
 
-  void clearCart() {
+  void clearCartData() {
     this._products.clear();
   }
 }

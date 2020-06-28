@@ -17,7 +17,7 @@ class ProductGridItem extends StatelessWidget {
     return InkWell(
       onTap: this.onPressed,
       child: Container(
-        // width: 150,
+        width: 120,
         margin: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,12 +41,18 @@ class ProductGridItem extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text(this.title != null ? this.title : "",
-                  style: TextStyle(fontSize: 14)),
+              child: Text(
+                this.title != null ? this.title : "",
+                style: TextStyle(fontSize: 14),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Text(
               this.price != null ? this.price : "",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             )
           ],
         ),
