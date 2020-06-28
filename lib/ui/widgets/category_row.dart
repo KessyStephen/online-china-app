@@ -31,7 +31,7 @@ class CategoryRow extends StatelessWidget {
                           var category = model.trendingCategories[index];
                           return CategoryGridItem(
                             title: category.name,
-                            imageUrl: "https://onlinechina.co/logo.png",
+                            imageUrl: category.image,
                             onPressed: () {
                               Navigator.pushNamed(context, "/product_list",
                                   arguments: {"parentCategory": category});

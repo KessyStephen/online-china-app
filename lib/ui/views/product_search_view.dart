@@ -82,7 +82,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                             return ProductListItem(
                               title: product.name,
                               price: product.priceLabel,
-                              imageUrl: "https://onlinechina.co/logo.png",
+                              imageUrl: product.thumbnail,
                               hideQuantityInput: false,
                             );
                           }),

@@ -29,7 +29,7 @@ class ProductListView extends StatelessWidget {
                       return ProductGridItem(
                         title: product.name,
                         price: product.priceLabel,
-                        imageUrl: "https://onlinechina.co/logo.png",
+                        imageUrl: product.thumbnail,
                         onPressed: () => Navigator.pushNamed(
                             context, "/product_detail",
                             arguments: product),
@@ -45,7 +45,7 @@ class ProductListView extends StatelessWidget {
 
                 //       return CategoryListItem(
                 //         title: product.name,
-                //         imageUrl: "https://onlinechina.co/logo.png",
+                //         imageUrl: product.thumbnail,
 
                 //       );
                 //     }),

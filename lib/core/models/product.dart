@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
@@ -12,6 +14,8 @@ class Product extends TranslatedModel {
   int quantity = 0;
   int minOrderQuantity = 0;
   String sku;
+  String thumbnail;
+  List<ImageItem> images;
 
   Product({
     this.id,
@@ -23,6 +27,8 @@ class Product extends TranslatedModel {
     this.quantity,
     this.minOrderQuantity,
     this.sku,
+    this.thumbnail,
+    this.images,
   }) : super();
 
   String get name {
@@ -49,6 +55,24 @@ class Product extends TranslatedModel {
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
+
+    //images
+    var imagesArr = map['images'];
+    List<ImageItem> imageItems = [];
+    for (var i = 0; i < imagesArr.length; i++) {
+      var img = imagesArr[i];
+      var imgItem = ImageItem.fromMap(img);
+      imageItems.add(imgItem);
+    }
+    images = imageItems;
+
+    //image thumb
+    if (images != null && images.length > 0) {
+      var imgItem = images[0];
+      thumbnail = imgItem.thumbSrc != null && imgItem.thumbSrc.isNotEmpty
+          ? imgItem.thumbSrc
+          : imgItem.src;
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -62,6 +86,33 @@ class Product extends TranslatedModel {
     data['minOrderQuantity'] = this.minOrderQuantity;
     data['sku'] = this.sku;
     data['translations'] = this.translations;
+    data['images'] = this.images;
     return data;
+  }
+}
+
+class ImageItem {
+  String id;
+  String src;
+  String thumbSrc;
+  int position;
+
+  ImageItem({this.id, this.src, this.thumbSrc, this.position}) : super();
+
+  ImageItem.fromMap(Map<String, dynamic> map) {
+    id = map['_id'];
+    src = map['src'];
+    thumbSrc = map['thumbSrc'];
+    position =
+        map['position'] != null ? int.parse(map['position'].toString()) : 0;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'src': src,
+      'thumbSrc': thumbSrc,
+      'position': position,
+    };
   }
 }

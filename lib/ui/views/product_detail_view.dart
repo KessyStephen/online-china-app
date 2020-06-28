@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
@@ -6,6 +8,7 @@ import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/details_header.dart';
 import 'package:online_china_app/ui/widgets/product_attribute.dart';
 import 'package:provider/provider.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 
 import '../base_widget.dart';
 
@@ -30,9 +33,33 @@ class ProductDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(
-                          height: 200,
-                        ),
+                        // SizedBox(
+                        //   height: 200,
+                        // ),
+                        if (product.images != null)
+                          CarouselSlider.builder(
+                            options: CarouselOptions(
+                                height: 200.0,
+                                initialPage: 0,
+                                scrollDirection: Axis.horizontal,
+                                viewportFraction: 1.0),
+                            itemCount: product.images != null
+                                ? product.images.length
+                                : 0,
+                            itemBuilder: (BuildContext context, int itemIndex) {
+                              var imageItem = product.images[itemIndex];
+                              return CachedNetworkImage(
+                                imageUrl:
+                                    imageItem.src != null ? imageItem.src : "",
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) => Image.asset(
+                                  PLACEHOLDER_IMAGE,
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            },
+                          ),
+
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5.0),
                           child: Text(

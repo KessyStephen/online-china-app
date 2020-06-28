@@ -26,7 +26,7 @@ class CategoryTabView extends StatelessWidget {
 
                 return CategoryListItem(
                   title: category.name,
-                  imageUrl: "https://onlinechina.co/logo.png",
+                  imageUrl: category.image,
                   onPressed: () {
                     List<Category> childCategories =
                         Category.getChildren(category.id, model.allCategories);

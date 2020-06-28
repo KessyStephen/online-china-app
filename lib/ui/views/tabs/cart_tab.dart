@@ -30,7 +30,7 @@ class CartTabView extends StatelessWidget {
                     return ProductListItem(
                       title: product.name,
                       price: product.priceLabel,
-                      imageUrl: "https://onlinechina.co/logo.png",
+                      imageUrl: product.thumbnail,
                       quantity: product.quantity,
                       hideQuantityInput: false,
                       addItem: () => model.addToCart(product),
@@ -41,7 +41,7 @@ class CartTabView extends StatelessWidget {
                     //   title:
                     //       "Go-Pro Full set with 23 Macro lenses 24MP, 48MP with Tripod Stand",
                     //   price: "TZS 750,000",
-                    //   imageUrl: "https://onlinechina.co/logo.png",
+                    //   imageUrl: product.thumbnail,
                     //   hideQuantityInput: false,
 
                     // );
