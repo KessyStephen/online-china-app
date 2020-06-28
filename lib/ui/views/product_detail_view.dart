@@ -42,7 +42,9 @@ class ProductDetailView extends StatelessWidget {
                                 height: 200.0,
                                 initialPage: 0,
                                 scrollDirection: Axis.horizontal,
-                                viewportFraction: 1.0),
+                                viewportFraction: 1.0,
+                                enableInfiniteScroll: false,
+                                autoPlay: false),
                             itemCount: product.images != null
                                 ? product.images.length
                                 : 0,
