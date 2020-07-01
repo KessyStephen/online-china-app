@@ -377,6 +377,7 @@ class Api {
           'name': product.name,
           'price': product.price,
           'currency': product.currency,
+          'quantity': product.quantity,
         };
         items.add(tmpMap);
       }
