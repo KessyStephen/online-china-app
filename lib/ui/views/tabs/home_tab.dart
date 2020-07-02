@@ -50,7 +50,7 @@ class HomeTabView extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
                               flex: 1,
@@ -72,7 +72,7 @@ class HomeTabView extends StatelessWidget {
                               child: Icon(
                                 CupertinoIcons.profile_circled,
                                 color: Colors.white,
-                                size: 42,
+                                size: 35,
                               ))
                         ],
                       ),
