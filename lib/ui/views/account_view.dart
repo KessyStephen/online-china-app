@@ -13,6 +13,7 @@ class AccountView extends StatelessWidget {
       model: AccountModel(accountService: Provider.of(context)),
       onModelReady: (model) => {},
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           // automaticallyImplyLeading: false,
           // elevation: 0,
@@ -30,8 +31,9 @@ class AccountView extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 5.0),
                 margin: EdgeInsets.symmetric(vertical: 10.0),
-                decoration:
-                    BoxDecoration(border: Border.all(color: primaryColor)),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color.fromRGBO(112, 112, 112, 1.0))),
                 child: Row(
                   children: <Widget>[
                     SizedBox(
@@ -61,55 +63,144 @@ class AccountView extends StatelessWidget {
                   ],
                 ),
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.lock_outline,
-                  color: primaryColor,
-                  size: 30.0,
-                ),
-                title: Text('Change password'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/register',
-                      arguments: {'reset_password': true});
-                },
-              ),
-              ListTile(
-                leading: Icon(
+              SettingListItem(
+                title: "Wishlist",
+                leading: const Icon(
                   Icons.favorite_border,
                   color: primaryColor,
                   size: 30.0,
                 ),
-                title: Text('Wishlist'),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
               ),
-              ListTile(
-                leading: Icon(
+              SettingListItem(
+                title: 'Change password',
+                leading: const Icon(
+                  Icons.lock_outline,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register',
+                      arguments: {'reset_password': true});
+                },
+              ),
+              SettingListItem(
+                title: 'Currency',
+                leading: const Icon(
+                  Icons.euro_symbol,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+              ),
+              SettingListItem(
+                title: 'Language',
+                leading: const Icon(
+                  Icons.language,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0, bottom: 12),
+                child: Container(
+                  height: 1,
+                  color: Color.fromRGBO(112, 112, 112, 1.0),
+                ),
+              ),
+              SettingListItem(
+                title: 'FAQ',
+                leading: const Icon(
                   Icons.help_outline,
                   color: primaryColor,
                   size: 30.0,
                 ),
-                title: Text('FAQ'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.info_outline,
+                trailing: const Icon(
+                  Icons.chevron_right,
                   color: primaryColor,
                   size: 30.0,
                 ),
-                title: Text('About'),
               ),
-              ListTile(
-                leading: Icon(
+              SettingListItem(
+                  title: 'About',
+                  leading: const Icon(
+                    Icons.info_outline,
+                    color: primaryColor,
+                    size: 30.0,
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: primaryColor,
+                    size: 30.0,
+                  )),
+              SettingListItem(
+                title: 'Logout',
+                leading: const Icon(
                   Icons.launch,
                   color: primaryColor,
                   size: 30.0,
                 ),
-                title: Text('Logout'),
-                onTap: () {
+                onPressed: () {
                   model.logout();
                 },
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SettingListItem extends StatelessWidget {
+  final String title;
+  final Widget leading;
+  final Widget trailing;
+  final Function onPressed;
+  const SettingListItem(
+      {Key key, this.title, this.leading, this.trailing, this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: this.onPressed,
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+            color: Color(0xffdfe4ea),
+            blurRadius: 10.0, // has the effect of softening the shadow
+            // spreadRadius: 8.0, // has the effect of extending the shadow
+            offset: Offset(
+              0.0, // horizontal, move right 10
+              10.0, // vertical, move down 10
+            ),
+          )
+        ]),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        margin: const EdgeInsets.only(bottom: 10),
+        child: ListTile(
+          leading: this.leading,
+          title: Text(this.title != null ? this.title : ""),
+          trailing: this.trailing,
         ),
       ),
     );

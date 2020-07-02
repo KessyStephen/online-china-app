@@ -17,12 +17,14 @@ class HomeModel extends BaseModel {
   List<Product> get bestSellingProducts => _productService.bestSellingProducts;
 
   Future<bool> getNewArrivalProducts() async {
+    setState(ViewState.Busy);
     bool response = await _productService.getNewArrivalProducts();
     setState(ViewState.Idle);
     return response;
   }
 
   Future<bool> getBestSellingProducts() async {
+    setState(ViewState.Busy);
     bool response = await _productService.getBestSellingProducts();
     setState(ViewState.Idle);
     return response;

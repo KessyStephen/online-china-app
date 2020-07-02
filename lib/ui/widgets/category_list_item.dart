@@ -17,19 +17,21 @@ class CategoryListItem extends StatelessWidget {
       child: ListTile(
         onTap: this.onPressed,
         leading: Container(
-            height: 64,
-            width: 64,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black54, width: 1.0)),
-            child: CachedNetworkImage(
-              imageUrl: this.imageUrl != null ? this.imageUrl : "",
+          height: 64,
+          width: 64,
+          margin: EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.all(10.0),
+          decoration:
+              BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+          child: CachedNetworkImage(
+            imageUrl: this.imageUrl != null ? this.imageUrl : "",
+            fit: BoxFit.contain,
+            placeholder: (context, url) => Image.asset(
+              PLACEHOLDER_IMAGE,
               fit: BoxFit.contain,
-              placeholder: (context, url) => Image.asset(
-                PLACEHOLDER_IMAGE,
-                fit: BoxFit.contain,
-              ),
-            )),
+            ),
+          ),
+        ),
         title: Text(this.title != null ? this.title : ""),
         trailing: const Icon(Icons.chevron_right),
       ),

@@ -21,7 +21,8 @@ class ProductDetailView extends StatelessWidget {
       model: CartModel(cartService: Provider.of(context)),
       onModelReady: (model) => {},
       builder: (context, model, child) => Scaffold(
-        appBar: AppBar(title: Text(product.name)),
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(title: Text("Product Details")),
         body: SafeArea(
           child: Column(
             children: <Widget>[

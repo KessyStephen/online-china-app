@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
+  final Color backgroundColor;
+  final Color textColor;
+
   final bool disableTextField;
   final TextEditingController controller;
   final Function onSubmitPressed;
 
   const SearchBar(
-      {Key key, this.disableTextField, this.controller, this.onSubmitPressed})
+      {Key key,
+      this.backgroundColor,
+      this.textColor,
+      this.disableTextField,
+      this.controller,
+      this.onSubmitPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 40,
       padding: EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.grey, width: 1.0)),
+      color: this.backgroundColor != null ? this.backgroundColor : Colors.white,
+      // decoration: BoxDecoration(
+      //     color: this.backgroundColor != null
+      //         ? this.backgroundColor
+      //         : Colors.white,
+      //     border: Border.all(color: Colors.grey, width: 1.0)),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
               flex: 1,
@@ -26,14 +38,14 @@ class SearchBar extends StatelessWidget {
                 enabled: this.disableTextField == null ||
                     this.disableTextField == false,
                 decoration: InputDecoration(
-                    border: InputBorder.none, hintText: 'Search Online China'),
+                    border: InputBorder.none,
+                    hintText: 'Search Online China',
+                    hintStyle: TextStyle(
+                        color: this.textColor != null ? this.textColor : null)),
               )),
           IconButton(
             onPressed: this.onSubmitPressed,
-            icon: Icon(
-              Icons.search,
-              color: Colors.grey,
-            ),
+            icon: Icon(Icons.search, color: Colors.white54),
           )
         ],
       ),

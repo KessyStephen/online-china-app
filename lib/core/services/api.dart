@@ -43,7 +43,7 @@ class Api {
     return client;
   }
 
-  Uri uriForPath(path, params) {
+  static Uri uriForPath(path, params) {
     return Uri.http('$endpoint', path, params);
     // return Uri.https('$endpoint', path, params);
   }

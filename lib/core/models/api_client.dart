@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:online_china_app/core/services/api.dart';
 import 'package:online_china_app/core/services/navigation_service.dart';
 import 'package:online_china_app/core/services/secure_storage_service.dart';
 
@@ -193,15 +194,15 @@ class ApiClient extends http.BaseClient {
       String token = await _storageService.getRefreshToken();
       String accessToken = await _storageService.getAccessToken();
 
-      Map<String, String> map = {'refresh_token': token};
-      var uri = Uri.https('$_endpoint', '/api/token');
+      Map<String, String> map = {'refreshToken': token};
+      var uri = Api.uriForPath('/api/token', null);
       var response = await http.post(uri, body: jsonEncode(map), headers: {
         'Authorization': 'Bearer $accessToken',
         'content-type': 'application/json'
       });
       Map<String, dynamic> data = json.decode(response.body);
       if (data != null && data['success'])
-        return await _storageService.refreshAccessToken(data['access_token']);
+        return await _storageService.refreshAccessToken(data['accessToken']);
       else {
         await _storageService.clearAllData();
         _navigationService.navigateAndNeverReturn('/login');

@@ -106,8 +106,8 @@ class AuthenticationService {
   }
 
   Future<bool> verifyOtp(code, phone, otpFor) async {
-
-    Map response = await _api.verifyOtp(code, phone, this._selectedCountryCode.code, otpFor);
+    Map response = await _api.verifyOtp(
+        code, phone, this._selectedCountryCode.code, otpFor);
     if (response != null && response['success']) {
       print(response);
       setVerificationId(response['verificationId']);

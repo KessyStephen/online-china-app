@@ -66,7 +66,7 @@ class ConfirmOrderView extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          total.toString(),
+                          total.toStringAsFixed(2),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

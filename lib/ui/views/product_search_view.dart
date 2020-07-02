@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
         model: ProductModel(productService: Provider.of(context)),
         onModelReady: (model) => model.clearSearchData(),
         builder: (context, model, child) => Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
               // appBar: AppBar(title: Text("Search")),
               body: SafeArea(
                 child: Column(
@@ -61,6 +63,15 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                               },
                             ),
                           ),
+                          IconButton(
+                            onPressed: () => model.searchProducts(
+                                query: _queryController.text),
+                            icon: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -69,23 +80,23 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.only(
-                              left: 18.0, right: 18.0, top: 10),
-                          itemCount: model.searchedProducts == null
-                              ? 0
-                              : model.searchedProducts.length,
-                          shrinkWrap: false,
-                          itemBuilder: (BuildContext context, int index) {
+                      child: GridView.extent(
+                          childAspectRatio: 200 / 230,
+                          maxCrossAxisExtent: 200,
+                          children: List.generate(
+                              model.searchedProducts == null
+                                  ? 0
+                                  : model.searchedProducts.length, (index) {
                             Product product = model.searchedProducts[index];
-
-                            return ProductListItem(
+                            return ProductGridItem(
                               title: product.name,
                               price: product.priceLabel,
                               imageUrl: product.thumbnail,
-                              hideQuantityInput: false,
+                              onPressed: () => Navigator.pushNamed(
+                                  context, "/product_detail",
+                                  arguments: product),
                             );
-                          }),
+                          })),
                     ),
                   ],
                 ),

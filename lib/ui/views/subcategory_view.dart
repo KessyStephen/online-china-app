@@ -18,6 +18,7 @@ class SubCategoryView extends StatelessWidget {
     return BaseView<CategoryModel>(
         model: CategoryModel(categoryService: Provider.of(context)),
         builder: (context, model, child) => Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
               appBar: AppBar(title: Text(parentCategory.name)),
               body: SafeArea(
                 child: ListView.builder(

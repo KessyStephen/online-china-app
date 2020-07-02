@@ -42,14 +42,17 @@ class OrderListItem extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text("Order ID: "+this.orderID),
+                  Text("Order ID: " + this.orderID),
                   Text(this.orderDate)
                 ]),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[Text(this.paymentStatus), Text(this.itemCount)]),
+                  children: <Widget>[
+                    Text(this.paymentStatus),
+                    Text(this.itemCount != null ? this.itemCount : "")
+                  ]),
             ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

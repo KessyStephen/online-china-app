@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         title: APP_NAME,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          backgroundColor: Colors.transparent,
+          backgroundColor: backgroundColor,
           primaryColor: primaryColor,
           accentColor: Color(0xff2ECC71),
           hintColor: Color(0xff707070),

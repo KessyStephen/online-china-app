@@ -24,11 +24,10 @@ class CategoryGridItem extends StatelessWidget {
             Container(
               height: 64,
               width: 64,
-              // padding: EdgeInsets.only(left: 10),
               margin: EdgeInsets.only(bottom: 4),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black54, width: 1.0)),
+              padding: const EdgeInsets.all(10.0),
+              decoration:
+                  BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: CachedNetworkImage(
                 imageUrl: this.imageUrl != null ? this.imageUrl : "",
                 fit: BoxFit.contain,

@@ -16,6 +16,7 @@ class CategoryTabView extends StatelessWidget {
         rootCategories = Category.getChildren(null, model.allCategories);
       },
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(title: Text("Categories")),
         body: SafeArea(
           child: ListView.builder(

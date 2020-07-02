@@ -15,6 +15,7 @@ class CartTabView extends StatelessWidget {
       model: CartModel(cartService: Provider.of(context)),
       onModelReady: (model) => {},
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(title: Text("My Items")),
         body: SafeArea(
           child: Column(
@@ -61,7 +62,7 @@ class CartTabView extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          model.total.toString(),
+                          model.total.toStringAsFixed(2),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

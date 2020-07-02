@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
-import 'package:online_china_app/ui/widgets/category_list_item.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +20,12 @@ class ProductListView extends StatelessWidget {
           model.getProducts(categoryIds: parentCategory.id);
         },
         builder: (context, model, child) => Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
               appBar: AppBar(title: Text(parentCategory.name)),
               body: SafeArea(
-                child: GridView.count(
-                    crossAxisCount: 2,
+                child: GridView.extent(
+                    childAspectRatio: 200 / 230,
+                    maxCrossAxisExtent: 200,
                     children: List.generate(model.products.length, (index) {
                       Product product = model.products[index];
                       return ProductGridItem(
@@ -35,20 +37,6 @@ class ProductListView extends StatelessWidget {
                             arguments: product),
                       );
                     })),
-
-                // child: ListView.builder(
-                //     itemCount:
-                //         model.products == null ? 0 : model.products.length,
-                //     shrinkWrap: false,
-                //     itemBuilder: (BuildContext context, int index) {
-                //       Product product = model.products[index];
-
-                //       return CategoryListItem(
-                //         title: product.name,
-                //         imageUrl: product.thumbnail,
-
-                //       );
-                //     }),
               ),
             ));
   }
