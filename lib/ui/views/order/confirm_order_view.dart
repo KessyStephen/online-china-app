@@ -20,6 +20,7 @@ class ConfirmOrderView extends StatelessWidget {
       model: OrderModel(orderService: Provider.of(context)),
       onModelReady: (model) => {},
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(title: Text("Order Details")),
         body: SafeArea(
           child: Column(
@@ -55,7 +56,8 @@ class ConfirmOrderView extends StatelessWidget {
               ),
               Column(
                 children: <Widget>[
-                  Padding(
+                  Container(
+                    color: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 10),
                     child: Row(

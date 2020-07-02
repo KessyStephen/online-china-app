@@ -1,3 +1,5 @@
+import 'package:online_china_app/core/models/product.dart';
+
 class Order {
   String id;
   String referenceId;
@@ -7,6 +9,7 @@ class Order {
   double total;
   String currency;
   int itemCount;
+  List<Product> products;
   DateTime createdAt;
 
   Order(
@@ -16,6 +19,7 @@ class Order {
       this.status,
       this.paymentStatus,
       this.itemCount,
+      this.products,
       this.createdAt})
       : super();
 
@@ -38,6 +42,20 @@ class Order {
 
     itemCount =
         map['itemCount'] != null ? int.parse(map['itemCount'].toString()) : 0;
+
+    //items
+    List<Product> resultItems = [];
+    var items = map["items"];
+    if (items != null && items.length > 0) {
+      for (var i = 0; i < items.length; i++) {
+        var obj = items[i];
+        var prod = Product.fromMap(obj);
+        prod.id = obj["productId"];
+
+        resultItems.add(prod);
+      }
+    }
+    products = resultItems;
   }
 
   Map<String, dynamic> toMap() {

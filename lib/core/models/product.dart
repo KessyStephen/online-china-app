@@ -52,6 +52,7 @@ class Product extends TranslatedModel {
     currency = map['currency'];
     categoryId = map['categoryId'];
     quality = map['quality'];
+    quantity = map['quantity'];
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
@@ -59,11 +60,14 @@ class Product extends TranslatedModel {
     //images
     var imagesArr = map['images'];
     List<ImageItem> imageItems = [];
-    for (var i = 0; i < imagesArr.length; i++) {
-      var img = imagesArr[i];
-      var imgItem = ImageItem.fromMap(img);
-      imageItems.add(imgItem);
+    if (imagesArr != null && imagesArr.length > 0) {
+      for (var i = 0; i < imagesArr.length; i++) {
+        var img = imagesArr[i];
+        var imgItem = ImageItem.fromMap(img);
+        imageItems.add(imgItem);
+      }
     }
+
     images = imageItems;
 
     //image thumb

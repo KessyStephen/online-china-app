@@ -51,7 +51,8 @@ class CartTabView extends StatelessWidget {
               ),
               Column(
                 children: <Widget>[
-                  Padding(
+                  Container(
+                    color: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 10),
                     child: Row(
