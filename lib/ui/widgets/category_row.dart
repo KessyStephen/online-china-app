@@ -18,8 +18,11 @@ class CategoryRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (model.trendingCategories.length > 0 && this.title != null)
-                  Text(this.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Text(this.title,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
                 if (model.trendingCategories.length > 0)
                   SizedBox(
                     height: 120,
