@@ -16,7 +16,10 @@ class CartTabView extends StatelessWidget {
       onModelReady: (model) => {},
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        appBar: AppBar(title: Text("My Items")),
+        appBar: AppBar(
+          title: Text("My Items"),
+          automaticallyImplyLeading: false,
+        ),
         body: SafeArea(
           child: Column(
             children: <Widget>[

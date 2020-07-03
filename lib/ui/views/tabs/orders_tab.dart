@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:online_china_app/core/helpers/Utils.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/order_list_item.dart';
@@ -15,7 +15,10 @@ class OrdersTabView extends StatelessWidget {
         onModelReady: (model) => model.getOrders(),
         builder: (context, model, child) => Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
-              appBar: AppBar(title: Text("Orders")),
+              appBar: AppBar(
+                title: Text("Orders"),
+                automaticallyImplyLeading: false,
+              ),
               body: SafeArea(
                 child: ListView.builder(
                   itemCount: model.orders.length,

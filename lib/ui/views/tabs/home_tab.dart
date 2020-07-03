@@ -26,6 +26,7 @@ class HomeTabView extends StatelessWidget {
           child: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 snap: false,
                 floating: false,
                 backgroundColor: Colors.transparent,
@@ -39,6 +40,7 @@ class HomeTabView extends StatelessWidget {
                 ),
               ),
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 snap: true,
                 floating: true,
                 pinned: true,

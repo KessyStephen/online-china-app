@@ -226,15 +226,10 @@ class _LoginViewState extends State<LoginView> {
                                       if (await model.login(
                                           phone: _phoneController.text,
                                           password: _passwordController.text)) {
-                                        bool isBasketFull =
-                                            await model.checkIfBasketIsFull();
-                                        if (isBasketFull) {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/order_confirm');
-                                        } else {
-                                          Navigator.pushReplacementNamed(
+                                        // bool isBasketFull =
+                                        //     await model.checkIfBasketIsFull();
+                                        Navigator.pushReplacementNamed(
                                               context, '/');
-                                        }
                                       }
                                     }
                                   },
