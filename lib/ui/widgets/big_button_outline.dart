@@ -13,7 +13,7 @@ class BigButtonOutline extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: OutlineButton(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(15.0),
         borderSide: BorderSide(color: primaryColor),
         color: primaryColor,
         child: Text(

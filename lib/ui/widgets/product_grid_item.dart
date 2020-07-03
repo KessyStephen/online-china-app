@@ -49,14 +49,14 @@ class ProductGridItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               child: Text(
-                "Samsung A20 QUAD CORE Processor 2019/2020",
+                this.title != null ? this.title : "",
                 style: TextStyle(fontSize: 14),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric( horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Text(
                 this.price != null ? this.price : "",
                 style: const TextStyle(
