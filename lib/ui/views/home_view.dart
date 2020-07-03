@@ -31,7 +31,7 @@ class HomeView extends StatelessWidget {
         await model.handleStartUpLogic();
       },
       builder: (context, model, child) => BusyOverlay(
-        show: model.state == ViewState.Busy,
+        show: false,
         child: Scaffold(
           body: SafeArea(
             child: _tabViews[model.currentIndex],

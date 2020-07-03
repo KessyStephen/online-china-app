@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
+import 'package:online_china_app/ui/widgets/auth_modal.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
@@ -14,6 +17,7 @@ import 'package:shimmer/shimmer.dart';
 class CartTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool isLoggedIn = Provider.of<User>(context).isLoggedIn;
     return BaseView<CartModel>(
       model: CartModel(cartService: Provider.of(context)),
       onModelReady: (model) => {},
@@ -90,7 +94,9 @@ class CartTabView extends StatelessWidget {
                     color: model.total > 0 ? primaryColor : Colors.grey,
                     buttonTitle: "CHECKOUT",
                     functionality: () {
-                      if (model.total > 0) {
+                      // bool isLoggedIn =Provider.of<User>(context).isLoggedIn;
+                      if (model.total > 0 &&
+                          isLoggedIn) {
                         Map<String, dynamic> params = {
                           'items': model.products,
                           'total': model.total,
@@ -98,6 +104,12 @@ class CartTabView extends StatelessWidget {
 
                         Navigator.pushNamed(context, '/confirm_order',
                             arguments: params);
+                      }
+                      if (model.total > 0 && !isLoggedIn) {
+                        Get.bottomSheet(AuthModalWidget(
+                          message: "Orders",
+                          subText: "Please check your orders",
+                        ));
                       }
                     },
                   )

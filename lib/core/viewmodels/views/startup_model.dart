@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/services/startup_service.dart';
+import 'package:online_china_app/ui/widgets/auth_modal.dart';
 import '../base_model.dart';
 
 class StartUpModel extends BaseModel {
@@ -13,7 +15,14 @@ class StartUpModel extends BaseModel {
 
   void navigateToTab(int index) async {
     setState(ViewState.Busy);
-    currentIndex = index;
+    bool isLoggedIn = await _startUpService.checkIfUserIsLoggedIn();
+    if (isLoggedIn || index == 0 || index == 1 || index == 2)
+      currentIndex = index;
+    else
+      Get.bottomSheet(AuthModalWidget(
+        message: "Orders",
+        subText: "Please check your orders",
+      ));
     setState(ViewState.Idle);
   }
 
