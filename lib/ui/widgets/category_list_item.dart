@@ -13,7 +13,7 @@ class CategoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: ListTile(
         onTap: this.onPressed,
         leading: Container(
