@@ -41,14 +41,19 @@ class OrderItemListItem extends StatelessWidget {
               height: 80,
               width: 80,
               margin: const EdgeInsets.only(right: 8),
-              child: CachedNetworkImage(
-                imageUrl: this.imageUrl != null ? this.imageUrl : "",
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Image.asset(
-                  PLACEHOLDER_IMAGE,
-                  fit: BoxFit.cover,
-                ),
-              )),
+              child: this.imageUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: this.imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Image.asset(
+                        PLACEHOLDER_IMAGE,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Image.asset(
+                      PLACEHOLDER_IMAGE,
+                      fit: BoxFit.cover,
+                    )),
           Expanded(
             flex: 1,
             child: Column(

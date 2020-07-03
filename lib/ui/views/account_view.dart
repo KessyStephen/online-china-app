@@ -9,6 +9,7 @@ import '../base_widget.dart';
 class AccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User currentUser = Provider.of<User>(context);
     return BaseView<AccountModel>(
       model: AccountModel(accountService: Provider.of(context)),
       onModelReady: (model) => {},
@@ -28,71 +29,74 @@ class AccountView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5.0),
-                margin: EdgeInsets.symmetric(vertical: 10.0),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: const Color.fromRGBO(112, 112, 112, 1.0))),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.person,
-                      color: primaryColor,
-                      size: 60.0,
-                    ),
-                    SizedBox(
-                      width: 15.0,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          Provider.of<User>(context).name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          Provider.of<User>(context).phone,
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                        )
-                      ],
-                    )
-                  ],
+              if (currentUser.isLoggedIn)
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromRGBO(112, 112, 112, 1.0))),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                        size: 60.0,
+                      ),
+                      SizedBox(
+                        width: 15.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            Provider.of<User>(context).name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            Provider.of<User>(context).phone,
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SettingListItem(
-                title: "Wishlist",
-                leading: const Icon(
-                  Icons.favorite_border,
-                  color: primaryColor,
-                  size: 30.0,
+              if (currentUser.isLoggedIn)
+                SettingListItem(
+                  title: "Wishlist",
+                  leading: const Icon(
+                    Icons.favorite_border,
+                    color: primaryColor,
+                    size: 30.0,
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: primaryColor,
+                    size: 30.0,
+                  ),
                 ),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                  color: primaryColor,
-                  size: 30.0,
+              if (currentUser.isLoggedIn)
+                SettingListItem(
+                  title: 'Change password',
+                  leading: const Icon(
+                    Icons.lock_outline,
+                    color: primaryColor,
+                    size: 30.0,
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: primaryColor,
+                    size: 30.0,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register',
+                        arguments: {'reset_password': true});
+                  },
                 ),
-              ),
-              SettingListItem(
-                title: 'Change password',
-                leading: const Icon(
-                  Icons.lock_outline,
-                  color: primaryColor,
-                  size: 30.0,
-                ),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                  color: primaryColor,
-                  size: 30.0,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/register',
-                      arguments: {'reset_password': true});
-                },
-              ),
               SettingListItem(
                 title: 'Currency',
                 leading: const Icon(
@@ -152,7 +156,7 @@ class AccountView extends StatelessWidget {
                     size: 30.0,
                   )),
               SettingListItem(
-                title: 'Logout',
+                title: currentUser.isLoggedIn ? 'Logout' : "Sign In / Register",
                 leading: const Icon(
                   Icons.launch,
                   color: primaryColor,
