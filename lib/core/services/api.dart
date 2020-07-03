@@ -19,7 +19,7 @@ class Api {
 
   static const endpoint = API_ENDPONT;
 
-  var client;
+  // var client;
 
   Api(
       {SecureStorageService storageService,
@@ -29,18 +29,28 @@ class Api {
         _navigationService = navigationService,
         _alertService = alertService;
 
-  dynamic createClient() {
-    if (client != null) {
-      return client;
-    }
+  // dynamic createClient() {
+  //   if (client != null) {
+  //     return client;
+  //   }
 
-    client = ApiClient(
+  //   client = ApiClient(
+  //       defaultHeaders: {'content-type': 'application/json'},
+  //       endpoint: endpoint,
+  //       navigationService: _navigationService,
+  //       storageService: _storageService);
+
+  //   return client;
+  // }
+
+  Future<dynamic> createClient() async {
+    var tempClient = ApiClient(
         defaultHeaders: {'content-type': 'application/json'},
         endpoint: endpoint,
         navigationService: _navigationService,
         storageService: _storageService);
 
-    return client;
+    return tempClient;
   }
 
   static Uri uriForPath(path, params) {
@@ -215,7 +225,7 @@ class Api {
       'parentId': parentId,
       'all': all,
     };
-    var client = createClient();
+    var client = await createClient();
     params.removeWhere((key, value) => value == null);
     try {
       var uri = uriForPath("/api/categories", params);
@@ -232,7 +242,7 @@ class Api {
 
   Future<Map> getTrendingCategories() async {
     try {
-      var client = createClient();
+      var client = await createClient();
       var uri = uriForPath("/api/categories_trending", null);
       var response = await client.get(uri);
       return json.decode(response.body);
@@ -254,7 +264,7 @@ class Api {
         'sort': sort,
         'categoryIds': categoryIds
       };
-      var client = createClient();
+      var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/products", params);
 
@@ -278,7 +288,7 @@ class Api {
         'perPage': perPage.toString(),
         'sort': sort,
       };
-      var client = createClient();
+      var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/search", params);
 
@@ -295,7 +305,7 @@ class Api {
 
   Future<Map> getNewArrivalProducts() async {
     try {
-      var client = createClient();
+      var client = await createClient();
       var uri = uriForPath("/api/products_new_arrivals", null);
 
       var response = await client.get(uri);
@@ -311,7 +321,7 @@ class Api {
 
   Future<Map> getBestSellingProducts() async {
     try {
-      var client = createClient();
+      var client = await createClient();
       var uri = uriForPath("/api/products_best_selling", null);
 
       var response = await client.get(uri);
@@ -327,7 +337,7 @@ class Api {
 
   Future<Map> getCountryCodes() async {
     try {
-      var client = createClient();
+      var client = await createClient();
       var uri = uriForPath("/api/country_codes", null);
 
       var response = await client.get(uri);
@@ -348,7 +358,7 @@ class Api {
         'perPage': perPage.toString(),
         'sort': sort,
       };
-      var client = createClient();
+      var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/orders", params);
 
@@ -383,7 +393,7 @@ class Api {
       }
 
       Map<String, dynamic> params = {'items': items};
-      var client = createClient();
+      var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/orders", null);
 

@@ -24,6 +24,15 @@ class CartService {
     return sum;
   }
 
+  int get itemCount {
+    var sum = 0;
+    _products.forEach((element) {
+      sum = sum + element.quantity;
+    });
+
+    return sum;
+  }
+
   Future<bool> addToCart(Product product) async {
     var found = _products.firstWhere((item) => item.id == product.id,
         orElse: () => null);

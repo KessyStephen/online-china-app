@@ -5,8 +5,14 @@ class BigButton extends StatelessWidget {
   final Function functionality;
   final String buttonTitle;
   final Color color;
+  final Color titleColor;
 
-  const BigButton({Key key, this.functionality, this.buttonTitle, this.color})
+  const BigButton(
+      {Key key,
+      this.functionality,
+      this.buttonTitle,
+      this.color,
+      this.titleColor})
       : super(key: key);
 
   @override
@@ -19,7 +25,9 @@ class BigButton extends StatelessWidget {
         child: Text(
           buttonTitle,
           style: TextStyle(
-              color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
+              color: this.titleColor != null ? this.titleColor : Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w800),
         ),
         onPressed: () => functionality(),
       ),

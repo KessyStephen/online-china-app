@@ -16,6 +16,7 @@ class Product extends TranslatedModel {
   String sku;
   String thumbnail;
   List<ImageItem> images;
+  bool canRequestSample;
 
   Product({
     this.id,
@@ -29,6 +30,7 @@ class Product extends TranslatedModel {
     this.sku,
     this.thumbnail,
     this.images,
+    this.canRequestSample,
   }) : super();
 
   String get name {
@@ -56,6 +58,7 @@ class Product extends TranslatedModel {
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
+    canRequestSample = map['canRequestSample'] == true;
 
     //images
     var imagesArr = map['images'];

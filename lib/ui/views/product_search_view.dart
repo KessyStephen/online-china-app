@@ -26,6 +26,10 @@ class _ProductSearchViewState extends State<ProductSearchView> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double gridWidth = width / 2 - 18;
+    double gridAspectRatio = gridWidth / (gridWidth + 20);
+
     return BaseView<ProductModel>(
         model: ProductModel(productService: Provider.of(context)),
         onModelReady: (model) => model.clearSearchData(),
@@ -80,9 +84,10 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: GridView.extent(
-                          childAspectRatio: 200 / 230,
-                          maxCrossAxisExtent: 200,
+                      child: GridView.count(
+                          crossAxisCount: 2,
+                          childAspectRatio: gridAspectRatio,
+                          shrinkWrap: true,
                           children: List.generate(
                               model.searchedProducts == null
                                   ? 0

@@ -39,6 +39,7 @@ dependencies:
   pin_code_fields: ^3.0.0
   shimmer: ^1.1.1
   flutter_icons: ^1.1.0
+  webview_flutter: ^0.3.22+1
 
 
 dev_dependencies:
