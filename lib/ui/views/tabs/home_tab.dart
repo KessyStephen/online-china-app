@@ -65,7 +65,7 @@ class HomeTabView extends StatelessWidget {
                                   Navigator.pushNamed(context, "/search"),
                             )),
                         SizedBox(
-                          width: 4,
+                          width: 16,
                         ),
                         InkWell(
                             onTap: () =>
