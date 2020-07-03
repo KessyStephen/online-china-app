@@ -15,29 +15,30 @@ class ProductListView extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
     Category parentCategory = params != null ? params['parentCategory'] : null;
     return BaseView<ProductModel>(
-        model: ProductModel(productService: Provider.of(context)),
-        onModelReady: (model) async {
-          model.getProducts(categoryIds: parentCategory.id);
-        },
-        builder: (context, model, child) => Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
-              appBar: AppBar(title: Text(parentCategory.name)),
-              body: SafeArea(
-                child: GridView.extent(
-                    childAspectRatio: 200 / 230,
-                    maxCrossAxisExtent: 200,
-                    children: List.generate(model.products.length, (index) {
-                      Product product = model.products[index];
-                      return ProductGridItem(
-                        title: product.name,
-                        price: product.priceLabel,
-                        imageUrl: product.thumbnail,
-                        onPressed: () => Navigator.pushNamed(
-                            context, "/product_detail",
-                            arguments: product),
-                      );
-                    })),
-              ),
-            ));
+      model: ProductModel(productService: Provider.of(context)),
+      onModelReady: (model) async {
+        model.getProducts(categoryIds: parentCategory.id);
+      },
+      builder: (context, model, child) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(title: Text(parentCategory.name)),
+        body: SafeArea(
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            children: List.generate(model.products.length, (index) {
+              Product product = model.products[index];
+              return ProductGridItem(
+                title: product.name,
+                price: product.priceLabel,
+                imageUrl: product.thumbnail,
+                onPressed: () => Navigator.pushNamed(context, "/product_detail",
+                    arguments: product),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
   }
 }

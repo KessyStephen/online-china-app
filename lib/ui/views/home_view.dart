@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
-import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/core/viewmodels/views/startup_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/tabs/cart_tab.dart';
@@ -48,15 +48,15 @@ class HomeView extends StatelessWidget {
             onTap: (index) => model.navigateToTab(index),
             items: [
               new BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Entypo.home),
                 title: Text('Home'),
               ),
               new BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard),
+                icon: Icon(Ionicons.md_grid),
                 title: Text('Categories'),
               ),
               new BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
+                icon: Icon(AntDesign.shoppingcart),
                 title: Text('My Items'),
               ),
               new BottomNavigationBarItem(

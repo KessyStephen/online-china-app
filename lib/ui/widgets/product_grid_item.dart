@@ -25,6 +25,7 @@ class ProductGridItem extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(16))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Align(
               alignment: Alignment.topCenter,

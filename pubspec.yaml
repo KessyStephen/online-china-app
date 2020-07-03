@@ -38,6 +38,7 @@ dependencies:
   cached_network_image: ^2.2.0+1
   pin_code_fields: ^3.0.0
   shimmer: ^1.1.1
+  flutter_icons: ^1.1.0
 
 
 dev_dependencies:
