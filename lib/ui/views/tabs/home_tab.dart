@@ -2,12 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/category_row.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../base_widget.dart';
 
@@ -16,9 +18,9 @@ class HomeTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
       model: HomeModel(productService: Provider.of(context)),
-      onModelReady: (model) {
-        model.getNewArrivalProducts();
-        model.getBestSellingProducts();
+      onModelReady: (model) async {
+        await model.getNewArrivalProducts();
+        await model.getBestSellingProducts();
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -117,65 +119,162 @@ class HomeTabView extends StatelessWidget {
                   CategoryRow(
                     title: "Trending Categories",
                   ),
-                  if (model.bestSellingProducts.length > 0)
+                  if (model.bestSellingProducts.length > 0 ||
+                      model.state == ViewState.Busy)
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
-                      child: Text(
-                        "Best Selling Products",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
-                      ),
+                      child: model.state == ViewState.Busy
+                          ? Shimmer.fromColors(
+                              child: Text(
+                                "Best Selling Products",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16),
+                              ),
+                              baseColor: Colors.grey[400],
+                              highlightColor: Colors.white)
+                          : Text(
+                              "Best Selling Products",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
                     ),
-                  if (model.bestSellingProducts.length > 0)
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minHeight: 150.0,
-                        maxHeight: 210.0,
-                      ),
-                      child: ListView.builder(
-                          itemCount: model.bestSellingProducts.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            var product = model.bestSellingProducts[index];
-                            return ProductGridItem(
-                              title: product.name,
-                              price: product.priceLabel,
-                              imageUrl: product.thumbnail,
-                              onPressed: () => Navigator.pushNamed(
-                                  context, "/product_detail",
-                                  arguments: product),
-                            );
-                          }),
+                  // if (model.bestSellingProducts.length > 0 || model.state == ViewState.Busy)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minHeight: 150.0,
+                      maxHeight: 210.0,
                     ),
-                  if (model.newArrivalProducts.length > 0)
+                    child: ViewState.Busy == model.state
+                        ? Shimmer.fromColors(
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  height: 200,
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: List.generate(4, (index) {
+                                      return Container(
+                                        width: 200,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black26,
+                                                blurRadius: 5.0,
+                                              ),
+                                            ],
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8.0))),
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: 150,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                )
+                              ],
+                            ),
+                            baseColor: Colors.grey[400],
+                            highlightColor: Colors.white)
+                        : ListView.builder(
+                            itemCount: model.bestSellingProducts.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              var product = model.bestSellingProducts[index];
+                              return ProductGridItem(
+                                title: product.name,
+                                price: product.priceLabel,
+                                imageUrl: product.thumbnail,
+                                onPressed: () => Navigator.pushNamed(
+                                    context, "/product_detail",
+                                    arguments: product),
+                              );
+                            }),
+                  ),
+                  if (model.bestSellingProducts.length > 0 ||
+                      model.state == ViewState.Busy)
                     Padding(
                       padding: const EdgeInsets.only(left: 18),
-                      child: Text("New Arrivals",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
+                      child: model.state == ViewState.Busy
+                          ? Shimmer.fromColors(
+                              child: Text(
+                                "New Arrivals",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16),
+                              ),
+                              baseColor: Colors.grey[400],
+                              highlightColor: Colors.white)
+                          : Text(
+                              "New Arrivals",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
                     ),
-                  if (model.newArrivalProducts.length > 0)
+                  if (model.bestSellingProducts.length > 0 ||
+                      model.state == ViewState.Busy)
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         minHeight: 150.0,
                         maxHeight: 210.0,
                       ),
-                      child: ListView.builder(
-                          itemCount: model.newArrivalProducts.length,
-                          shrinkWrap: false,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            var product = model.newArrivalProducts[index];
-                            return ProductGridItem(
-                              title: product.name,
-                              price: product.priceLabel,
-                              imageUrl: product.thumbnail,
-                              onPressed: () => Navigator.pushNamed(
-                                  context, "/product_detail",
-                                  arguments: product),
-                            );
-                          }),
+                      child: ViewState.Busy == model.state
+                          ? Shimmer.fromColors(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 200,
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: List.generate(4, (index) {
+                                        return Container(
+                                          width: 200,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black26,
+                                                  blurRadius: 5.0,
+                                                ),
+                                              ],
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.0))),
+                                          child: SizedBox(
+                                            height: 100,
+                                            width: 150,
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              baseColor: Colors.grey[400],
+                              highlightColor: Colors.white)
+                          : ListView.builder(
+                              itemCount: model.newArrivalProducts.length,
+                              shrinkWrap: false,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                var product = model.newArrivalProducts[index];
+                                return ProductGridItem(
+                                  title: product.name,
+                                  price: product.priceLabel,
+                                  imageUrl: product.thumbnail,
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, "/product_detail",
+                                      arguments: product),
+                                );
+                              }),
                     )
                 ],
               )
