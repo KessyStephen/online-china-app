@@ -50,7 +50,7 @@ class ProductGridItem extends StatelessWidget {
               child: Text(
                 "Samsung A20 QUAD CORE Processor 2019/2020",
                 style: TextStyle(fontSize: 14),
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),

@@ -129,8 +129,8 @@ class HomeTabView extends StatelessWidget {
                   if (model.bestSellingProducts.length > 0)
                     ConstrainedBox(
                       constraints: const BoxConstraints(
-                        minHeight: 180.0,
-                        maxHeight: 220.0,
+                        minHeight: 150.0,
+                        maxHeight: 210.0,
                       ),
                       child: ListView.builder(
                           itemCount: model.bestSellingProducts.length,
@@ -158,8 +158,8 @@ class HomeTabView extends StatelessWidget {
                   if (model.newArrivalProducts.length > 0)
                     ConstrainedBox(
                       constraints: const BoxConstraints(
-                        minHeight: 180.0,
-                        maxHeight: 220.0,
+                        minHeight: 150.0,
+                        maxHeight: 210.0,
                       ),
                       child: ListView.builder(
                           itemCount: model.newArrivalProducts.length,
