@@ -21,7 +21,7 @@ class CategoryRow extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
                     child: Text(this.title,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
                   ),
                 if (model.trendingCategories.length > 0)
                   SizedBox(

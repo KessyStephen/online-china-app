@@ -18,9 +18,8 @@ class ProductGridItem extends StatelessWidget {
     return InkWell(
       onTap: this.onPressed,
       child: Container(
-        width: 150,
+        width: 180,
         margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.only(top: 12, right: 8, bottom: 8, left: 8),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(16))),
@@ -30,35 +29,43 @@ class ProductGridItem extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                height: 100,
-                child: CachedNetworkImage(
-                  imageUrl: this.imageUrl != null ? this.imageUrl : "",
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.asset(
-                    PLACEHOLDER_IMAGE,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: this.imageUrl != null ? this.imageUrl : "",
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Image.asset(
+                      PLACEHOLDER_IMAGE,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               child: Text(
-                this.title != null ? this.title : "",
-                style: TextStyle(fontSize: 12),
+                "Samsung A20 QUAD CORE Processor 2019/2020",
+                style: TextStyle(fontSize: 14),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              this.price != null ? this.price : "",
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: primaryColor),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
+            Padding(
+              padding: const EdgeInsets.symmetric( horizontal: 6),
+              child: Text(
+                this.price != null ? this.price : "",
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: primaryColor),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),

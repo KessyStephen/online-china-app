@@ -15,11 +15,11 @@ class CategoryGridItem extends StatelessWidget {
     return InkWell(
       onTap: this.onPressed,
       child: Container(
-        width: 64,
         margin: const EdgeInsets.all(8),
+        width: 64,
+        alignment: Alignment.center,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               height: 64,
@@ -41,6 +41,7 @@ class CategoryGridItem extends StatelessWidget {
               this.title,
               style: const TextStyle(fontSize: 12),
               maxLines: 2,
+              textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
             ),
           ],
