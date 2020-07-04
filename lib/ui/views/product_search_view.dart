@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_widgets/infinite_widgets.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
-import 'package:online_china_app/ui/widgets/product_list_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,8 @@ class ProductSearchView extends StatefulWidget {
 
 class _ProductSearchViewState extends State<ProductSearchView> {
   final _queryController = TextEditingController();
+  int page = 2;
+  bool showLoading = true;
 
   @override
   void dispose() {
@@ -26,10 +29,6 @@ class _ProductSearchViewState extends State<ProductSearchView> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double gridWidth = width / 2 - 18;
-    double gridAspectRatio = gridWidth / (gridWidth + 20);
-
     return BaseView<ProductModel>(
         model: ProductModel(productService: Provider.of(context)),
         onModelReady: (model) => model.clearSearchData(),
@@ -84,28 +83,52 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: GridView.count(
-                          crossAxisCount: 2,
-                          childAspectRatio: gridAspectRatio,
-                          shrinkWrap: true,
-                          children: List.generate(
-                              model.searchedProducts == null
-                                  ? 0
-                                  : model.searchedProducts.length, (index) {
-                            Product product = model.searchedProducts[index];
-                            return ProductGridItem(
-                              title: product.name,
-                              price: product.priceLabel,
-                              imageUrl: product.thumbnail,
-                              onPressed: () => Navigator.pushNamed(
-                                  context, "/product_detail",
-                                  arguments: product),
-                            );
-                          })),
+                      child: InfiniteGridView(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        itemBuilder: (context, index) {
+                          Product product = model.searchedProducts[index];
+                          return ProductGridItem(
+                            title: product.name,
+                            price: product.priceLabel,
+                            imageUrl: product.thumbnail,
+                            onPressed: () => Navigator.pushNamed(
+                                context, "/product_detail",
+                                arguments: product),
+                          );
+                        },
+                        itemCount: model.searchedProducts == null
+                            ? 0
+                            : model.searchedProducts
+                                .length, // Current itemCount you have
+                        hasNext: model.searchedProducts.length >= PER_PAGE_COUNT
+                            ? this.showLoading
+                            : false, // if we have fewer than requested, there is no next
+                        nextData: () {
+                          this.loadNextData(model);
+                        }, // callback called when end to the list is reach and hasNext is true
+                      ),
                     ),
                   ],
                 ),
               ),
             ));
+  }
+
+  void loadNextData(ProductModel model) async {
+    bool flag = await model.searchProducts(
+        query: this._queryController.text,
+        hideLoading: true,
+        page: this.page,
+        perPage: PER_PAGE_COUNT);
+    if (flag) {
+      setState(() {
+        this.page++;
+      });
+    } else {
+      setState(() {
+        this.showLoading = false;
+      });
+    }
   }
 }

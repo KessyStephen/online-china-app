@@ -41,6 +41,7 @@ dependencies:
   flutter_icons: ^1.1.0
   webview_flutter: ^0.3.22+1
   html: ^0.14.0+3
+  infinite_widgets: ^1.0.1
 
 
 dev_dependencies:

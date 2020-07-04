@@ -18,12 +18,12 @@ class OrderModel extends BaseModel {
       {perPage = PER_PAGE_COUNT,
       page = 1,
       sort = "",
-      userId = "",
       hideLoading = false}) async {
     if (hideLoading) {
       setState(ViewState.Busy);
     }
-    bool response = await _orderService.getOrders();
+    bool response =
+        await _orderService.getOrders(perPage: perPage, page: page, sort: sort);
     setState(ViewState.Idle);
     return response;
   }

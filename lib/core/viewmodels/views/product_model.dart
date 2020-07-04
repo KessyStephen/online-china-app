@@ -15,12 +15,15 @@ class ProductModel extends BaseModel {
   List<Product> get searchedProducts => _productService.searchedProducts;
 
   Future<bool> getProducts(
-      {categoryIds = "", page = 1, hideLoading = false}) async {
+      {categoryIds = "",
+      page = 1,
+      perPage = PER_PAGE_COUNT,
+      hideLoading = false}) async {
     if (hideLoading) {
       setState(ViewState.Busy);
     }
-    bool response =
-        await _productService.getProducts(categoryIds: categoryIds, page: page);
+    bool response = await _productService.getProducts(
+        categoryIds: categoryIds, page: page, perPage: perPage);
     setState(ViewState.Idle);
     return response;
   }

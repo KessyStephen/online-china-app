@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:infinite_widgets/infinite_widgets.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
@@ -12,12 +14,21 @@ import 'package:online_china_app/ui/widgets/order_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-class OrdersTabView extends StatelessWidget {
+class OrdersTabView extends StatefulWidget {
+  @override
+  _OrdersTabViewState createState() => _OrdersTabViewState();
+}
+
+class _OrdersTabViewState extends State<OrdersTabView> {
+  int page = 2;
+  bool showLoading = true;
+
   @override
   Widget build(BuildContext context) {
     return BaseView<OrderModel>(
       model: OrderModel(orderService: Provider.of(context)),
-      onModelReady: (model) => model.getOrders(hideLoading: true),
+      onModelReady: (model) =>
+          model.getOrders(hideLoading: true, perPage: PER_PAGE_COUNT),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
@@ -39,13 +50,13 @@ class OrdersTabView extends StatelessWidget {
                   ),
                 )
               : model.orders.length == 0
-                  ? EmptyListWidget(message: "No Orders",)
-                  : ListView.builder(
-                      itemCount: model.orders.length,
-                      shrinkWrap: false,
+                  ? EmptyListWidget(
+                      message: "No Orders",
+                    )
+                  : InfiniteListView.separated(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (context, index) {
                         var order = model.orders[index];
                         return OrderListItem(
                           orderID: order.referenceId.toString(),
@@ -60,18 +71,33 @@ class OrdersTabView extends StatelessWidget {
                                 arguments: {"order": order});
                           },
                         );
-
-                        //        return OrderListItem(
-                        //   orderID: "#123123",
-                        //   orderDate: "27 JAN 2020",
-                        //   paymentStatus: "UNPAID",
-                        //   itemCount: "X 4 Items",
-                        //   price: "TZS 720,000",
-                        // );
                       },
+                      itemCount: model.orders != null
+                          ? model.orders.length
+                          : 0, // Current itemCount you have
+                      hasNext: model.orders.length >= PER_PAGE_COUNT
+                          ? this.showLoading
+                          : false, // if we have fewer than requested, there is no next
+                      nextData: () => this.loadNextData(
+                          model), // callback called when end to the list is reach and hasNext is true
+                      separatorBuilder: (context, index) => Divider(height: 1),
                     ),
         ),
       ),
     );
+  }
+
+  void loadNextData(OrderModel model) async {
+    bool flag = await model.getOrders(
+        hideLoading: true, page: this.page, perPage: PER_PAGE_COUNT);
+    if (flag) {
+      setState(() {
+        this.page++;
+      });
+    } else {
+      setState(() {
+        this.showLoading = false;
+      });
+    }
   }
 }
