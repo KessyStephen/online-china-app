@@ -20,7 +20,9 @@ class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => HomeView());
+        return MaterialPageRoute(
+            builder: (_) => HomeView(),
+            settings: RouteSettings(arguments: settings.arguments));
         break;
 
       case '/login':

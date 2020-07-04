@@ -26,4 +26,9 @@ class CartModel extends BaseModel {
     setState(ViewState.Idle);
     return response;
   }
+
+  Future<bool> clearCartData() async {
+    _cartService.clearCartData();
+    return true;
+  }
 }

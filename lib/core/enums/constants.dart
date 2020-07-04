@@ -7,3 +7,6 @@ const String API_ENDPONT = 'dev.onlinechina.co:3000';
 const String FALLBACK_LANG = 'en';
 
 const String PLACEHOLDER_IMAGE = 'assets/images/logo.png';
+
+//zero based index of cart tab
+const int CART_INDEX = 2;

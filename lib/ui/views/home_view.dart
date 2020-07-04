@@ -23,12 +23,20 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> params =
+        ModalRoute.of(context).settings.arguments;
+    var switchToIndex = params != null ? params['switchToIndex'] : null;
+
     return BaseView<StartUpModel>(
       model: StartUpModel(
         startUpService: Provider.of(context),
       ),
       onModelReady: (model) async {
         await model.handleStartUpLogic();
+
+        if (switchToIndex != null) {
+          await model.navigateToTab(switchToIndex);
+        }
       },
       builder: (context, model, child) => BusyOverlay(
         show: false,

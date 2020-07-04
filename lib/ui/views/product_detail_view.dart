@@ -52,7 +52,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             ),
             BadgeIcon(
               count: model.itemCount.toString(),
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, "/",
+                  arguments: {"switchToIndex": CART_INDEX}),
             ),
           ],
         ),
@@ -207,6 +208,12 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     child: BigButton(
                       color: Color.fromRGBO(152, 2, 32, 1.0),
                       buttonTitle: "BUY NOW",
+                      functionality: () async {
+                        await model.clearCartData();
+                        await model.addToCart(product);
+                        Navigator.pushNamed(context, "/",
+                            arguments: {"switchToIndex": CART_INDEX});
+                      },
                     ),
                   ),
                 ],
