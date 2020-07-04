@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:online_china_app/core/helpers/Utils.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -26,6 +27,16 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   @override
   Widget build(BuildContext context) {
     final Product product = ModalRoute.of(context).settings.arguments;
+
+    var attributeWidgets = List<Widget>();
+    if (product.attributes != null) {
+      for (var attr in product.attributes) {
+        attributeWidgets.add(ProductAttribute(
+          leftText: attr.name,
+          rightText: attr.valueString,
+        ));
+      }
+    }
 
     return BaseView<CartModel>(
       model: CartModel(cartService: Provider.of(context)),
@@ -86,7 +97,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                           ),
 
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 5.0),
+                          padding: const EdgeInsets.only(bottom: 10.0, top: 6),
                           child: Text(
                             product.name,
                             style: const TextStyle(fontSize: 18),
@@ -118,29 +129,29 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                               functionality: () => model.addToCart(product),
                             ),
                           ),
-                        DetailsHeader(
-                          title: "About",
-                          rightText: "See all >",
-                        ),
-                        ProductAttribute(
-                          leftText: "Condition",
-                          rightText: "New",
-                        ),
-                        ProductAttribute(
-                          leftText: "Brand",
-                          rightText: "Apple",
-                        ),
-                        ProductAttribute(
-                          leftText: "Screen Size",
-                          rightText: "5.5",
-                        ),
-                        ProductAttribute(
-                          leftText: "Model",
-                          rightText: "iPhone 8 Plus",
+                        if (attributeWidgets.length > 0)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (attributeWidgets.length > 0)
+                          DetailsHeader(
+                            title: "About",
+                            rightText: "",
+                          ),
+
+                        ...attributeWidgets,
+
+                        SizedBox(
+                          height: 10,
                         ),
                         DetailsHeader(
                           title: "Description",
                           rightText: "See all >",
+                          onPressed: () => Navigator.pushNamed(
+                              context, "/product_description_full", arguments: {
+                            "title": product.name,
+                            "body": product.description
+                          }),
                         ),
                         // if (product.description != null)
                         //   Container(
@@ -159,9 +170,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(product.description != null
-                              ? product.description
-                              : ""),
+                          child: Text(
+                            product.description != null
+                                ? Utils.removeHtmlTags(product.description)
+                                : "",
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
 
                         // InkWell(

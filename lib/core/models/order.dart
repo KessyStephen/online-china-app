@@ -34,7 +34,7 @@ class Order {
     status = map['status'];
     paymentStatus = map['paymentStatus'];
     createdAt = map['createdAt'] != null
-        ? DateTime.parse(map['createdAt'].toString())
+        ? DateTime.parse(map['createdAt'].toString()).toLocal()
         : null;
 
     total = map['total'] != null ? double.parse(map['total'].toString()) : 0;

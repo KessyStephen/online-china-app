@@ -48,7 +48,7 @@ class CartTabView extends StatelessWidget {
                       )
                     : model.products.length == 0
                         ? EmptyListWidget(
-                            message: "Cart is empty",
+                            message: "Empty list",
                           )
                         : ListView.builder(
                             itemCount: model.products.length,
@@ -95,8 +95,7 @@ class CartTabView extends StatelessWidget {
                     buttonTitle: "CHECKOUT",
                     functionality: () {
                       // bool isLoggedIn =Provider.of<User>(context).isLoggedIn;
-                      if (model.total > 0 &&
-                          isLoggedIn) {
+                      if (model.total > 0 && isLoggedIn) {
                         Map<String, dynamic> params = {
                           'items': model.products,
                           'total': model.total,

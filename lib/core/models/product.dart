@@ -16,6 +16,7 @@ class Product extends TranslatedModel {
   String sku;
   String thumbnail;
   List<ImageItem> images;
+  List<AttributeItem> attributes;
   bool canRequestSample;
 
   Product({
@@ -80,6 +81,19 @@ class Product extends TranslatedModel {
           ? imgItem.thumbSrc
           : imgItem.src;
     }
+
+    //attributes
+    var attributesArr = map['attributes'];
+    List<AttributeItem> attributeItems = [];
+    if (attributesArr != null && attributesArr.length > 0) {
+      for (var i = 0; i < attributesArr.length; i++) {
+        var attr = attributesArr[i];
+        var attrItem = AttributeItem.fromMap(attr);
+        attributeItems.add(attrItem);
+      }
+    }
+
+    attributes = attributeItems;
   }
 
   Map<String, dynamic> toMap() {
@@ -120,6 +134,34 @@ class ImageItem {
       'src': src,
       'thumbSrc': thumbSrc,
       'position': position,
+    };
+  }
+}
+
+class AttributeItem {
+  String name;
+  List<dynamic> value;
+  String valueString;
+
+  AttributeItem({this.name, this.value}) : super();
+
+  AttributeItem.fromMap(Map<String, dynamic> map) {
+    name = map['name'];
+    value = map['value'];
+
+    var tmpVal = map['value'];
+    if (tmpVal != null && tmpVal is List && tmpVal.length > 0) {
+      valueString = tmpVal.join(", ");
+    } else {
+      valueString = "";
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'value': value,
+      'valueString': valueString,
     };
   }
 }

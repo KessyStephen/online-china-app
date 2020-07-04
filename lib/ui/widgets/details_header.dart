@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class DetailsHeader extends StatelessWidget {
   final String title;
   final String rightText;
+  final Function onPressed;
 
-  const DetailsHeader({Key key, this.title, this.rightText}) : super(key: key);
+  const DetailsHeader({Key key, this.title, this.rightText, this.onPressed})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +21,7 @@ class DetailsHeader extends StatelessWidget {
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           if (this.rightText != null)
             InkWell(
+              onTap: this.onPressed,
               child: Text(
                 this.rightText != null ? this.rightText : "",
                 style:

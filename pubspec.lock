@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.16.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -137,6 +144,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.11.3"
+  html:
+    dependency: "direct main"
+    description:
+      name: html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0+3"
   http:
     dependency: "direct main"
     description:

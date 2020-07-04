@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/ui/views/account_view.dart';
 import 'package:online_china_app/ui/views/country_code_picker.dart';
 import 'package:online_china_app/ui/views/home_view.dart';
+import 'package:online_china_app/ui/views/in_app_webview.dart';
 import 'package:online_china_app/ui/views/login_view.dart';
 import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
 import 'package:online_china_app/ui/views/order/order_detail_view.dart';
@@ -13,6 +14,7 @@ import 'package:online_china_app/ui/views/reset_password.dart';
 import 'package:online_china_app/ui/views/product_detail_view.dart';
 import 'package:online_china_app/ui/views/product_list_view.dart';
 import 'package:online_china_app/ui/views/subcategory_view.dart';
+import 'package:online_china_app/ui/views/tabs/cart_tab.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -47,6 +49,11 @@ class Router {
       case '/product_detail':
         return MaterialPageRoute(
             builder: (_) => ProductDetailView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/product_description_full':
+        return MaterialPageRoute(
+            builder: (_) => InAppWebview(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
       case '/product_list':
