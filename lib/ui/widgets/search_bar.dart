@@ -5,6 +5,8 @@ class SearchBar extends StatelessWidget {
   final Color textColor;
 
   final bool disableTextField;
+  final bool autofocus;
+
   final TextEditingController controller;
   final Function onSubmitPressed;
 
@@ -13,6 +15,7 @@ class SearchBar extends StatelessWidget {
       this.backgroundColor,
       this.textColor,
       this.disableTextField,
+      this.autofocus,
       this.controller,
       this.onSubmitPressed})
       : super(key: key);
@@ -34,6 +37,7 @@ class SearchBar extends StatelessWidget {
           Expanded(
               flex: 1,
               child: TextField(
+                autofocus: this.autofocus == true,
                 controller: this.controller,
                 enabled: this.disableTextField == null ||
                     this.disableTextField == false,

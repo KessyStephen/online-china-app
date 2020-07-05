@@ -56,6 +56,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                           Expanded(
                             flex: 1,
                             child: SearchBar(
+                              autofocus: true,
                               controller: _queryController,
                               onSubmitPressed: () {
                                 if (_queryController.text != null &&
@@ -67,8 +68,13 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () => model.searchProducts(
-                                query: _queryController.text),
+                            onPressed: () {
+                              if (_queryController.text.isNotEmpty) {
+                                model.searchProducts(
+                                    query: _queryController.text);
+                                FocusScope.of(context).unfocus();
+                              }
+                            },
                             icon: Icon(
                               Icons.search,
                               color: Colors.white,
