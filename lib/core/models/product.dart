@@ -75,7 +75,10 @@ class Product extends TranslatedModel {
     images = imageItems;
 
     //image thumb
-    if (images != null && images.length > 0) {
+    thumbnail = map["thumbnail"];
+    if ((thumbnail == null || thumbnail.isEmpty) &&
+        images != null &&
+        images.length > 0) {
       var imgItem = images[0];
       thumbnail = imgItem.thumbSrc != null && imgItem.thumbSrc.isNotEmpty
           ? imgItem.thumbSrc
