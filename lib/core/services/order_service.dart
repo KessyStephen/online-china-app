@@ -53,6 +53,30 @@ class OrderService {
     }
   }
 
+  Future<Order> getOrder({String orderId = ""}) async {
+    if (orderId == null || orderId.isEmpty) {
+      return null;
+    }
+
+    var response = await this._api.getOrder(orderId: orderId);
+    if (response != null && response['success']) {
+      var obj = response['data'];
+
+      if (obj != null) {
+        return Order.fromMap(obj);
+      }
+
+      return null;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return null;
+    }
+  }
+
   Future<bool> createOrder({List<Product> products}) async {
     var response = await this._api.createOrder(products: products);
     if (response != null && response['success']) {

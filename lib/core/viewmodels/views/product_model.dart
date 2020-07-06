@@ -28,6 +28,16 @@ class ProductModel extends BaseModel {
     return response;
   }
 
+  Future<Product> getProduct(
+      {String productId = "", hideLoading = false}) async {
+    if (hideLoading) {
+      setState(ViewState.Busy);
+    }
+    Product response = await _productService.getProduct(productId: productId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
   Future<bool> searchProducts(
       {query = '',
       perPage = PER_PAGE_COUNT,

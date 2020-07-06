@@ -28,6 +28,15 @@ class OrderModel extends BaseModel {
     return response;
   }
 
+  Future<Order> getOrder({String orderId = "", hideLoading = false}) async {
+    if (hideLoading) {
+      setState(ViewState.Busy);
+    }
+    Order response = await _orderService.getOrder(orderId: orderId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
   Future<bool> createOrder({List<Product> products}) async {
     setState(ViewState.Busy);
     bool response = await _orderService.createOrder(products: products);

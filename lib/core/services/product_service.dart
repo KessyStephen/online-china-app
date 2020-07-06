@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/services/cart_service.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -8,10 +9,15 @@ import 'api.dart';
 class ProductService {
   final Api _api;
   final AlertService _alertService;
+  final CartService _cartService;
 
-  ProductService({@required Api api, @required AlertService alertService})
+  ProductService(
+      {@required Api api,
+      @required AlertService alertService,
+      @required CartService cartService})
       : _api = api,
-        _alertService = alertService;
+        _alertService = alertService,
+        _cartService = cartService;
 
   List<Product> _products = [];
   List<Product> get products => _products;
@@ -51,6 +57,30 @@ class ProductService {
               : 'It appears you are Offline',
           error: true);
       return false;
+    }
+  }
+
+  Future<Product> getProduct({String productId = ""}) async {
+    if (productId == null || productId.isEmpty) {
+      return null;
+    }
+
+    var response = await this._api.getProduct(productId: productId);
+    if (response != null && response['success']) {
+      var obj = response['data'];
+
+      if (obj != null) {
+        return Product.fromMap(obj);
+      }
+
+      return null;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return null;
     }
   }
 
@@ -137,5 +167,17 @@ class ProductService {
           error: true);
       return false;
     }
+  }
+
+  Future<bool> addToCart(Product product) async {
+    return _cartService.addToCart(product);
+  }
+
+  Future<bool> removeFromCart(Product product) async {
+    return _cartService.removeFromCart(product);
+  }
+
+  void clearCartData() {
+    _cartService.clearCartData();
   }
 }

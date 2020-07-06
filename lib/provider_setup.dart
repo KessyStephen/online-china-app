@@ -45,10 +45,6 @@ List<SingleChildWidget> dependentServices = [
     update: (context, api, alertService, categoryService) =>
         CategoryService(api: api, alertService: alertService),
   ),
-  ProxyProvider2<Api, AlertService, ProductService>(
-    update: (context, api, alertService, productService) =>
-        ProductService(api: api, alertService: alertService),
-  ),
   ProxyProvider4<Api, AlertService, SecureStorageService, NavigationService,
       AuthenticationService>(
     update: (context, api, alertService, storageService, navigationService,
@@ -70,6 +66,11 @@ List<SingleChildWidget> dependentServices = [
   ProxyProvider3<Api, AlertService, CartService, OrderService>(
     update: (context, api, alertService, cartService, orderService) =>
         OrderService(
+            api: api, alertService: alertService, cartService: cartService),
+  ),
+  ProxyProvider3<Api, AlertService, CartService, ProductService>(
+    update: (context, api, alertService, cartService, productService) =>
+        ProductService(
             api: api, alertService: alertService, cartService: cartService),
   ),
   ProxyProvider4<OrderService, CartService, SecureStorageService,

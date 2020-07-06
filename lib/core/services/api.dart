@@ -294,6 +294,22 @@ class Api {
     }
   }
 
+  Future<Map> getProduct({productId = ""}) async {
+    try {
+      var client = await createClient();
+      var uri = uriForPath("/api/products/" + productId, null);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
   Future<Map> searchProducts(
       {query = "", perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
     try {
@@ -376,6 +392,22 @@ class Api {
       var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/orders", params);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getOrder({orderId = ""}) async {
+    try {
+      var client = await createClient();
+      var uri = uriForPath("/api/orders/" + orderId, null);
 
       var response = await client.get(uri);
       return json.decode(response.body);
