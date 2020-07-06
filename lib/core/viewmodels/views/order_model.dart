@@ -19,7 +19,7 @@ class OrderModel extends BaseModel {
       page = 1,
       sort = "",
       hideLoading = false}) async {
-    if (hideLoading) {
+    if (!hideLoading) {
       setState(ViewState.Busy);
     }
     bool response =
@@ -29,7 +29,7 @@ class OrderModel extends BaseModel {
   }
 
   Future<Order> getOrder({String orderId = "", hideLoading = false}) async {
-    if (hideLoading) {
+    if (!hideLoading) {
       setState(ViewState.Busy);
     }
     Order response = await _orderService.getOrder(orderId: orderId);

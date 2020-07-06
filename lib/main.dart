@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           backgroundColor: backgroundColor,
           primaryColor: primaryColor,
-          accentColor: Color(0xff2ECC71),
+          accentColor: primaryColor,
           hintColor: Color(0xff707070),
         ),
         initialRoute: '/',

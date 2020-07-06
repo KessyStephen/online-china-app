@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_widgets/infinite_widgets.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -87,34 +88,45 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                     SizedBox(
                       height: 10,
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: InfiniteGridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
-                        itemBuilder: (context, index) {
-                          Product product = model.searchedProducts[index];
-                          return ProductGridItem(
-                            title: product.name,
-                            price: product.priceLabel,
-                            imageUrl: product.thumbnail,
-                            onPressed: () => Navigator.pushNamed(
-                                context, "/product_detail",
-                                arguments: product),
-                          );
-                        },
-                        itemCount: model.searchedProducts == null
-                            ? 0
-                            : model.searchedProducts
-                                .length, // Current itemCount you have
-                        hasNext: model.searchedProducts.length >= PER_PAGE_COUNT
-                            ? this.showLoading
-                            : false, // if we have fewer than requested, there is no next
-                        nextData: () {
-                          this.loadNextData(model);
-                        }, // callback called when end to the list is reach and hasNext is true
-                      ),
-                    ),
+                    model.state == ViewState.Busy
+                        ? Expanded(
+                            flex: 1,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            flex: 1,
+                            child: InfiniteGridView(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                                Product product = model.searchedProducts[index];
+                                return ProductGridItem(
+                                  title: product.name,
+                                  price: product.priceLabel,
+                                  imageUrl: product.thumbnail,
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, "/product_detail",
+                                      arguments: {"productId": product.id}),
+                                );
+                              },
+                              itemCount: model.searchedProducts == null
+                                  ? 0
+                                  : model.searchedProducts
+                                      .length, // Current itemCount you have
+                              hasNext: model.searchedProducts.length >=
+                                      PER_PAGE_COUNT
+                                  ? this.showLoading
+                                  : false, // if we have fewer than requested, there is no next
+                              nextData: () {
+                                this.loadNextData(model);
+                              }, // callback called when end to the list is reach and hasNext is true
+                            ),
+                          ),
                   ],
                 ),
               ),

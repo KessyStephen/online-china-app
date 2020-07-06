@@ -12,21 +12,21 @@ class CartService {
       : _api = api,
         _alertService = alertService;
 
-  List<Product> _products = [];
-  List<Product> get products => _products;
+  List<Product> _cartProducts = [];
+  List<Product> get cartProducts => _cartProducts;
 
-  double get total {
+  double get cartTotal {
     var sum = 0.0;
-    _products.forEach((element) {
+    _cartProducts.forEach((element) {
       sum = sum + element.price * element.quantity;
     });
 
     return sum;
   }
 
-  int get itemCount {
+  int get cartItemCount {
     var sum = 0;
-    _products.forEach((element) {
+    _cartProducts.forEach((element) {
       sum = sum + element.quantity;
     });
 
@@ -34,7 +34,7 @@ class CartService {
   }
 
   Future<bool> addToCart(Product product) async {
-    var found = _products.firstWhere((item) => item.id == product.id,
+    var found = _cartProducts.firstWhere((item) => item.id == product.id,
         orElse: () => null);
 
     if (found != null) {
@@ -43,20 +43,20 @@ class CartService {
     }
 
     product.quantity = 1;
-    _products.add(product);
+    _cartProducts.add(product);
 
     return true;
   }
 
   Future<bool> removeFromCart(Product product) async {
-    var found = _products.firstWhere((item) => item.id == product.id,
+    var found = _cartProducts.firstWhere((item) => item.id == product.id,
         orElse: () => null);
 
     if (found != null) {
       found.quantity = found.quantity - 1;
 
       if (found.quantity < 0) {
-        _products.removeWhere((item) => item.id == product.id);
+        _cartProducts.removeWhere((item) => item.id == product.id);
       }
 
       return true;
@@ -66,6 +66,6 @@ class CartService {
   }
 
   void clearCartData() {
-    this._products.clear();
+    this._cartProducts.clear();
   }
 }

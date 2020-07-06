@@ -46,17 +46,17 @@ class CartTabView extends StatelessWidget {
                           ),
                         ),
                       )
-                    : model.products.length == 0
+                    : model.cartProducts.length == 0
                         ? EmptyListWidget(
                             message: "Empty list",
                           )
                         : ListView.builder(
-                            itemCount: model.products.length,
+                            itemCount: model.cartProducts.length,
                             shrinkWrap: false,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
                             itemBuilder: (BuildContext context, int index) {
-                              var product = model.products[index];
+                              var product = model.cartProducts[index];
                               return ProductListItem(
                                 title: product.name,
                                 price: product.priceLabel,
@@ -83,7 +83,7 @@ class CartTabView extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          model.total.toStringAsFixed(2),
+                          model.cartTotal.toStringAsFixed(2),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -91,20 +91,20 @@ class CartTabView extends StatelessWidget {
                     ),
                   ),
                   BigButton(
-                    color: model.total > 0 ? primaryColor : Colors.grey,
+                    color: model.cartTotal > 0 ? primaryColor : Colors.grey,
                     buttonTitle: "CHECKOUT",
                     functionality: () {
                       // bool isLoggedIn =Provider.of<User>(context).isLoggedIn;
-                      if (model.total > 0 && isLoggedIn) {
+                      if (model.cartTotal > 0 && isLoggedIn) {
                         Map<String, dynamic> params = {
-                          'items': model.products,
-                          'total': model.total,
+                          'items': model.cartProducts,
+                          'total': model.cartTotal,
                         };
 
                         Navigator.pushNamed(context, '/confirm_order',
                             arguments: params);
                       }
-                      if (model.total > 0 && !isLoggedIn) {
+                      if (model.cartTotal > 0 && !isLoggedIn) {
                         Get.bottomSheet(AuthModalWidget(
                           message: "Orders",
                           subText: "Please check your orders",

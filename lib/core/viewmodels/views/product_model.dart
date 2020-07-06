@@ -14,12 +14,17 @@ class ProductModel extends BaseModel {
   List<Product> get products => _productService.products;
   List<Product> get searchedProducts => _productService.searchedProducts;
 
+//cart
+  List<Product> get cartProducts => _productService.cartProducts;
+  double get cartTotal => _productService.cartTotal;
+  int get cartItemCount => _productService.cartItemCount;
+
   Future<bool> getProducts(
       {categoryIds = "",
       page = 1,
       perPage = PER_PAGE_COUNT,
       hideLoading = false}) async {
-    if (hideLoading) {
+    if (!hideLoading) {
       setState(ViewState.Busy);
     }
     bool response = await _productService.getProducts(
@@ -30,7 +35,7 @@ class ProductModel extends BaseModel {
 
   Future<Product> getProduct(
       {String productId = "", hideLoading = false}) async {
-    if (hideLoading) {
+    if (!hideLoading) {
       setState(ViewState.Busy);
     }
     Product response = await _productService.getProduct(productId: productId);
@@ -44,7 +49,7 @@ class ProductModel extends BaseModel {
       page = 1,
       sort = "",
       hideLoading = false}) async {
-    if (hideLoading) {
+    if (!hideLoading) {
       setState(ViewState.Busy);
     }
     bool response = await _productService.searchProducts(
@@ -55,5 +60,24 @@ class ProductModel extends BaseModel {
 
   void clearSearchData() {
     _productService.clearSearchData();
+  }
+
+  Future<bool> addToCart(Product product) async {
+    setState(ViewState.Busy);
+    bool response = await _productService.addToCart(product);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<bool> removeFromCart(Product product) async {
+    setState(ViewState.Busy);
+    bool response = await _productService.removeFromCart(product);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<bool> clearCartData() async {
+    _productService.clearCartData();
+    return true;
   }
 }

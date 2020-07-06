@@ -45,7 +45,11 @@ class Product extends TranslatedModel {
   }
 
   String get priceLabel {
-    return currency + " " + price.toString();
+    if (price != null && currency != null) {
+      return currency + " " + price.toString();
+    }
+
+    return "";
   }
 
   Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {

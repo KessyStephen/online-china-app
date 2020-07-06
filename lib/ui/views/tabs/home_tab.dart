@@ -167,7 +167,7 @@ class HomeTabView extends StatelessWidget {
                                 imageUrl: product.thumbnail,
                                 onPressed: () => Navigator.pushNamed(
                                     context, "/product_detail",
-                                    arguments: product),
+                                    arguments: {"productId": product.id}),
                               );
                             }),
                   ),
@@ -246,7 +246,7 @@ class HomeTabView extends StatelessWidget {
                                   imageUrl: product.thumbnail,
                                   onPressed: () => Navigator.pushNamed(
                                       context, "/product_detail",
-                                      arguments: product),
+                                      arguments: {"productId": product.id}),
                                 );
                               }),
                     )

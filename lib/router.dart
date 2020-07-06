@@ -14,7 +14,6 @@ import 'package:online_china_app/ui/views/reset_password.dart';
 import 'package:online_china_app/ui/views/product_detail_view.dart';
 import 'package:online_china_app/ui/views/product_list_view.dart';
 import 'package:online_china_app/ui/views/subcategory_view.dart';
-import 'package:online_china_app/ui/views/tabs/cart_tab.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {

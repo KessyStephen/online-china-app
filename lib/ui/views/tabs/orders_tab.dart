@@ -27,8 +27,7 @@ class _OrdersTabViewState extends State<OrdersTabView> {
   Widget build(BuildContext context) {
     return BaseView<OrderModel>(
       model: OrderModel(orderService: Provider.of(context)),
-      onModelReady: (model) =>
-          model.getOrders(hideLoading: true, perPage: PER_PAGE_COUNT),
+      onModelReady: (model) => model.getOrders(perPage: PER_PAGE_COUNT),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
@@ -68,7 +67,7 @@ class _OrdersTabViewState extends State<OrdersTabView> {
                           price: order.priceLabel,
                           onPressed: () {
                             Navigator.pushNamed(context, "/order_detail",
-                                arguments: {"order": order});
+                                arguments: {"orderId": order.id});
                           },
                         );
                       },

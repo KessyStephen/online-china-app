@@ -56,26 +56,36 @@ class _BannerRowState extends State<BannerRow> {
                     itemCount: model.banners != null ? model.banners.length : 0,
                     itemBuilder: (BuildContext context, int itemIndex) {
                       BannerItem bannerItem = model.banners[itemIndex];
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        // color: Colors.white,
-                        // decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius:
-                        //         const BorderRadius.all(Radius.circular(20))),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(16),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: bannerItem.image != null
-                                ? bannerItem.image
-                                : "",
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Image.asset(
-                              PLACEHOLDER_IMAGE,
-                              fit: BoxFit.contain,
+                      return InkWell(
+                        onTap: () {
+                          //check if it's product banner
+                          if (bannerItem.productId != null &&
+                              bannerItem.productId.isNotEmpty) {
+                            Navigator.pushNamed(context, "/product_detail",
+                                arguments: {"productId": bannerItem.productId});
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          // color: Colors.white,
+                          // decoration: BoxDecoration(
+                          //     color: Colors.white,
+                          //     borderRadius:
+                          //         const BorderRadius.all(Radius.circular(20))),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(16),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: bannerItem.image != null
+                                  ? bannerItem.image
+                                  : "",
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Image.asset(
+                                PLACEHOLDER_IMAGE,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                         ),

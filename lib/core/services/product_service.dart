@@ -31,6 +31,10 @@ class ProductService {
   List<Product> _bestSellingProducts = [];
   List<Product> get bestSellingProducts => _bestSellingProducts;
 
+  List<Product> get cartProducts => _cartService.cartProducts;
+  double get cartTotal => _cartService.cartTotal;
+  int get cartItemCount => _cartService.cartItemCount;
+
   Future<bool> getProducts(
       {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
     if (page == 1) {
