@@ -47,6 +47,10 @@ class Category extends TranslatedModel {
   }
 
   Category.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
+    if (map == null) {
+      return;
+    }
+
     id = map['_id'];
     parentId = map['parentId'];
   }

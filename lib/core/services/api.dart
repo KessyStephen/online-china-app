@@ -220,6 +220,21 @@ class Api {
     }
   }
 
+  Future<Map> getBanners() async {
+    var client = await createClient();
+    try {
+      var uri = uriForPath("/api/banners", null);
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
   Future<Map> getCategories({parentId = "", all = ""}) async {
     Map<String, String> params = {
       'parentId': parentId,

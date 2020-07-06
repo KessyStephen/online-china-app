@@ -3,14 +3,16 @@ class CountryCode {
   String country;
   String phonePrefix;
 
-  CountryCode({
-    this.code, this.country, this.phonePrefix
-  });
+  CountryCode({this.code, this.country, this.phonePrefix});
 
   CountryCode.fromJson(Map<String, dynamic> map) {
-      code = map['code2'];
-      country = map['country'];
-      phonePrefix = map['phonePrefix'];
+    if (map == null) {
+      return;
+    }
+
+    code = map['code2'];
+    country = map['country'];
+    phonePrefix = map['phonePrefix'];
   }
 
   Map<String, dynamic> toJSON() {

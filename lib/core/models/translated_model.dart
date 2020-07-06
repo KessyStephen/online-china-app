@@ -17,6 +17,8 @@ class TranslatedModel {
   }
 
   TranslatedModel.fromMap(Map<String, dynamic> map) {
-    translations = map['translations'];
+    if (map != null) {
+      translations = map['translations'];
+    }
   }
 }

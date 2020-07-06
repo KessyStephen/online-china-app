@@ -28,6 +28,10 @@ class Order {
   }
 
   Order.fromMap(Map<String, dynamic> map) {
+    if (map == null) {
+      return;
+    }
+
     id = map['_id'];
     referenceId = map['referenceId'] != null ? map['referenceId'] : "";
     supplierId = map['supplierId'];

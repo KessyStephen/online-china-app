@@ -14,6 +14,10 @@ class User {
         isLoggedIn = false;
 
   User.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return;
+    }
+
     id = json['id'];
     name = json['name'];
     email = json['email'];

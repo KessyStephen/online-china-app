@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:online_china_app/ui/widgets/banner_row.dart';
 import 'package:online_china_app/ui/widgets/category_row.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
@@ -88,34 +89,7 @@ class HomeTabView extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(
-                        right: 18, left: 18, bottom: 10, top: 18),
-                    height: 170,
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                          height: 170.0,
-                          initialPage: 0,
-                          scrollDirection: Axis.horizontal,
-                          viewportFraction: 1.0,
-                          enableInfiniteScroll: false,
-                          autoPlay: false),
-                      items: [1, 2, 3, 4, 5].map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20))),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                  BannerRow(),
                   CategoryRow(
                     title: "Trending Categories",
                   ),

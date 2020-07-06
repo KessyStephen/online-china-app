@@ -49,6 +49,10 @@ class Product extends TranslatedModel {
   }
 
   Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
+    if (map == null) {
+      return;
+    }
+
     id = map['_id'];
     type = map['type'];
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
