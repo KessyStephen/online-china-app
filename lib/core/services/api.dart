@@ -454,4 +454,28 @@ class Api {
       };
     }
   }
+
+  Future<Map> getInvoiceHTML({orderId = ""}) async {
+    try {
+      Map<String, String> params = {
+        'orderId': orderId,
+      };
+      params.removeWhere((key, value) => value == null);
+
+      var client = await createClient();
+      var uri = uriForPath("/api/invoices", params);
+
+      var response = await client.get(uri);
+      return {
+        'success': true,
+        'data': response.body,
+      };
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
 }

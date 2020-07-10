@@ -50,7 +50,17 @@ class OrderListItem extends StatelessWidget {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(this.paymentStatus),
+                    Text(
+                      this.paymentStatus == "Pending"
+                          ? "UNPAID"
+                          : this.paymentStatus.toUpperCase(),
+                      style: TextStyle(
+                          color: this.paymentStatus == "Pending"
+                              ? Colors.red
+                              : this.paymentStatus == "Paid"
+                                  ? Colors.green
+                                  : null),
+                    ),
                     Text(this.itemCount != null ? this.itemCount : "")
                   ]),
             ),

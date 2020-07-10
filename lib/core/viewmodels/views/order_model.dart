@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
@@ -33,6 +35,21 @@ class OrderModel extends BaseModel {
       setState(ViewState.Busy);
     }
     Order response = await _orderService.getOrder(orderId: orderId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<String> getInvoiceHTML({String orderId = ""}) async {
+    setState(ViewState.Busy);
+    var response = await _orderService.getInvoiceHTML(orderId: orderId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<Uint8List> generateInvoicePDF({String htmlContent}) async {
+    setState(ViewState.Busy);
+    var response =
+        await _orderService.generateInvoicePDF(htmlContent: htmlContent);
     setState(ViewState.Idle);
     return response;
   }

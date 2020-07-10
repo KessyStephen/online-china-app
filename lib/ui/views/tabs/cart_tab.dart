@@ -90,28 +90,47 @@ class CartTabView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  BigButton(
-                    color: model.cartTotal > 0 ? primaryColor : Colors.grey,
-                    buttonTitle: "CHECKOUT",
-                    functionality: () {
-                      // bool isLoggedIn =Provider.of<User>(context).isLoggedIn;
-                      if (model.cartTotal > 0 && isLoggedIn) {
-                        Map<String, dynamic> params = {
-                          'items': model.cartProducts,
-                          'total': model.cartTotal,
-                        };
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: BigButton(
+                          color: primaryColor,
+                          buttonTitle: "GO SHOPPING",
+                          functionality: () {
+                            Navigator.pushNamed(context, "/",
+                                arguments: {"switchToIndex": 0});
+                          },
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: BigButton(
+                            color: model.cartTotal > 0
+                                ? Color.fromRGBO(152, 2, 32, 1.0)
+                                : Colors.grey,
+                            buttonTitle: "CHECKOUT",
+                            functionality: () {
+                              // bool isLoggedIn =Provider.of<User>(context).isLoggedIn;
+                              if (model.cartTotal > 0 && isLoggedIn) {
+                                Map<String, dynamic> params = {
+                                  'items': model.cartProducts,
+                                  'total': model.cartTotal,
+                                };
 
-                        Navigator.pushNamed(context, '/confirm_order',
-                            arguments: params);
-                      }
-                      if (model.cartTotal > 0 && !isLoggedIn) {
-                        Get.bottomSheet(AuthModalWidget(
-                          message: "Orders",
-                          subText: "Please check your orders",
-                        ));
-                      }
-                    },
-                  )
+                                Navigator.pushNamed(context, '/confirm_order',
+                                    arguments: params);
+                              }
+                              if (model.cartTotal > 0 && !isLoggedIn) {
+                                Get.bottomSheet(AuthModalWidget(
+                                  message: "Orders",
+                                  subText: "Please check your orders",
+                                ));
+                              }
+                            },
+                          )),
+                    ],
+                  ),
                 ],
               )
             ],

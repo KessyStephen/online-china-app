@@ -1,11 +1,17 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
+import 'package:printing/printing.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 
 class OrderService {
   final Api _api;
@@ -90,6 +96,38 @@ class OrderService {
           error: true);
       return false;
     }
+  }
+
+  Future<String> getInvoiceHTML({String orderId = ""}) async {
+    if (orderId == null || orderId.isEmpty) {
+      return null;
+    }
+
+    var response = await this._api.getInvoiceHTML(orderId: orderId);
+    if (response != null && response['success']) {
+      var html = response['data'];
+
+      if (html != null) {
+        return html;
+      }
+
+      return "";
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return null;
+    }
+  }
+
+  Future<Uint8List> generateInvoicePDF({String htmlContent}) async {
+    //filename = filename + ".pdf";
+    return Printing.convertHtml(
+      format: PdfPageFormat.a4,
+      html: htmlContent,
+    );
   }
 
   void clearOrderData({bool removeOrders = false}) {
