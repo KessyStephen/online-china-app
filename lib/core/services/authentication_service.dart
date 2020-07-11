@@ -159,6 +159,26 @@ class AuthenticationService {
     }
   }
 
+  Future<bool> changePassword(password, newPassword, confirmNewPassword) async {
+    if (newPassword != confirmNewPassword) {
+      _alertService.showAlert(
+          text: 'Password and confirm password do not match', error: true);
+      return false;
+    }
+    Map response =
+        await _api.changePassword(password, newPassword, confirmNewPassword);
+    if (response != null && response['success']) {
+      return true;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
+    }
+  }
+
   Future<bool> getCountryCodes() async {
     Map response = await _api.getCountryCodes();
     if (response != null && response['success']) {

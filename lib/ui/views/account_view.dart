@@ -93,8 +93,7 @@ class AccountView extends StatelessWidget {
                     size: 30.0,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/register',
-                        arguments: {'reset_password': true});
+                    Navigator.pushNamed(context, '/change_password');
                   },
                 ),
               SettingListItem(

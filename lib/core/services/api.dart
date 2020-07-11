@@ -200,6 +200,28 @@ class Api {
     }
   }
 
+  // Change Password
+  Future<Map> changePassword(password, newPassword, confirmNewPassword) async {
+    try {
+      Map<String, String> map = {
+        'password': password,
+        'newPassword': newPassword,
+        'confirmNewPassword': confirmNewPassword,
+      };
+      var client = await createClient();
+      var uri = uriForPath("/api/change_password", null);
+      var response = await client.post(uri, body: jsonEncode(map));
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      // return e;
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
   // Login
   Future<Map> login(countryCode, phone, password) async {
     try {

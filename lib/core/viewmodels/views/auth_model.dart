@@ -31,6 +31,10 @@ class AuthModel extends BaseModel {
   void setNotResetPasswordFlag() =>
       _authenticationService.setIsNotResetPassword();
 
+  void logout() async {
+    _authenticationService.logout();
+  }
+
   Future<bool> login({phone: String, password: String}) async {
     setState(ViewState.Busy);
     var success = await _authenticationService.login(phone, password);
@@ -49,8 +53,7 @@ class AuthModel extends BaseModel {
   Future<bool> verifyOtp({code: String, otpFor: String}) async {
     setState(ViewState.Busy);
 
-    var success =
-        await _authenticationService.verifyOtp(code, phone, otpFor);
+    var success = await _authenticationService.verifyOtp(code, phone, otpFor);
     setState(ViewState.Idle);
     return success;
   }
@@ -65,6 +68,15 @@ class AuthModel extends BaseModel {
 
     var success = await _authenticationService.resetPasswordCall(
         phone, countryCode, password, confirmPassword, verificationId);
+    setState(ViewState.Idle);
+    return success;
+  }
+
+  Future<bool> changePassword(
+      {password, newPassword, confirmNewPassword}) async {
+    setState(ViewState.Busy);
+    var success = await _authenticationService.changePassword(
+        password, newPassword, confirmNewPassword);
     setState(ViewState.Idle);
     return success;
   }

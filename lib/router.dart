@@ -7,6 +7,7 @@ import 'package:online_china_app/ui/views/login_view.dart';
 import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
 import 'package:online_china_app/ui/views/order/order_detail_view.dart';
 import 'package:online_china_app/ui/views/product_search_view.dart';
+import 'package:online_china_app/ui/views/registration/change_password_view.dart';
 import 'package:online_china_app/ui/views/registration/register_phone.dart';
 import 'package:online_china_app/ui/views/registration/user_info.dart';
 import 'package:online_china_app/ui/views/registration/verify_otp.dart';
@@ -41,6 +42,9 @@ class Router {
 
       case '/reset_password':
         return MaterialPageRoute(builder: (_) => ResetPassword());
+
+      case '/change_password':
+        return MaterialPageRoute(builder: (_) => ChangePasswordView());
 
       case '/country_code_picker':
         return MaterialPageRoute(
