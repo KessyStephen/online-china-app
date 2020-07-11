@@ -18,14 +18,15 @@ class FavoriteService {
 
   Future<bool> getFavorites({perPage = PER_PAGE_COUNT, page = 1}) async {
     var response = await this._api.getFavorites();
+
+    _favorites.clear();
+
     if (response != null && response['success']) {
       var favoritesArray = response['data'];
 
       if (favoritesArray.length == 0) {
         return false;
       }
-
-      _favorites.clear();
 
       for (int i = 0; i < favoritesArray.length; i++) {
         _favorites.add(Favorite.fromJson(favoritesArray[i]));
