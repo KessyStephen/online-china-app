@@ -78,6 +78,9 @@ class AccountView extends StatelessWidget {
                     color: primaryColor,
                     size: 30.0,
                   ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/favorite_list');
+                  },
                 ),
               if (currentUser.isLoggedIn)
                 SettingListItem(

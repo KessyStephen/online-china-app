@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/product_service.dart';
 
@@ -13,6 +14,8 @@ class ProductModel extends BaseModel {
 
   List<Product> get products => _productService.products;
   List<Product> get searchedProducts => _productService.searchedProducts;
+
+  List<Favorite> get favorites => _productService.favorites;
 
 //cart
   List<Product> get cartProducts => _productService.cartProducts;
@@ -79,5 +82,25 @@ class ProductModel extends BaseModel {
   Future<bool> clearCartData() async {
     _productService.clearCartData();
     return true;
+  }
+
+  Future<bool> getFavorites(
+      {perPage = PER_PAGE_COUNT, page = 1, hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+    bool response =
+        await _productService.getFavorites(perPage: perPage, page: page);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<bool> addToFavorites({productId, hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+    bool response = await _productService.addToFavorites(productId: productId);
+    setState(ViewState.Idle);
+    return response;
   }
 }

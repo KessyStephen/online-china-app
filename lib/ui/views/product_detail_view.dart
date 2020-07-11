@@ -57,7 +57,12 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.favorite_border),
-              onPressed: () {},
+              onPressed: () {
+                if (product != null && product.id != null) {
+                  model.addToFavorites(
+                      productId: product.id, hideLoading: true);
+                }
+              },
             ),
             BadgeIcon(
               count: model.cartItemCount.toString(),

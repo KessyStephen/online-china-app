@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
+import 'package:online_china_app/core/services/favorite_service.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -10,14 +12,17 @@ class ProductService {
   final Api _api;
   final AlertService _alertService;
   final CartService _cartService;
+  final FavoriteService _favoriteService;
 
-  ProductService(
-      {@required Api api,
-      @required AlertService alertService,
-      @required CartService cartService})
-      : _api = api,
+  ProductService({
+    @required Api api,
+    @required AlertService alertService,
+    @required CartService cartService,
+    @required FavoriteService favoriteService,
+  })  : _api = api,
         _alertService = alertService,
-        _cartService = cartService;
+        _cartService = cartService,
+        _favoriteService = favoriteService;
 
   List<Product> _products = [];
   List<Product> get products => _products;
@@ -30,6 +35,9 @@ class ProductService {
 
   List<Product> _bestSellingProducts = [];
   List<Product> get bestSellingProducts => _bestSellingProducts;
+
+  //favorites
+  List<Favorite> get favorites => _favoriteService.favorites;
 
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
@@ -179,6 +187,14 @@ class ProductService {
 
   Future<bool> removeFromCart(Product product) async {
     return _cartService.removeFromCart(product);
+  }
+
+  Future<bool> getFavorites({perPage = PER_PAGE_COUNT, page = 1}) async {
+    return _favoriteService.getFavorites();
+  }
+
+  Future<bool> addToFavorites({productId}) async {
+    return _favoriteService.addToFavorites(productId: productId);
   }
 
   void clearCartData() {

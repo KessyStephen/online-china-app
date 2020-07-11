@@ -2,6 +2,7 @@ import 'package:online_china_app/core/services/account_service.dart';
 import 'package:online_china_app/core/services/banner_service.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 import 'package:online_china_app/core/services/category_service.dart';
+import 'package:online_china_app/core/services/favorite_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
 import 'package:online_china_app/core/services/product_service.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,10 @@ List<SingleChildWidget> dependentServices = [
             navigationService: navigationService,
             alertService: alertService),
   ),
+  ProxyProvider2<Api, AlertService, FavoriteService>(
+    update: (context, api, alertService, favoriteService) =>
+        FavoriteService(api: api, alertService: alertService),
+  ),
   ProxyProvider2<Api, AlertService, BannerService>(
     update: (context, api, alertService, bannerService) =>
         BannerService(api: api, alertService: alertService),
@@ -68,10 +73,20 @@ List<SingleChildWidget> dependentServices = [
         OrderService(
             api: api, alertService: alertService, cartService: cartService),
   ),
-  ProxyProvider3<Api, AlertService, CartService, ProductService>(
-    update: (context, api, alertService, cartService, productService) =>
+  // ProxyProvider3<Api, AlertService, CartService, ProductService>(
+  //   update: (context, api, alertService, cartService, productService) =>
+  //       ProductService(
+  //           api: api, alertService: alertService, cartService: cartService),
+  // ),
+  ProxyProvider4<Api, AlertService, CartService, FavoriteService,
+      ProductService>(
+    update: (context, api, alertService, cartService, favoriteService,
+            productService) =>
         ProductService(
-            api: api, alertService: alertService, cartService: cartService),
+            api: api,
+            alertService: alertService,
+            cartService: cartService,
+            favoriteService: favoriteService),
   ),
   ProxyProvider4<OrderService, CartService, SecureStorageService,
       AuthenticationService, AccountService>(
