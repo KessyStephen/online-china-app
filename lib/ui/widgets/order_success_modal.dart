@@ -68,7 +68,8 @@ class OrderSuccessModal extends StatelessWidget {
           BigButtonOutline(
             buttonTitle: 'GO SHOPPING',
             functionality: () {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/", (Route<dynamic> route) => false);
             },
           ),
         ],
