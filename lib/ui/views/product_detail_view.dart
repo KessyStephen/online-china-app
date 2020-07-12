@@ -158,8 +158,28 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                         titleColor: Colors.black,
                                         color: Color.fromRGBO(255, 222, 0, 1.0),
                                         buttonTitle: "REQUEST SAMPLE",
-                                        functionality: () =>
-                                            model.addToCart(product),
+                                        functionality: () async {
+                                          await model.clearCartData();
+                                          await model.addToCart(product);
+                                          model.setSampleRequestOrder(true);
+
+                                          Map<String, dynamic> params = {
+                                            'items': model.cartProducts,
+                                            'total': model.cartTotal,
+                                          };
+
+                                          Navigator.pushNamed(
+                                              context, '/confirm_order',
+                                              arguments: params);
+
+                                          // Navigator.pushNamedAndRemoveUntil(
+                                          //     context,
+                                          //     "/",
+                                          //     (Route<dynamic> route) => false,
+                                          //     arguments: {
+                                          //       "switchToIndex": CART_INDEX
+                                          //     });
+                                        },
                                       ),
                                     ),
                                   if (attributeWidgets.length > 0)

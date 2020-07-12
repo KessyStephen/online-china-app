@@ -21,6 +21,7 @@ class ProductModel extends BaseModel {
   List<Product> get cartProducts => _productService.cartProducts;
   double get cartTotal => _productService.cartTotal;
   int get cartItemCount => _productService.cartItemCount;
+  bool get isSampleRequest => _productService.isSampleRequest;
 
   Future<bool> getProducts(
       {categoryIds = "",
@@ -82,6 +83,10 @@ class ProductModel extends BaseModel {
   Future<bool> clearCartData() async {
     _productService.clearCartData();
     return true;
+  }
+
+  void setSampleRequestOrder(bool val) {
+    _productService.setSampleRequestOrder(val);
   }
 
   Future<bool> getFavorites(

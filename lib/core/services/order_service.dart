@@ -28,6 +28,7 @@ class OrderService {
 
   List<Order> _orders = [];
   List<Order> get orders => _orders;
+  bool get isSampleRequest => _cartService.isSampleRequest;
 
   Future<bool> getOrders(
       {perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
@@ -84,7 +85,8 @@ class OrderService {
   }
 
   Future<List<String>> createOrder({List<Product> products}) async {
-    var response = await this._api.createOrder(products: products);
+    var response = await this._api.createOrder(
+        products: products, isSampleRequest: _cartService.isSampleRequest);
     if (response != null && response['success']) {
       //_alertService.showAlert(text: "Order successfully placed", error: false);
 

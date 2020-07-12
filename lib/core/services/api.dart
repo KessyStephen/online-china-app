@@ -442,7 +442,8 @@ class Api {
     }
   }
 
-  Future<Map> createOrder({List<Product> products}) async {
+  Future<Map> createOrder(
+      {List<Product> products, isSampleRequest = false}) async {
     try {
       if (products == null) {
         products = [];
@@ -461,7 +462,10 @@ class Api {
         items.add(tmpMap);
       }
 
-      Map<String, dynamic> params = {'items': items};
+      Map<String, dynamic> params = {
+        'items': items,
+        'isSampleRequest': isSampleRequest
+      };
       var client = await createClient();
       params.removeWhere((key, value) => value == null);
       var uri = uriForPath("/api/orders", null);

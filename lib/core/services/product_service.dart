@@ -42,6 +42,7 @@ class ProductService {
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
+  bool get isSampleRequest => _cartService.isSampleRequest;
 
   Future<bool> getProducts(
       {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
@@ -199,5 +200,9 @@ class ProductService {
 
   void clearCartData() {
     _cartService.clearCartData();
+  }
+
+  void setSampleRequestOrder(bool val) {
+    _cartService.setSampleRequestOrder(val);
   }
 }

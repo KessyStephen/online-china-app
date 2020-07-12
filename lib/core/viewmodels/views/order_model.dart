@@ -15,6 +15,7 @@ class OrderModel extends BaseModel {
       : _orderService = orderService;
 
   List<Order> get orders => _orderService.orders;
+  bool get isSampleRequest => _orderService.isSampleRequest;
 
   Future<bool> getOrders(
       {perPage = PER_PAGE_COUNT,

@@ -15,6 +15,9 @@ class CartService {
   List<Product> _cartProducts = [];
   List<Product> get cartProducts => _cartProducts;
 
+  bool _isSampleRequest = false;
+  bool get isSampleRequest => _isSampleRequest;
+
   double get cartTotal {
     var sum = 0.0;
     _cartProducts.forEach((element) {
@@ -66,6 +69,11 @@ class CartService {
   }
 
   void clearCartData() {
+    _isSampleRequest = false;
     this._cartProducts.clear();
+  }
+
+  void setSampleRequestOrder(bool val) {
+    _isSampleRequest = val;
   }
 }
