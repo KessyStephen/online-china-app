@@ -10,3 +10,4 @@ const String PLACEHOLDER_IMAGE = 'assets/images/logo.png';
 
 //zero based index of cart tab
 const int CART_INDEX = 2;
+const int ORDERS_INDEX = 3;

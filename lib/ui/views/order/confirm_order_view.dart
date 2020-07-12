@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
@@ -89,6 +90,10 @@ class ConfirmOrderView extends StatelessWidget {
                             Get.bottomSheet(OrderSuccessModal(
                               onGetInvoice: () async {
                                 String orderId = orderIds[0];
+
+                                await Navigator.pop(context);
+                                // await Navigator.popAndPushNamed(context, "/",
+                                //     arguments: {"switchToIndex": ORDERS_INDEX});
 
                                 Navigator.pushReplacementNamed(
                                     context, "/order_detail",

@@ -66,7 +66,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             ),
             BadgeIcon(
               count: model.cartItemCount.toString(),
-              onPressed: () => Navigator.pushNamed(context, "/",
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                  context, "/", (Route<dynamic> route) => false,
                   arguments: {"switchToIndex": CART_INDEX}),
             ),
           ],
@@ -245,7 +246,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                 functionality: () async {
                                   await model.clearCartData();
                                   await model.addToCart(product);
-                                  Navigator.pushNamed(context, "/",
+                                  // Navigator.pushReplacementNamed(context, "/",
+                                  //     arguments: {"switchToIndex": CART_INDEX});
+
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      "/", (Route<dynamic> route) => false,
                                       arguments: {"switchToIndex": CART_INDEX});
                                 },
                               ),
