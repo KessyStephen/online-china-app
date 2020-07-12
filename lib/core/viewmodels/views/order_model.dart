@@ -54,9 +54,9 @@ class OrderModel extends BaseModel {
     return response;
   }
 
-  Future<bool> createOrder({List<Product> products}) async {
+  Future<List<String>> createOrder({List<Product> products}) async {
     setState(ViewState.Busy);
-    bool response = await _orderService.createOrder(products: products);
+    List<String> response = await _orderService.createOrder(products: products);
     setState(ViewState.Idle);
     return response;
   }

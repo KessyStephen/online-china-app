@@ -83,18 +83,30 @@ class OrderService {
     }
   }
 
-  Future<bool> createOrder({List<Product> products}) async {
+  Future<List<String>> createOrder({List<Product> products}) async {
     var response = await this._api.createOrder(products: products);
     if (response != null && response['success']) {
-      _alertService.showAlert(text: "Order successfully placed", error: false);
-      return true;
+      //_alertService.showAlert(text: "Order successfully placed", error: false);
+
+      var tmpArray = response['data'];
+
+      if (tmpArray == null || tmpArray.length == 0) {
+        return [];
+      }
+
+      List<String> ids = [];
+      for (int i = 0; i < tmpArray.length; i++) {
+        ids.add(tmpArray[i]);
+      }
+
+      return ids;
     } else {
       _alertService.showAlert(
           text: response != null
               ? response['message']
               : 'It appears you are Offline',
           error: true);
-      return false;
+      return null;
     }
   }
 
