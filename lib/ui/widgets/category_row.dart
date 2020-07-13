@@ -15,7 +15,12 @@ class CategoryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<CategoryModel>(
         model: CategoryModel(categoryService: Provider.of(context)),
-        onModelReady: (model) => model.getTrendingCategories(hideLoading: true),
+        onModelReady: (model) {
+          if (model.trendingCategories == null ||
+              model.trendingCategories.length == 0) {
+            model.getTrendingCategories(hideLoading: true);
+          }
+        },
         builder: (context, model, child) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -48,14 +53,18 @@ class CategoryRow extends StatelessWidget {
                                 return Container(
                                   width: 86,
                                   margin: EdgeInsets.all(10),
-                                  
                                   child: Column(
                                     children: <Widget>[
                                       CircleAvatar(
                                         child: Container(),
                                       ),
-                                      SizedBox(height: 10,),
-                                      Container(width: 100, color: Colors.black26,child: Text("      ")),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          width: 100,
+                                          color: Colors.black26,
+                                          child: Text("      ")),
                                     ],
                                   ),
                                 );

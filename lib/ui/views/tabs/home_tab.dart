@@ -20,8 +20,15 @@ class HomeTabView extends StatelessWidget {
     return BaseView<HomeModel>(
       model: HomeModel(productService: Provider.of(context)),
       onModelReady: (model) async {
-        await model.getNewArrivalProducts();
-        await model.getBestSellingProducts();
+        if (model.newArrivalProducts == null ||
+            model.newArrivalProducts.length == 0) {
+          await model.getNewArrivalProducts();
+        }
+
+        if (model.bestSellingProducts == null ||
+            model.bestSellingProducts.length == 0) {
+          await model.getBestSellingProducts();
+        }
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,

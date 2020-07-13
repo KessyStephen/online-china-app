@@ -25,7 +25,11 @@ class _BannerRowState extends State<BannerRow> {
   Widget build(BuildContext context) {
     return BaseView<BannerModel>(
       model: BannerModel(bannerService: Provider.of(context)),
-      onModelReady: (model) => model.getBanners(),
+      onModelReady: (model) {
+        if (model.banners == null || model.banners.length == 0) {
+          model.getBanners();
+        }
+      },
       builder: (context, model, child) => (model.banners == null ||
               model.banners.length == 0)
           ? Container(

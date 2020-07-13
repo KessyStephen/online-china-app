@@ -14,7 +14,10 @@ class CategoryTabView extends StatelessWidget {
     return BaseView<CategoryModel>(
       model: CategoryModel(categoryService: Provider.of(context)),
       onModelReady: (model) async {
-        await model.getAllCategories(hideLoading: true);
+        if (model.allCategories == null || model.allCategories.length == 0) {
+          await model.getAllCategories(hideLoading: true);
+        }
+
         rootCategories = Category.getChildren(null, model.allCategories);
       },
       builder: (context, model, child) => Scaffold(
@@ -52,7 +55,9 @@ class CategoryTabView extends StatelessWidget {
                               ),
                               child: Text("             "),
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Container(
                               width: 150,
                               decoration: BoxDecoration(
