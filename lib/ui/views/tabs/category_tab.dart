@@ -5,9 +5,17 @@ import 'package:online_china_app/core/viewmodels/views/category_model.dart';
 import 'package:online_china_app/ui/base_widget.dart';
 import 'package:online_china_app/ui/widgets/category_list_item.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CategoryTabView extends StatelessWidget {
+class CategoryTabView extends StatefulWidget {
+  @override
+  _CategoryTabViewState createState() => _CategoryTabViewState();
+}
+
+class _CategoryTabViewState extends State<CategoryTabView> {
+  final RefreshController _refreshController = RefreshController();
+
   @override
   Widget build(BuildContext context) {
     List<Category> rootCategories;
@@ -78,28 +86,41 @@ class CategoryTabView extends StatelessWidget {
                     ),
                   ),
                 )
-              : ListView.builder(
-                  itemCount: rootCategories == null ? 0 : rootCategories.length,
-                  shrinkWrap: false,
-                  itemBuilder: (BuildContext context, int index) {
-                    Category category = rootCategories[index];
+              : SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  onRefresh: () async {
+                    await model.getAllCategories(hideLoading: true);
+                    rootCategories =
+                        Category.getChildren(null, model.allCategories);
 
-                    return CategoryListItem(
-                      title: category.name,
-                      imageUrl: category.image,
-                      onPressed: () {
-                        List<Category> childCategories = Category.getChildren(
-                            category.id, model.allCategories);
+                    _refreshController.refreshCompleted();
+                  },
+                  child: ListView.builder(
+                      itemCount:
+                          rootCategories == null ? 0 : rootCategories.length,
+                      shrinkWrap: false,
+                      itemBuilder: (BuildContext context, int index) {
+                        Category category = rootCategories[index];
 
-                        Map<String, dynamic> params = {
-                          'childCategories': childCategories,
-                          'parentCategory': category,
-                        };
-                        Navigator.pushNamed(context, '/subcategories',
-                            arguments: params);
-                      },
-                    );
-                  }),
+                        return CategoryListItem(
+                          title: category.name,
+                          imageUrl: category.image,
+                          onPressed: () {
+                            List<Category> childCategories =
+                                Category.getChildren(
+                                    category.id, model.allCategories);
+
+                            Map<String, dynamic> params = {
+                              'childCategories': childCategories,
+                              'parentCategory': category,
+                            };
+                            Navigator.pushNamed(context, '/subcategories',
+                                arguments: params);
+                          },
+                        );
+                      }),
+                ),
         ),
       ),
     );

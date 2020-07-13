@@ -10,11 +10,19 @@ import 'package:online_china_app/ui/widgets/category_row.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../base_widget.dart';
 
-class HomeTabView extends StatelessWidget {
+class HomeTabView extends StatefulWidget {
+  @override
+  _HomeTabViewState createState() => _HomeTabViewState();
+}
+
+class _HomeTabViewState extends State<HomeTabView> {
+  final RefreshController _refreshController = RefreshController();
+
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
@@ -32,173 +40,104 @@ class HomeTabView extends StatelessWidget {
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              snap: false,
-              floating: false,
-              backgroundColor: Colors.transparent,
-              title: Container(
-                margin: EdgeInsets.symmetric(vertical: 6),
-                height: 50,
-                child: Image.asset(
-                  "assets/images/logo_black.png",
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              snap: true,
-              floating: true,
-              pinned: true,
-              backgroundColor: const Color.fromRGBO(238, 52, 34, 1.0),
-              title: Container(
-                // height: 100,
-                color: const Color.fromRGBO(238, 52, 34, 1.0),
-                //padding: EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                            flex: 1,
-                            child: InkWell(
-                              child: SearchBar(
-                                backgroundColor: primaryColor,
-                                textColor: Colors.white,
-                                disableTextField: true,
-                              ),
-                              onTap: () =>
-                                  Navigator.pushNamed(context, "/search"),
-                            )),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, "/account"),
-                            child: Icon(
-                              CupertinoIcons.profile_circled,
-                              color: Colors.white,
-                              size: 35,
-                            ))
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  BannerRow(),
-                  CategoryRow(
-                    title: "Trending Categories",
+        body: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          onRefresh: () async {
+            await model.getNewArrivalProducts();
+            await model.getBestSellingProducts();
+
+            _refreshController.refreshCompleted();
+          },
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                snap: false,
+                floating: false,
+                backgroundColor: Colors.transparent,
+                title: Container(
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  height: 50,
+                  child: Image.asset(
+                    "assets/images/logo_black.png",
+                    fit: BoxFit.contain,
                   ),
-                  if (model.bestSellingProducts.length > 0 ||
-                      model.state == ViewState.Busy)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: model.state == ViewState.Busy
-                          ? Shimmer.fromColors(
-                              child: Text(
+                ),
+              ),
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                snap: true,
+                floating: true,
+                pinned: true,
+                backgroundColor: const Color.fromRGBO(238, 52, 34, 1.0),
+                title: Container(
+                  // height: 100,
+                  color: const Color.fromRGBO(238, 52, 34, 1.0),
+                  //padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                child: SearchBar(
+                                  backgroundColor: primaryColor,
+                                  textColor: Colors.white,
+                                  disableTextField: true,
+                                ),
+                                onTap: () =>
+                                    Navigator.pushNamed(context, "/search"),
+                              )),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          InkWell(
+                              onTap: () =>
+                                  Navigator.pushNamed(context, "/account"),
+                              child: Icon(
+                                CupertinoIcons.profile_circled,
+                                color: Colors.white,
+                                size: 35,
+                              ))
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    BannerRow(),
+                    CategoryRow(
+                      title: "Trending Categories",
+                    ),
+                    if (model.bestSellingProducts.length > 0 ||
+                        model.state == ViewState.Busy)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: model.state == ViewState.Busy
+                            ? Shimmer.fromColors(
+                                child: Text(
+                                  "Best Selling Products",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                                baseColor: Colors.grey[400],
+                                highlightColor: Colors.white)
+                            : Text(
                                 "Best Selling Products",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 16),
                               ),
-                              baseColor: Colors.grey[400],
-                              highlightColor: Colors.white)
-                          : Text(
-                              "Best Selling Products",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 16),
-                            ),
-                    ),
-                  // if (model.bestSellingProducts.length > 0 || model.state == ViewState.Busy)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minHeight: 150.0,
-                      maxHeight: 210.0,
-                    ),
-                    child: ViewState.Busy == model.state
-                        ? Shimmer.fromColors(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 200,
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: List.generate(4, (index) {
-                                      return Container(
-                                        width: 200,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black26,
-                                                blurRadius: 5.0,
-                                              ),
-                                            ],
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8.0))),
-                                        child: SizedBox(
-                                          height: 100,
-                                          width: 150,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                )
-                              ],
-                            ),
-                            baseColor: Colors.grey[400],
-                            highlightColor: Colors.white)
-                        : ListView.builder(
-                            itemCount: model.bestSellingProducts.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              var product = model.bestSellingProducts[index];
-                              return ProductGridItem(
-                                title: product.name,
-                                price: product.priceLabel,
-                                imageUrl: product.thumbnail,
-                                onPressed: () => Navigator.pushNamed(
-                                    context, "/product_detail",
-                                    arguments: {"productId": product.id}),
-                              );
-                            }),
-                  ),
-                  if (model.bestSellingProducts.length > 0 ||
-                      model.state == ViewState.Busy)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: model.state == ViewState.Busy
-                          ? Shimmer.fromColors(
-                              child: Text(
-                                "New Arrivals",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
-                              ),
-                              baseColor: Colors.grey[400],
-                              highlightColor: Colors.white)
-                          : Text(
-                              "New Arrivals",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 16),
-                            ),
-                    ),
-                  if (model.bestSellingProducts.length > 0 ||
-                      model.state == ViewState.Busy)
+                      ),
+                    // if (model.bestSellingProducts.length > 0 || model.state == ViewState.Busy)
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         minHeight: 150.0,
@@ -242,11 +181,11 @@ class HomeTabView extends StatelessWidget {
                               baseColor: Colors.grey[400],
                               highlightColor: Colors.white)
                           : ListView.builder(
-                              itemCount: model.newArrivalProducts.length,
-                              shrinkWrap: false,
+                              itemCount: model.bestSellingProducts.length,
+                              shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
-                                var product = model.newArrivalProducts[index];
+                                var product = model.bestSellingProducts[index];
                                 return ProductGridItem(
                                   title: product.name,
                                   price: product.priceLabel,
@@ -256,11 +195,93 @@ class HomeTabView extends StatelessWidget {
                                       arguments: {"productId": product.id}),
                                 );
                               }),
-                    )
-                ],
-              )
-            ]))
-          ],
+                    ),
+                    if (model.bestSellingProducts.length > 0 ||
+                        model.state == ViewState.Busy)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18),
+                        child: model.state == ViewState.Busy
+                            ? Shimmer.fromColors(
+                                child: Text(
+                                  "New Arrivals",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                ),
+                                baseColor: Colors.grey[400],
+                                highlightColor: Colors.white)
+                            : Text(
+                                "New Arrivals",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16),
+                              ),
+                      ),
+                    if (model.bestSellingProducts.length > 0 ||
+                        model.state == ViewState.Busy)
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minHeight: 150.0,
+                          maxHeight: 210.0,
+                        ),
+                        child: ViewState.Busy == model.state
+                            ? Shimmer.fromColors(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 200,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: List.generate(4, (index) {
+                                          return Container(
+                                            width: 200,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black26,
+                                                    blurRadius: 5.0,
+                                                  ),
+                                                ],
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8.0))),
+                                            child: SizedBox(
+                                              height: 100,
+                                              width: 150,
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                baseColor: Colors.grey[400],
+                                highlightColor: Colors.white)
+                            : ListView.builder(
+                                itemCount: model.newArrivalProducts.length,
+                                shrinkWrap: false,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var product = model.newArrivalProducts[index];
+                                  return ProductGridItem(
+                                    title: product.name,
+                                    price: product.priceLabel,
+                                    imageUrl: product.thumbnail,
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, "/product_detail",
+                                        arguments: {"productId": product.id}),
+                                  );
+                                }),
+                      )
+                  ],
+                )
+              ]))
+            ],
+          ),
         ),
       ),
     );

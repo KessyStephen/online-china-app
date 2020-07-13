@@ -12,6 +12,7 @@ import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/order_list_item.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 class OrdersTabView extends StatefulWidget {
@@ -22,6 +23,7 @@ class OrdersTabView extends StatefulWidget {
 class _OrdersTabViewState extends State<OrdersTabView> {
   int page = 2;
   bool showLoading = true;
+  final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,39 +54,49 @@ class _OrdersTabViewState extends State<OrdersTabView> {
                     ),
                   ),
                 )
-              : model.orders.length == 0
-                  ? EmptyListWidget(
-                      message: "No Orders",
-                    )
-                  : InfiniteListView.separated(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      itemBuilder: (context, index) {
-                        var order = model.orders[index];
-                        return OrderListItem(
-                          orderID: order.referenceId.toString(),
-                          orderDate: Utils.displayDate(order.createdAt),
-                          paymentStatus: order.status,
-                          itemCount: order.itemCount > 0
-                              ? "X ${order.itemCount} Items"
-                              : "",
-                          price: order.priceLabel,
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/order_detail",
-                                arguments: {"orderId": order.id});
+              : SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  onRefresh: () async {
+                    await model.getOrders(perPage: PER_PAGE_COUNT);
+
+                    _refreshController.refreshCompleted();
+                  },
+                  child: model.orders.length == 0
+                      ? EmptyListWidget(
+                          message: "No Orders",
+                        )
+                      : InfiniteListView.separated(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          itemBuilder: (context, index) {
+                            var order = model.orders[index];
+                            return OrderListItem(
+                              orderID: order.referenceId.toString(),
+                              orderDate: Utils.displayDate(order.createdAt),
+                              paymentStatus: order.status,
+                              itemCount: order.itemCount > 0
+                                  ? "X ${order.itemCount} Items"
+                                  : "",
+                              price: order.priceLabel,
+                              onPressed: () {
+                                Navigator.pushNamed(context, "/order_detail",
+                                    arguments: {"orderId": order.id});
+                              },
+                            );
                           },
-                        );
-                      },
-                      itemCount: model.orders != null
-                          ? model.orders.length
-                          : 0, // Current itemCount you have
-                      hasNext: model.orders.length >= PER_PAGE_COUNT
-                          ? this.showLoading
-                          : false, // if we have fewer than requested, there is no next
-                      nextData: () => this.loadNextData(
-                          model), // callback called when end to the list is reach and hasNext is true
-                      separatorBuilder: (context, index) => Divider(height: 1),
-                    ),
+                          itemCount: model.orders != null
+                              ? model.orders.length
+                              : 0, // Current itemCount you have
+                          hasNext: model.orders.length >= PER_PAGE_COUNT
+                              ? this.showLoading
+                              : false, // if we have fewer than requested, there is no next
+                          nextData: () => this.loadNextData(
+                              model), // callback called when end to the list is reach and hasNext is true
+                          separatorBuilder: (context, index) =>
+                              Divider(height: 1),
+                        ),
+                ),
         ),
       ),
     );
