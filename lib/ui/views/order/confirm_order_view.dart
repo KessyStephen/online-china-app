@@ -57,7 +57,9 @@ class ConfirmOrderView extends StatelessWidget {
                           var product = products[index];
                           return ProductListItem(
                             title: product.name,
-                            price: product.priceLabel,
+                            price: model.isSampleRequest
+                                ? product.samplePriceLabel
+                                : product.priceLabel,
                             imageUrl: product.thumbnail,
                             quantity: product.quantity,
                             hideQuantityInput: true,

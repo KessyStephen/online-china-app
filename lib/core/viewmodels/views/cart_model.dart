@@ -12,6 +12,7 @@ class CartModel extends BaseModel {
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
+  bool get isSampleRequest => _cartService.isSampleRequest;
 
   Future<bool> addToCart(Product product) async {
     setState(ViewState.Busy);

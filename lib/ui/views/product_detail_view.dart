@@ -165,7 +165,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
                                           Map<String, dynamic> params = {
                                             'items': model.cartProducts,
-                                            'total': model.cartTotal,
+                                            'total': product.samplePrice,
                                           };
 
                                           Navigator.pushNamed(

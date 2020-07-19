@@ -18,7 +18,10 @@ class Product extends TranslatedModel {
   List<ImageItem> images;
   List<AttributeItem> attributes;
   bool canRequestSample;
-
+  double samplePrice;
+  String sampleCurrency;
+  int sampleQuantity;
+  String sampleUnit;
   Product({
     this.id,
     this.type,
@@ -52,6 +55,17 @@ class Product extends TranslatedModel {
     return "";
   }
 
+  String get samplePriceLabel {
+    if (canRequestSample) {
+      if (samplePrice != null && sampleCurrency != null) {
+        return sampleCurrency + " " + samplePrice.toString();
+      }
+      return "";
+    } else {
+      return this.priceLabel;
+    }
+  }
+
   Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
     if (map == null) {
       return;
@@ -68,6 +82,13 @@ class Product extends TranslatedModel {
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
     canRequestSample = map['canRequestSample'] == true;
+    samplePrice = map['samplePrice'] != null
+        ? double.parse(map['samplePrice'].toString())
+        : 0;
+
+    sampleCurrency = map['sampleCurrency'];
+    sampleQuantity = map['sampleQuantity'];
+    sampleUnit = map['sampleUnit'];
 
     //images
     var imagesArr = map['images'];
