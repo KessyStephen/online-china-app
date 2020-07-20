@@ -43,11 +43,27 @@ class FavoriteService {
     }
   }
 
-  Future<bool> addToFavorites({productId}) async {
+  Future<String> addToFavorites({productId}) async {
     var response = await this._api.addToFavorites(productId: productId);
     if (response != null && response['success']) {
       _alertService.showAlert(
           text: "Product successfully added to wishlist!", error: false);
+      return response["id"];
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return null;
+    }
+  }
+
+  Future<bool> deleteFromFavorites({favoriteId}) async {
+    var response = await this._api.deleteFromFavorites(favoriteId: favoriteId);
+    if (response != null && response['success']) {
+      _alertService.showAlert(
+          text: "Product successfully removed from wishlist!", error: false);
       return true;
     } else {
       _alertService.showAlert(
@@ -57,5 +73,18 @@ class FavoriteService {
           error: true);
       return false;
     }
+  }
+
+  Future<Favorite> getFavoriteForProduct({productId}) async {
+    Favorite result;
+
+    for (var item in _favorites) {
+      if (item.product != null && item.product.id == productId) {
+        result = item;
+        break;
+      }
+    }
+
+    return result;
   }
 }

@@ -100,12 +100,51 @@ class ProductModel extends BaseModel {
     return response;
   }
 
-  Future<bool> addToFavorites({productId, hideLoading = false}) async {
+  Future<String> addToFavorites({productId, hideLoading = false}) async {
     if (!hideLoading) {
       setState(ViewState.Busy);
     }
-    bool response = await _productService.addToFavorites(productId: productId);
+    var response = await _productService.addToFavorites(productId: productId);
     setState(ViewState.Idle);
     return response;
   }
+
+  Future<bool> deleteFromFavorites({favoriteId, hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+    bool response =
+        await _productService.deleteFromFavorites(favoriteId: favoriteId);
+    setState(ViewState.Idle);
+    return response;
+  }
+
+  Future<Favorite> getFavoriteForProduct(
+      {productId, hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+    Favorite result =
+        await _productService.getFavoriteForProduct(productId: productId);
+
+    setState(ViewState.Idle);
+    return result;
+  }
+
+  // Future<bool> checkIfInFavorites({productId, hideLoading = false}) async {
+  //   if (!hideLoading) {
+  //     setState(ViewState.Busy);
+  //   }
+  //   bool result = false;
+
+  //   for (var item in _productService.favorites) {
+  //     if (item.product != null && item.product.id == productId) {
+  //       result = true;
+  //       break;
+  //     }
+  //   }
+
+  //   setState(ViewState.Idle);
+  //   return result;
+  // }
 }

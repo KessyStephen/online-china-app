@@ -37,6 +37,10 @@ class _HomeTabViewState extends State<HomeTabView> {
             model.bestSellingProducts.length == 0) {
           await model.getBestSellingProducts();
         }
+
+        if (model.favorites == null || model.favorites.length == 0) {
+          await model.getFavorites();
+        }
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,

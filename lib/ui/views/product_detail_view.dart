@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/Utils.dart';
+import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -34,11 +35,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     var attributeWidgets = List<Widget>();
 
     Product product;
+    Favorite favorite;
 
     return BaseView<ProductModel>(
       model: ProductModel(productService: Provider.of(context)),
       onModelReady: (model) async {
         product = await model.getProduct(productId: productId);
+        favorite = await model.getFavoriteForProduct(productId: productId);
 
         if (product != null && product.attributes != null) {
           attributeWidgets.clear();
@@ -56,11 +59,26 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           //title: Text("Product Details"),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.favorite_border),
-              onPressed: () {
+              icon: favorite != null
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_border),
+              onPressed: () async {
                 if (product != null && product.id != null) {
-                  model.addToFavorites(
-                      productId: product.id, hideLoading: true);
+                  if (favorite != null) {
+                    //remove
+                    bool isRemoved = await model.deleteFromFavorites(
+                        favoriteId: favorite.id, hideLoading: true);
+                    if (isRemoved) {
+                      favorite = null;
+                    }
+                  } else {
+                    //add
+                    var favoriteId = await model.addToFavorites(
+                        productId: product.id, hideLoading: true);
+                    if (favoriteId != null) {
+                      favorite = Favorite(id: favoriteId, product: product);
+                    }
+                  }
                 }
               },
             ),

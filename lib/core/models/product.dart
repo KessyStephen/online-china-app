@@ -17,6 +17,9 @@ class Product extends TranslatedModel {
   String thumbnail;
   List<ImageItem> images;
   List<AttributeItem> attributes;
+  List<Variation> variations;
+  double minPrice; //for variable product
+  double maxPrice; //for variable product
   bool canRequestSample;
   double samplePrice;
   String sampleCurrency;
@@ -48,6 +51,20 @@ class Product extends TranslatedModel {
   }
 
   String get priceLabel {
+    //variable product
+    if (type == "variable") {
+      if (minPrice != null && maxPrice != null && currency != null) {
+        if (minPrice == maxPrice) {
+          return "$currency $minPrice";
+        }
+
+        return "$currency $minPrice - $maxPrice";
+      }
+
+      return "";
+    }
+
+    //simple product
     if (price != null && currency != null) {
       return currency + " " + price.toString();
     }
@@ -126,6 +143,32 @@ class Product extends TranslatedModel {
     }
 
     attributes = attributeItems;
+
+    //variations
+    var variationsArr = map['variations'];
+    List<Variation> variationItems = [];
+    if (variationsArr != null && variationsArr.length > 0) {
+      for (var i = 0; i < variationsArr.length; i++) {
+        var varTmp = variationsArr[i];
+        var varItem = Variation.fromMap(varTmp);
+        variationItems.add(varItem);
+      }
+    }
+    variations = variationItems;
+
+    //min and max price
+    if (variations != null && variations.length > 0) {
+      var maxValue = variations[0].price;
+      var minValue = variations[0].price;
+
+      variations.forEach((e) => {
+            if (e.price > maxValue) {maxValue = e.price},
+            if (e.price < minValue) {minValue = e.price},
+          });
+
+      maxPrice = maxValue;
+      minPrice = minValue;
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -194,6 +237,61 @@ class AttributeItem {
       'name': name,
       'value': value,
       'valueString': valueString,
+    };
+  }
+}
+
+//---- Variations
+
+class Variation {
+  double price;
+  String currency;
+  int quantity = 0;
+  List<Attribute> attributes;
+
+  Variation({this.price, this.currency}) : super();
+
+  Variation.fromMap(Map<String, dynamic> map) {
+    price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
+    currency = map['currency'];
+
+    //attributes
+    var attributesArr = map['attributes'];
+    List<Attribute> attributeItems = [];
+    if (attributesArr != null && attributesArr.length > 0) {
+      for (var i = 0; i < attributesArr.length; i++) {
+        var attr = attributesArr[i];
+        var attrItem = Attribute.fromMap(attr);
+        attributeItems.add(attrItem);
+      }
+    }
+    attributes = attributeItems;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'price': price,
+      'currency': currency,
+      'attributes': attributes,
+    };
+  }
+}
+
+class Attribute {
+  String name;
+  String value;
+
+  Attribute({this.name, this.value}) : super();
+
+  Attribute.fromMap(Map<String, dynamic> map) {
+    name = map['name'];
+    value = map['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'value': value,
     };
   }
 }

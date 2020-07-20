@@ -545,4 +545,20 @@ class Api {
       };
     }
   }
+
+  Future<Map> deleteFromFavorites({favoriteId}) async {
+    try {
+      var client = await createClient();
+      var uri = uriForPath("/api/favorites/" + favoriteId, null);
+
+      var response = await client.delete(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
 }
