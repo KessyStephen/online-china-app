@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/Utils.dart';
 import 'package:online_china_app/core/models/favorite.dart';
@@ -12,6 +13,8 @@ import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/details_header.dart';
 import 'package:online_china_app/ui/widgets/product_attribute.dart';
+import 'package:online_china_app/ui/widgets/product_options_modal.dart';
+import 'package:online_china_app/ui/widgets/quantity_input.dart';
 import 'package:provider/provider.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -24,8 +27,6 @@ class ProductDetailView extends StatefulWidget {
 }
 
 class _ProductDetailViewState extends State<ProductDetailView> {
-  WebViewController _controller;
-
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> params =
@@ -152,11 +153,31 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 5.0),
-                                    child: Text(
-                                      product.priceLabel,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          product.priceLabel,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        if (product.variations == null ||
+                                            product.variations.length == 0)
+                                          QuantityInput(
+                                              addItem: () {
+                                                product.increaseQuantity(1);
+                                                model.setState(ViewState.Idle);
+                                              },
+                                              removeItem: () {
+                                                product.increaseQuantity(-1);
+                                                model.setState(ViewState.Idle);
+                                              },
+                                              quantity: product.quantity != null
+                                                  ? product.quantity
+                                                  : 0),
+                                      ],
                                     ),
                                   ),
                                   if (product.minOrderQuantity > 0)
@@ -225,20 +246,6 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                           "body": product.description
                                         }),
                                   ),
-                                  // if (product.description != null)
-                                  //   Container(
-                                  //     height: 200,
-                                  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  //     child: WebView(
-                                  //       initialUrl: '',
-                                  //       onWebViewCreated:
-                                  //           (WebViewController webViewController) {
-                                  //         _controller = webViewController;
-                                  //         _loadHtmlFromAssets(
-                                  //             product.description, _controller);
-                                  //       },
-                                  //     ),
-                                  //   ),
 
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -273,7 +280,28 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                               child: BigButton(
                                 color: primaryColor,
                                 buttonTitle: "ADD TO ITEMS",
-                                functionality: () => model.addToCart(product),
+                                functionality: () {
+                                  if (product.type == PRODUCT_TYPE_VARIABLE &&
+                                      product.variations != null &&
+                                      product.variations.length > 0) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => ProductOptionsModal(
+                                        action: ProductAction.AddToItems,
+                                        product: product,
+                                        onAddToCart: () => this
+                                            ._handleAddToCart(model, product),
+                                      ),
+                                    );
+                                    // Get.bottomSheet(ProductOptionsModal());
+                                    return;
+                                  }
+
+                                  //simple product
+                                  this._handleAddToCart(model, product);
+                                },
                               ),
                             ),
                             Expanded(
@@ -282,14 +310,25 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                 color: Color.fromRGBO(152, 2, 32, 1.0),
                                 buttonTitle: "BUY NOW",
                                 functionality: () async {
-                                  await model.clearCartData();
-                                  await model.addToCart(product);
-                                  // Navigator.pushReplacementNamed(context, "/",
-                                  //     arguments: {"switchToIndex": CART_INDEX});
+                                  if (product.type == PRODUCT_TYPE_VARIABLE &&
+                                      product.variations != null &&
+                                      product.variations.length > 0) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => ProductOptionsModal(
+                                        action: ProductAction.BuyNow,
+                                        product: product,
+                                        onBuyNow: () =>
+                                            this._handleBuyNow(model, product),
+                                      ),
+                                    );
+                                    return;
+                                  }
 
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      "/", (Route<dynamic> route) => false,
-                                      arguments: {"switchToIndex": CART_INDEX});
+                                  //simple product
+                                  this._handleBuyNow(model, product);
                                 },
                               ),
                             ),
@@ -306,6 +345,23 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     controller.loadUrl(Uri.dataFromString(htmlText,
             mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
         .toString());
+  }
+
+  _handleAddToCart(model, product) async {
+    model.addToCart(product);
+  }
+
+  _handleBuyNow(model, product) async {
+    var success = await model.addToCart(product);
+
+    //make sure product can be added successful before clearing the cart
+    if (success) {
+      await model.clearCartData();
+      await model.addToCart(product);
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false,
+          arguments: {"switchToIndex": CART_INDEX});
+    }
   }
 }
 

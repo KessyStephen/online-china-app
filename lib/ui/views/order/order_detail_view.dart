@@ -55,6 +55,10 @@ class OrderDetailView extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   var product = order.products[index];
                                   return OrderItemListItem(
+                                    subtitle: product.variations != null &&
+                                            product.variations.length > 0
+                                        ? product.variations[0]?.attributesLabel
+                                        : null,
                                     title: product.name,
                                     price: product.priceLabel,
                                     imageUrl: product.thumbnail,

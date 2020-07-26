@@ -25,8 +25,15 @@ class AuthModalWidget extends StatelessWidget {
         model: AuthModel(authenticationService: Provider.of(context)),
         onModelReady: (model) => {},
         builder: (context, model, child) => Container(
-              color: Colors.white,
+              // color: Colors.white,
               padding: EdgeInsets.all(16),
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20.0),
+                  topRight: const Radius.circular(20.0),
+                ),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

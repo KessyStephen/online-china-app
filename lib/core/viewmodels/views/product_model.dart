@@ -80,6 +80,10 @@ class ProductModel extends BaseModel {
     return response;
   }
 
+  Product getProductFromCart(String productId) {
+    return _productService.getProductFromCart(productId);
+  }
+
   Future<bool> clearCartData() async {
     _productService.clearCartData();
     return true;

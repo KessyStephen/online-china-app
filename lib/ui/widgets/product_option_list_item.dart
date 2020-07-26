@@ -1,22 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/ui/widgets/quantity_input.dart';
 
-class OrderItemListItem extends StatelessWidget {
-  final String subtitle;
+class ProductOptionListItem extends StatelessWidget {
   final String title;
   final String price;
   final int quantity;
   final String imageUrl;
+  final bool hideQuantityInput;
+  final Function addItem;
+  final Function removeItem;
   final Function onPressed;
 
-  const OrderItemListItem(
+  const ProductOptionListItem(
       {Key key,
-      this.subtitle,
       this.title,
       this.price,
       this.quantity,
       this.imageUrl,
+      this.hideQuantityInput,
+      this.addItem,
+      this.removeItem,
       this.onPressed})
       : super(key: key);
 
@@ -39,23 +44,23 @@ class OrderItemListItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         margin: const EdgeInsets.only(bottom: 10),
         child: Row(children: <Widget>[
-          Container(
-              height: 80,
-              width: 80,
-              margin: const EdgeInsets.only(right: 8),
-              child: this.imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: this.imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Image.asset(
-                        PLACEHOLDER_IMAGE,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Image.asset(
-                      PLACEHOLDER_IMAGE,
-                      fit: BoxFit.cover,
-                    )),
+          // Container(
+          //     height: 80,
+          //     width: 80,
+          //     margin: const EdgeInsets.only(right: 8),
+          //     child: this.imageUrl != null
+          //         ? CachedNetworkImage(
+          //             imageUrl: this.imageUrl != null ? this.imageUrl : "",
+          //             fit: BoxFit.cover,
+          //             placeholder: (context, url) => Image.asset(
+          //               PLACEHOLDER_IMAGE,
+          //               fit: BoxFit.cover,
+          //             ),
+          //           )
+          //         : Image.asset(
+          //             PLACEHOLDER_IMAGE,
+          //             fit: BoxFit.cover,
+          //           )),
           Expanded(
             flex: 1,
             child: Column(
@@ -63,14 +68,7 @@ class OrderItemListItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  if (this.title != null)
-                    Text(this.title != null ? this.title : ""),
-                  if (this.subtitle != null)
-                    SizedBox(
-                      height: 5,
-                    ),
-                  if (this.subtitle != null)
-                    Text(this.subtitle != null ? this.subtitle : ""),
+                  Text(this.title != null ? this.title : ""),
                   SizedBox(
                     height: 5,
                   ),
@@ -83,10 +81,12 @@ class OrderItemListItem extends StatelessWidget {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        Text(
-                          this.quantity != null ? "x ${this.quantity}" : "",
-                          style: TextStyle(fontSize: 14),
-                        ),
+                        if (this.hideQuantityInput != true)
+                          QuantityInput(
+                              addItem: this.addItem,
+                              removeItem: this.removeItem,
+                              quantity:
+                                  this.quantity != null ? this.quantity : 0)
                       ])
                 ]),
           )

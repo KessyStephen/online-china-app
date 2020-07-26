@@ -206,6 +206,10 @@ class ProductService {
     return _favoriteService.getFavoriteForProduct(productId: productId);
   }
 
+  Product getProductFromCart(String productId) {
+    return _cartService.getProductFromCart(productId);
+  }
+
   void clearCartData() {
     _cartService.clearCartData();
   }

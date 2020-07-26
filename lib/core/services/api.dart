@@ -452,14 +452,7 @@ class Api {
       List<Map<String, dynamic>> items = [];
       for (var i = 0; i < products.length; i++) {
         var product = products[i];
-        Map<String, dynamic> tmpMap = {
-          'productId': product.id,
-          'name': product.name,
-          'price': product.price,
-          'currency': product.currency,
-          'quantity': product.quantity,
-        };
-        items.add(tmpMap);
+        items.add(product.toMapForAPI());
       }
 
       Map<String, dynamic> params = {
