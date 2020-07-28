@@ -54,7 +54,7 @@ class _ProductListViewState extends State<ProductListView> {
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green)),
+                              color: primaryColor)),
                     )
                   ],
                 ),
@@ -63,6 +63,7 @@ class _ProductListViewState extends State<ProductListView> {
               Column(
                 children: <Widget>[
                   ListTile(
+                    leading: Icon(Icons.trending_down),
                     title: Text(
                       'High to Low',
                       style: TextStyle(fontSize: 16),
@@ -71,16 +72,17 @@ class _ProductListViewState extends State<ProductListView> {
                     //   Icons.check_circle,
                     //   color: Colors.green,
                     // ),
-                    onTap: () async {
-                      await model.getProducts(
+                    onTap: () {
+                      model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "price:DESC",
+                          sort: "price:desc",
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
                   ),
                   Divider(),
                   ListTile(
+                    leading: Icon(Icons.trending_up),
                     title: Text(
                       'Low to High',
                       style: TextStyle(fontSize: 16),
@@ -89,16 +91,17 @@ class _ProductListViewState extends State<ProductListView> {
                     //   Icons.check_circle,
                     //   color: Colors.grey,
                     // ),
-                    onTap: () async {
-                      await model.getProducts(
+                    onTap: () {
+                      model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "price:ASC",
+                          sort: "price:asc",
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
                   ),
                   Divider(),
                   ListTile(
+                    leading: Icon(Icons.access_time),
                     title: Text(
                       'Newly Listed',
                       style: TextStyle(fontSize: 16),
@@ -107,10 +110,10 @@ class _ProductListViewState extends State<ProductListView> {
                     //   Icons.check_circle,
                     //   color: Colors.grey,
                     // ),
-                    onTap: () async {
-                      await model.getProducts(
+                    onTap: () {
+                      model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "createdAt:DESC",
+                          sort: "createdAt:desc",
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
