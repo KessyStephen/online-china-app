@@ -16,6 +16,7 @@ class ProductModel extends BaseModel {
   List<Product> get searchedProducts => _productService.searchedProducts;
 
   List<Favorite> get favorites => _productService.favorites;
+  bool isSort = false;
 
 //cart
   List<Product> get cartProducts => _productService.cartProducts;
@@ -27,12 +28,13 @@ class ProductModel extends BaseModel {
       {categoryIds = "",
       page = 1,
       perPage = PER_PAGE_COUNT,
+      sort = '',
       hideLoading = false}) async {
     if (!hideLoading) {
       setState(ViewState.Busy);
     }
     bool response = await _productService.getProducts(
-        categoryIds: categoryIds, page: page, perPage: perPage);
+        categoryIds: categoryIds, page: page, perPage: perPage, sort: sort);
     setState(ViewState.Idle);
     return response;
   }
@@ -107,5 +109,9 @@ class ProductModel extends BaseModel {
     bool response = await _productService.addToFavorites(productId: productId);
     setState(ViewState.Idle);
     return response;
+  }
+
+  void setIsSort(bool flag) {
+    this.isSort = flag;
   }
 }
