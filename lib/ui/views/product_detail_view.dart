@@ -16,7 +16,6 @@ import 'package:online_china_app/ui/widgets/product_options_modal.dart';
 import 'package:online_china_app/ui/widgets/quantity_input.dart';
 import 'package:provider/provider.dart';
 import 'package:online_china_app/core/enums/constants.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../base_widget.dart';
 
