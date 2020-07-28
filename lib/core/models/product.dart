@@ -209,6 +209,9 @@ class Product extends TranslatedModel {
         var varItem = Variation.fromMap(varTmp);
         variationItems.add(varItem);
       }
+
+      //take currency for variable product
+      currency = variationItems[0]?.currency;
     }
     variations = variationItems;
 
