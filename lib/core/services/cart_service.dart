@@ -44,7 +44,8 @@ class CartService {
 
   Future<bool> addToCart(Product product) async {
     //check minimum order quantity
-    if (product.type == PRODUCT_TYPE_SIMPLE &&
+    if (!_isSampleRequest &&
+        product.type == PRODUCT_TYPE_SIMPLE &&
         product.quantity < product.minOrderQuantity) {
       _alertService.showAlert(
           text:
@@ -53,7 +54,8 @@ class CartService {
       return false;
     }
 
-    if (product.type == PRODUCT_TYPE_VARIABLE &&
+    if (!_isSampleRequest &&
+        product.type == PRODUCT_TYPE_VARIABLE &&
         product.variationsItemCount < product.minOrderQuantity) {
       _alertService.showAlert(
           text:

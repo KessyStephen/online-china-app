@@ -197,8 +197,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                         buttonTitle: "REQUEST SAMPLE",
                                         functionality: () async {
                                           await model.clearCartData();
-                                          await model.addToCart(product);
                                           model.setSampleRequestOrder(true);
+                                          await model.addToCart(product);
 
                                           Map<String, dynamic> params = {
                                             'items': model.cartProducts,
