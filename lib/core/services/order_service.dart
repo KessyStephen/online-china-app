@@ -148,6 +148,10 @@ class OrderService {
     if (removeOrders) this._orders = [];
   }
 
+  Product getProductFromCart(String productId) {
+    return _cartService.getProductFromCart(productId);
+  }
+
   void clearCartData() {
     _cartService.clearCartData();
   }

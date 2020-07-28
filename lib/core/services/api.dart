@@ -452,14 +452,7 @@ class Api {
       List<Map<String, dynamic>> items = [];
       for (var i = 0; i < products.length; i++) {
         var product = products[i];
-        Map<String, dynamic> tmpMap = {
-          'productId': product.id,
-          'name': product.name,
-          'price': product.price,
-          'currency': product.currency,
-          'quantity': product.quantity,
-        };
-        items.add(tmpMap);
+        items.add(product.toMapForAPI());
       }
 
       Map<String, dynamic> params = {
@@ -536,6 +529,22 @@ class Api {
       var uri = uriForPath("/api/favorites", null);
 
       var response = await client.post(uri, body: jsonEncode(params));
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> deleteFromFavorites({favoriteId}) async {
+    try {
+      var client = await createClient();
+      var uri = uriForPath("/api/favorites/" + favoriteId, null);
+
+      var response = await client.delete(uri);
       return json.decode(response.body);
     } catch (e) {
       print(e);

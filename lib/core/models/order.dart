@@ -1,3 +1,4 @@
+import 'package:online_china_app/core/models/order_item.dart';
 import 'package:online_china_app/core/models/product.dart';
 
 class Order {
@@ -9,7 +10,7 @@ class Order {
   double total;
   String currency;
   int itemCount;
-  List<Product> products;
+  List<OrderItem> products;
   DateTime createdAt;
 
   Order(
@@ -48,12 +49,12 @@ class Order {
         map['itemCount'] != null ? int.parse(map['itemCount'].toString()) : 0;
 
     //items
-    List<Product> resultItems = [];
+    List<OrderItem> resultItems = [];
     var items = map["items"];
     if (items != null && items.length > 0) {
       for (var i = 0; i < items.length; i++) {
         var obj = items[i];
-        var prod = Product.fromMap(obj);
+        var prod = OrderItem.fromMap(obj);
         prod.id = obj["productId"];
 
         resultItems.add(prod);

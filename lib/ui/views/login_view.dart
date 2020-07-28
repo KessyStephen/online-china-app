@@ -193,7 +193,10 @@ class _LoginViewState extends State<LoginView> {
                       InkWell(
                         onTap: () {
                           model.setNotResetPasswordFlag();
-                          Navigator.pushReplacementNamed(context, '/');
+                          // Navigator.pushReplacementNamed(context, '/');
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, "/", (Route<dynamic> route) => false,
+                              arguments: {"switchToIndex": 0});
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(vertical: 15.0),
@@ -229,7 +232,7 @@ class _LoginViewState extends State<LoginView> {
                                         // bool isBasketFull =
                                         //     await model.checkIfBasketIsFull();
                                         Navigator.pushReplacementNamed(
-                                              context, '/');
+                                            context, '/');
                                       }
                                     }
                                   },

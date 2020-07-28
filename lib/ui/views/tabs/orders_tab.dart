@@ -30,9 +30,10 @@ class _OrdersTabViewState extends State<OrdersTabView> {
     return BaseView<OrderModel>(
       model: OrderModel(orderService: Provider.of(context)),
       onModelReady: (model) {
-        if (model.orders == null || model.orders.length == 0) {
-          model.getOrders(perPage: PER_PAGE_COUNT);
-        }
+        model.getOrders(perPage: PER_PAGE_COUNT);
+        // if (model.orders == null || model.orders.length == 0) {
+        //   model.getOrders(perPage: PER_PAGE_COUNT);
+        // }
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,

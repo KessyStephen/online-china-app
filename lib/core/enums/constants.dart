@@ -11,3 +11,9 @@ const String PLACEHOLDER_IMAGE = 'assets/images/logo.png';
 //zero based index of cart tab
 const int CART_INDEX = 2;
 const int ORDERS_INDEX = 3;
+
+//product types
+const String PRODUCT_TYPE_SIMPLE = 'simple';
+const String PRODUCT_TYPE_VARIABLE = 'variable';
+
+enum ProductAction { None, AddToItems, BuyNow, Update }

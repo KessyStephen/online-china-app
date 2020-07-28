@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
@@ -11,6 +12,7 @@ import 'package:online_china_app/ui/widgets/auth_modal.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
+import 'package:online_china_app/ui/widgets/product_options_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -58,13 +60,40 @@ class CartTabView extends StatelessWidget {
                             itemBuilder: (BuildContext context, int index) {
                               var product = model.cartProducts[index];
                               return ProductListItem(
+                                type: product.type,
                                 title: product.name,
-                                price: product.priceLabel,
+                                price: model.isSampleRequest
+                                    ? product.samplePriceLabel
+                                    : product.priceLabel,
                                 imageUrl: product.thumbnail,
-                                quantity: product.quantity,
+                                quantity: product.type == PRODUCT_TYPE_VARIABLE
+                                    ? product.variationsItemCount
+                                    : product.quantity,
                                 hideQuantityInput: false,
-                                addItem: () => model.addToCart(product),
-                                removeItem: () => model.removeFromCart(product),
+                                addItem: () {
+                                  product.increaseQuantity(1);
+                                  model.setState(ViewState.Idle);
+                                },
+                                removeItem: () {
+                                  product.increaseQuantity(-1);
+                                  model.setState(ViewState.Idle);
+                                },
+                                onEditQuantity: () {
+                                  if (product.type == PRODUCT_TYPE_VARIABLE) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => ProductOptionsModal(
+                                        action: ProductAction.Update,
+                                        product: product,
+                                        onAddToCart: () =>
+                                            model.addToCart(product),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                },
                               );
                             },
                           ),

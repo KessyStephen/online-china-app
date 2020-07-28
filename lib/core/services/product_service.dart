@@ -194,8 +194,20 @@ class ProductService {
     return _favoriteService.getFavorites();
   }
 
-  Future<bool> addToFavorites({productId}) async {
+  Future<String> addToFavorites({productId}) async {
     return _favoriteService.addToFavorites(productId: productId);
+  }
+
+  Future<bool> deleteFromFavorites({favoriteId}) async {
+    return _favoriteService.deleteFromFavorites(favoriteId: favoriteId);
+  }
+
+  Future<Favorite> getFavoriteForProduct({productId}) async {
+    return _favoriteService.getFavoriteForProduct(productId: productId);
+  }
+
+  Product getProductFromCart(String productId) {
+    return _cartService.getProductFromCart(productId);
   }
 
   void clearCartData() {

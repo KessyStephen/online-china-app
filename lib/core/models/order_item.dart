@@ -1,18 +1,15 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
 
-class Product extends TranslatedModel {
+class OrderItem extends TranslatedModel {
   String id;
   String type;
   double price;
   String currency;
   String categoryId;
   String quality;
-  int quantity = 1;
+  int quantity = 0;
   int minOrderQuantity = 0;
   String sku;
   String thumbnail;
@@ -26,7 +23,7 @@ class Product extends TranslatedModel {
   String sampleCurrency;
   int sampleQuantity;
   String sampleUnit;
-  Product({
+  OrderItem({
     this.id,
     this.type,
     this.price,
@@ -52,27 +49,6 @@ class Product extends TranslatedModel {
   }
 
   String get priceLabel {
-    //variable product
-    if (type == PRODUCT_TYPE_VARIABLE &&
-        variations != null &&
-        variations.length > 0) {
-      if (variationsTotalPrice > 0) {
-        var tmpPrice = variationsTotalPrice.toStringAsFixed(2);
-        return "$currency $tmpPrice";
-      }
-
-      if (minPrice != null && maxPrice != null && currency != null) {
-        if (minPrice == maxPrice) {
-          return "$currency $minPrice";
-        }
-
-        return "$currency $minPrice - $maxPrice";
-      }
-
-      return "";
-    }
-
-    //simple product
     if (price != null && currency != null) {
       return currency + " " + price.toString();
     }
@@ -83,7 +59,7 @@ class Product extends TranslatedModel {
   String get samplePriceLabel {
     if (canRequestSample) {
       if (samplePrice != null && sampleCurrency != null) {
-        return sampleCurrency + " " + samplePrice.toStringAsFixed(2);
+        return sampleCurrency + " " + samplePrice.toString();
       }
       return "";
     } else {
@@ -119,15 +95,6 @@ class Product extends TranslatedModel {
     return 0;
   }
 
-  void increaseQuantity(int extraQuantity) {
-    quantity = quantity + extraQuantity;
-
-    //minimum one item
-    if (quantity <= 0) {
-      quantity = 1;
-    }
-  }
-
   void increaseVariationQuantity(int index, int extraQuantity) {
     var variation = variations[index];
 
@@ -139,7 +106,7 @@ class Product extends TranslatedModel {
     variations[index] = variation;
   }
 
-  Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
+  OrderItem.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
     if (map == null) {
       return;
     }
@@ -150,7 +117,7 @@ class Product extends TranslatedModel {
     currency = map['currency'];
     categoryId = map['categoryId'];
     quality = map['quality'];
-    quantity = map['quantity'] != null ? map['quantity'] : 1;
+    quantity = map['quantity'];
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
     sku = map['sku'];
@@ -187,18 +154,25 @@ class Product extends TranslatedModel {
           : imgItem.src;
     }
 
-    //attributes
-    var attributesArr = map['attributes'];
-    List<AttributeItem> attributeItems = [];
-    if (attributesArr != null && attributesArr.length > 0) {
-      for (var i = 0; i < attributesArr.length; i++) {
-        var attr = attributesArr[i];
-        var attrItem = AttributeItem.fromMap(attr);
-        attributeItems.add(attrItem);
-      }
-    }
+    // //attributes
+    // var attributesArr = map['attributes'];
+    // List<AttributeItem> attributeItems = [];
+    // if (attributesArr != null && attributesArr.length > 0) {
+    //   for (var i = 0; i < attributesArr.length; i++) {
+    //     var attr = attributesArr[i];
+    //     var attrItem = AttributeItem.fromMap(attr);
+    //     attributeItems.add(attrItem);
+    //   }
+    // }
 
-    attributes = attributeItems;
+    // attributes = attributeItems;
+
+    //variationAttributes (for order items)
+    if (map['attributes'] != null) {
+      map['variations'] = [
+        {"attributes": map['attributes']}
+      ];
+    }
 
     //variations
     var variationsArr = map['variations'];
@@ -209,9 +183,6 @@ class Product extends TranslatedModel {
         var varItem = Variation.fromMap(varTmp);
         variationItems.add(varItem);
       }
-
-      //take currency for variable product
-      currency = variationItems[0]?.currency;
     }
     variations = variationItems;
 
@@ -292,7 +263,8 @@ class ImageItem {
 
 class AttributeItem {
   String name;
-  List<dynamic> value;
+  //value = List<dynamic> or String
+  dynamic value;
   String valueString;
 
   AttributeItem({this.name, this.value}) : super();

@@ -62,6 +62,10 @@ class OrderModel extends BaseModel {
     return response;
   }
 
+  Product getProductFromCart(String productId) {
+    return _orderService.getProductFromCart(productId);
+  }
+
   void clearCartData() async {
     _orderService.clearCartData();
   }

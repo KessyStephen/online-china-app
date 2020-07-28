@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/product.dart';
 
 import 'alert_service.dart';
@@ -21,33 +22,60 @@ class CartService {
   double get cartTotal {
     var sum = 0.0;
     _cartProducts.forEach((element) {
-      sum = sum + element.price * element.quantity;
+      if (element.type == PRODUCT_TYPE_VARIABLE) {
+        sum = sum + element.variationsTotalPrice;
+      } else {
+        sum = sum + element.price * element.quantity;
+      }
     });
 
     return sum;
   }
 
   int get cartItemCount {
-    var sum = 0;
-    _cartProducts.forEach((element) {
-      sum = sum + element.quantity;
-    });
+    return _cartProducts.length;
+    // var sum = 0;
+    // _cartProducts.forEach((element) {
+    //   sum = sum + element.quantity;
+    // });
 
-    return sum;
+    // return sum;
   }
 
   Future<bool> addToCart(Product product) async {
+    //check minimum order quantity
+    if (product.type == PRODUCT_TYPE_SIMPLE &&
+        product.quantity < product.minOrderQuantity) {
+      _alertService.showAlert(
+          text:
+              'Minimum order quantity: ' + product.minOrderQuantity.toString(),
+          error: true);
+      return false;
+    }
+
+    if (product.type == PRODUCT_TYPE_VARIABLE &&
+        product.variationsItemCount < product.minOrderQuantity) {
+      _alertService.showAlert(
+          text:
+              'Minimum order quantity: ' + product.minOrderQuantity.toString(),
+          error: true);
+      return false;
+    }
+
+    //-- continue minimum order quantity reached
     var found = _cartProducts.firstWhere((item) => item.id == product.id,
         orElse: () => null);
 
     if (found != null) {
-      found.quantity = found.quantity + 1;
+      var index = _cartProducts.indexOf(found);
+      _cartProducts[index] = product;
+      _alertService.showAlert(text: 'Added to items', error: false);
       return true;
     }
 
-    product.quantity = 1;
     _cartProducts.add(product);
 
+    _alertService.showAlert(text: 'Added to items', error: false);
     return true;
   }
 
@@ -66,6 +94,11 @@ class CartService {
     }
 
     return false;
+  }
+
+  Product getProductFromCart(String productId) {
+    return _cartProducts.firstWhere((item) => item.id == productId,
+        orElse: () => null);
   }
 
   void clearCartData() {
