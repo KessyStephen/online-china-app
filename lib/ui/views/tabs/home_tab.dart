@@ -60,12 +60,16 @@ class _HomeTabViewState extends State<HomeTabView> {
                 snap: false,
                 floating: false,
                 backgroundColor: Colors.transparent,
-                title: Container(
-                  margin: EdgeInsets.symmetric(vertical: 6),
-                  height: 50,
-                  child: Image.asset(
-                    "assets/images/logo_black.png",
-                    fit: BoxFit.contain,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.zero,
+                  centerTitle: true,
+                  title: Container(
+                    margin: EdgeInsets.symmetric(vertical: 6),
+                    height: 50,
+                    child: Image.asset(
+                      "assets/images/logo_black.png",
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
@@ -145,7 +149,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         minHeight: 150.0,
-                        maxHeight: 210.0,
+                        maxHeight: 220.0,
                       ),
                       child: ViewState.Busy == model.state
                           ? Shimmer.fromColors(
@@ -193,6 +197,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                                 return ProductGridItem(
                                   title: product.name,
                                   price: product.priceLabel,
+                                  minOrderQuantity: product.minOrderQuantity,
                                   imageUrl: product.thumbnail,
                                   onPressed: () => Navigator.pushNamed(
                                       context, "/product_detail",
@@ -225,7 +230,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(
                           minHeight: 150.0,
-                          maxHeight: 210.0,
+                          maxHeight: 220.0,
                         ),
                         child: ViewState.Busy == model.state
                             ? Shimmer.fromColors(
@@ -274,6 +279,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                                   return ProductGridItem(
                                     title: product.name,
                                     price: product.priceLabel,
+                                    minOrderQuantity: product.minOrderQuantity,
                                     imageUrl: product.thumbnail,
                                     onPressed: () => Navigator.pushNamed(
                                         context, "/product_detail",

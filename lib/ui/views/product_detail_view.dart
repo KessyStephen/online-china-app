@@ -346,19 +346,26 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   }
 
   _handleAddToCart(model, product) async {
+    await model.setBuyNowOrder(false);
     model.addToCart(product);
   }
 
   _handleBuyNow(model, product) async {
+    await model.setBuyNowOrder(true);
     var success = await model.addToCart(product);
 
     //make sure product can be added successful before clearing the cart
     if (success) {
       await model.clearCartData();
+      await model.setBuyNowOrder(true);
       await model.addToCart(product);
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/", (Route<dynamic> route) => false,
-          arguments: {"switchToIndex": CART_INDEX});
+
+      Map<String, dynamic> params = {
+        'items': model.cartProducts,
+        'total': model.cartTotal,
+      };
+
+      Navigator.pushNamed(context, '/confirm_order', arguments: params);
     }
   }
 }

@@ -59,6 +59,7 @@ class _FavoriteListViewState extends State<FavoriteListView> {
                     return ProductGridItem(
                       title: product.name,
                       price: product.priceLabel,
+                      minOrderQuantity: product.minOrderQuantity,
                       imageUrl: product.thumbnail,
                       onPressed: () => Navigator.pushNamed(
                           context, "/product_detail",

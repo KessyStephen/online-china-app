@@ -6,11 +6,17 @@ import 'package:online_china_app/ui/shared/app_colors.dart';
 class ProductGridItem extends StatelessWidget {
   final String title;
   final String price;
+  final int minOrderQuantity;
   final String imageUrl;
   final Function onPressed;
 
   const ProductGridItem(
-      {Key key, this.title, this.price, this.imageUrl, this.onPressed})
+      {Key key,
+      this.title,
+      this.price,
+      this.minOrderQuantity,
+      this.imageUrl,
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -18,7 +24,7 @@ class ProductGridItem extends StatelessWidget {
     return InkWell(
       onTap: this.onPressed,
       child: Container(
-        width: 180,
+        width: 200,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -68,6 +74,19 @@ class ProductGridItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            if (this.minOrderQuantity != null && this.minOrderQuantity > 0)
+              Padding(
+                padding: const EdgeInsets.only(left: 6, right: 6, top: 4),
+                child: Text(
+                  this.minOrderQuantity != null && this.minOrderQuantity > 0
+                      ? "MOQ: " + this.minOrderQuantity.toString()
+                      : "",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 12),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
           ],
         ),
       ),

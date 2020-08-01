@@ -95,6 +95,10 @@ class ProductModel extends BaseModel {
     _productService.setSampleRequestOrder(val);
   }
 
+  void setBuyNowOrder(bool val) {
+    _productService.setBuyNowOrder(val);
+  }
+
   Future<bool> getFavorites(
       {perPage = PER_PAGE_COUNT, page = 1, hideLoading = false}) async {
     if (!hideLoading) {
@@ -128,6 +132,7 @@ class ProductModel extends BaseModel {
   void setIsSort(bool flag) {
     this.isSort = flag;
   }
+
   Future<Favorite> getFavoriteForProduct(
       {productId, hideLoading = false}) async {
     if (!hideLoading) {

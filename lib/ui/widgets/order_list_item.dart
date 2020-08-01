@@ -55,6 +55,7 @@ class OrderListItem extends StatelessWidget {
                           ? "UNPAID"
                           : this.paymentStatus.toUpperCase(),
                       style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: this.paymentStatus == "Pending"
                               ? Colors.red
                               : this.paymentStatus == "Paid"

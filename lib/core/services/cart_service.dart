@@ -19,6 +19,9 @@ class CartService {
   bool _isSampleRequest = false;
   bool get isSampleRequest => _isSampleRequest;
 
+  bool _isBuyNow = false;
+  bool get isBuyNow => _isBuyNow;
+
   double get cartTotal {
     var sum = 0.0;
     _cartProducts.forEach((element) {
@@ -71,13 +74,18 @@ class CartService {
     if (found != null) {
       var index = _cartProducts.indexOf(found);
       _cartProducts[index] = product;
-      _alertService.showAlert(text: 'Added to items', error: false);
+
+      if (!_isSampleRequest && !_isBuyNow) {
+        _alertService.showAlert(text: 'Added to items', error: false);
+      }
       return true;
     }
 
     _cartProducts.add(product);
 
-    _alertService.showAlert(text: 'Added to items', error: false);
+    if (!_isSampleRequest && !_isBuyNow) {
+      _alertService.showAlert(text: 'Added to items', error: false);
+    }
     return true;
   }
 
@@ -110,5 +118,9 @@ class CartService {
 
   void setSampleRequestOrder(bool val) {
     _isSampleRequest = val;
+  }
+
+  void setBuyNowOrder(bool val) {
+    _isBuyNow = val;
   }
 }

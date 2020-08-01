@@ -125,7 +125,7 @@ class CartTabView extends StatelessWidget {
                         flex: 1,
                         child: BigButton(
                           color: primaryColor,
-                          buttonTitle: "GO SHOPPING",
+                          buttonTitle: "GO TO SHOP",
                           functionality: () {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, "/", (Route<dynamic> route) => false,

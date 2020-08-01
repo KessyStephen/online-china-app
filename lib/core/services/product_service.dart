@@ -217,4 +217,8 @@ class ProductService {
   void setSampleRequestOrder(bool val) {
     _cartService.setSampleRequestOrder(val);
   }
+
+  void setBuyNowOrder(bool val) {
+    _cartService.setBuyNowOrder(val);
+  }
 }
