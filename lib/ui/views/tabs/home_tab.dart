@@ -197,7 +197,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                                 return ProductGridItem(
                                   title: product.name,
                                   price: product.priceLabel,
-                                  minOrderQuantity: product.minOrderQuantity,
+                                  minOrderQuantity: product.minOrderLabel,
                                   imageUrl: product.thumbnail,
                                   onPressed: () => Navigator.pushNamed(
                                       context, "/product_detail",
@@ -279,7 +279,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                                   return ProductGridItem(
                                     title: product.name,
                                     price: product.priceLabel,
-                                    minOrderQuantity: product.minOrderQuantity,
+                                    minOrderQuantity: product.minOrderLabel,
                                     imageUrl: product.thumbnail,
                                     onPressed: () => Navigator.pushNamed(
                                         context, "/product_detail",

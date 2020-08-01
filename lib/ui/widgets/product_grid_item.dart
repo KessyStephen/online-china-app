@@ -6,7 +6,7 @@ import 'package:online_china_app/ui/shared/app_colors.dart';
 class ProductGridItem extends StatelessWidget {
   final String title;
   final String price;
-  final int minOrderQuantity;
+  final String minOrderQuantity;
   final String imageUrl;
   final Function onPressed;
 
@@ -74,11 +74,11 @@ class ProductGridItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (this.minOrderQuantity != null && this.minOrderQuantity > 0)
+            if (this.minOrderQuantity != null)
               Padding(
                 padding: const EdgeInsets.only(left: 6, right: 6, top: 4),
                 child: Text(
-                  this.minOrderQuantity != null && this.minOrderQuantity > 0
+                  this.minOrderQuantity != null
                       ? "MOQ: " + this.minOrderQuantity.toString()
                       : "",
                   style: const TextStyle(

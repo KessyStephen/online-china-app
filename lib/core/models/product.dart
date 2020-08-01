@@ -14,6 +14,7 @@ class Product extends TranslatedModel {
   String quality;
   int quantity = 1;
   int minOrderQuantity = 0;
+  String minOrderUnit;
   String sku;
   String thumbnail;
   List<ImageItem> images;
@@ -78,6 +79,15 @@ class Product extends TranslatedModel {
     }
 
     return "";
+  }
+
+  String get minOrderLabel {
+    if (minOrderQuantity != null &&
+        minOrderQuantity > 0 &&
+        minOrderUnit != null) {
+      return minOrderQuantity.toString() + " " + minOrderUnit;
+    }
+    return null;
   }
 
   String get samplePriceLabel {
@@ -153,6 +163,7 @@ class Product extends TranslatedModel {
     quantity = map['quantity'] != null ? map['quantity'] : 1;
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
+    minOrderUnit = map['minOrderUnit'] != null ? map['minOrderUnit'] : "";
     sku = map['sku'];
     canRequestSample = map['canRequestSample'] == true;
     samplePrice = map['samplePrice'] != null

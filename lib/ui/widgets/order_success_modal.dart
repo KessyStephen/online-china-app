@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/big_button_outline.dart';
@@ -40,7 +41,10 @@ class OrderSuccessModal extends StatelessWidget {
                   color: primaryColor,
                 ),
                 onPressed: () {
-                  Get.back();
+                  // Get.back();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (Route<dynamic> route) => false,
+                      arguments: {"switchToIndex": ORDERS_INDEX});
                 },
               )
             ],

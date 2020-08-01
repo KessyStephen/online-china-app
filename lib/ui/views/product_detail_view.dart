@@ -183,7 +183,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                       padding:
                                           const EdgeInsets.only(bottom: 5.0),
                                       child: Text(
-                                        "Min Order: ${product.minOrderQuantity} pc",
+                                        "Min Order: ${product.minOrderLabel}",
                                         style: const TextStyle(fontSize: 18),
                                       ),
                                     ),
