@@ -17,6 +17,7 @@ class ProductListView extends StatefulWidget {
 }
 
 class _ProductListViewState extends State<ProductListView> {
+  String sort = "";
   int page = 2;
   bool showLoading = true;
 
@@ -73,9 +74,10 @@ class _ProductListViewState extends State<ProductListView> {
                     //   color: Colors.green,
                     // ),
                     onTap: () {
+                      this.sort = "price:desc";
                       model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "price:desc",
+                          sort: this.sort,
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
@@ -92,9 +94,10 @@ class _ProductListViewState extends State<ProductListView> {
                     //   color: Colors.grey,
                     // ),
                     onTap: () {
+                      this.sort = "price:asc";
                       model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "price:asc",
+                          sort: this.sort,
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
@@ -111,9 +114,10 @@ class _ProductListViewState extends State<ProductListView> {
                     //   color: Colors.grey,
                     // ),
                     onTap: () {
+                      this.sort = "createdAt:desc";
                       model.getProducts(
                           categoryIds: parentCategory.id,
-                          sort: "createdAt:desc",
+                          sort: this.sort,
                           perPage: PER_PAGE_COUNT);
                       Navigator.pop(context);
                     },
@@ -228,6 +232,7 @@ class _ProductListViewState extends State<ProductListView> {
   void loadNextData(ProductModel model, dynamic categoryIds) async {
     bool flag = await model.getProducts(
         hideLoading: true,
+        sort: this.sort,
         page: this.page,
         categoryIds: categoryIds,
         perPage: PER_PAGE_COUNT);
