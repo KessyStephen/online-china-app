@@ -90,18 +90,7 @@ class CartService {
   }
 
   Future<bool> removeFromCart(Product product) async {
-    var found = _cartProducts.firstWhere((item) => item.id == product.id,
-        orElse: () => null);
-
-    if (found != null) {
-      found.quantity = found.quantity - 1;
-
-      if (found.quantity < 0) {
-        _cartProducts.removeWhere((item) => item.id == product.id);
-      }
-
-      return true;
-    }
+    _cartProducts.removeWhere((item) => item.id == product.id);
 
     return false;
   }

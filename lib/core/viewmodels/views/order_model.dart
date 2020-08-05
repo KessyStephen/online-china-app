@@ -40,6 +40,17 @@ class OrderModel extends BaseModel {
     return response;
   }
 
+  Future<bool> updateOrder(
+      {String orderId = "", statusCode = "", hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+    var response = await _orderService.updateOrder(
+        orderId: orderId, statusCode: statusCode);
+    setState(ViewState.Idle);
+    return response;
+  }
+
   Future<String> getInvoiceHTML({String orderId = ""}) async {
     setState(ViewState.Busy);
     var response = await _orderService.getInvoiceHTML(orderId: orderId);

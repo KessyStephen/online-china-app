@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/orderitem_list_item.dart';
@@ -39,73 +41,105 @@ class OrderDetailView extends StatelessWidget {
                         backgroundColor: Colors.white,
                       ),
                     ),
-                  order == null
-                      ? Container()
-                      : Column(
+                  if (order == null)
+                    Container()
+                  else
+                    Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: ListView.builder(
+                            itemCount: order.products != null
+                                ? order.products.length
+                                : 0,
+                            shrinkWrap: false,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              var product = order.products[index];
+                              return OrderItemListItem(
+                                subtitle: product.variations != null &&
+                                        product.variations.length > 0
+                                    ? product.variations[0]?.attributesLabel
+                                    : null,
+                                title: product.name,
+                                price: product.priceLabel,
+                                imageUrl: product.thumbnail,
+                                quantity: product.quantity,
+                              );
+                            },
+                          ),
+                        ),
+                        Column(
                           children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: ListView.builder(
-                                itemCount: order.products != null
-                                    ? order.products.length
-                                    : 0,
-                                shrinkWrap: false,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                itemBuilder: (BuildContext context, int index) {
-                                  var product = order.products[index];
-                                  return OrderItemListItem(
-                                    subtitle: product.variations != null &&
-                                            product.variations.length > 0
-                                        ? product.variations[0]?.attributesLabel
-                                        : null,
-                                    title: product.name,
-                                    price: product.priceLabel,
-                                    imageUrl: product.thumbnail,
-                                    quantity: product.quantity,
-                                  );
-                                },
+                            Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Total Amount",
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    order.priceLabel,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
-                            Column(
+                            Row(
                               children: <Widget>[
-                                Container(
-                                  color: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 18, vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        "Total Amount",
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                      Text(
-                                        order.priceLabel,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                if (order.status == "Pending")
+                                  Expanded(
+                                    flex: 1,
+                                    child: BigButton(
+                                      color: Color.fromRGBO(152, 2, 32, 1.0),
+                                      buttonTitle: "CANCEL",
+                                      functionality: () async {
+                                        bool success = await model.updateOrder(
+                                            orderId: order.id,
+                                            statusCode:
+                                                ORDER_STATUSCODE_CANCELLED);
+
+                                        if (success) {
+                                          // Navigator.pop(context);
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              "/",
+                                              (Route<dynamic> route) => false,
+                                              arguments: {"switchToIndex": 0});
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                Expanded(
+                                  flex: 1,
+                                  child: BigButton(
+                                    color: primaryColor,
+                                    buttonTitle: "GET INVOICE",
+                                    functionality: () async {
+                                      String response = await model
+                                          .getInvoiceHTML(orderId: order.id);
+                                      var invoicePDFData =
+                                          await model.generateInvoicePDF(
+                                              htmlContent: response);
+
+                                      await sharePDF(invoicePDFData, order.id);
+                                    },
                                   ),
                                 ),
-                                BigButton(
-                                  buttonTitle: "GET INVOICE",
-                                  functionality: () async {
-                                    String response = await model
-                                        .getInvoiceHTML(orderId: order.id);
-                                    var invoicePDFData =
-                                        await model.generateInvoicePDF(
-                                            htmlContent: response);
-
-                                    await sharePDF(invoicePDFData, order.id);
-                                  },
-                                )
                               ],
                             )
                           ],
-                        ),
+                        )
+                      ],
+                    ),
                 ],
               )),
             ));

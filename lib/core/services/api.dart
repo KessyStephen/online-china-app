@@ -474,6 +474,26 @@ class Api {
     }
   }
 
+  Future<Map> updateOrder({orderId = "", statusCode = ""}) async {
+    try {
+      Map<String, dynamic> params = {
+        'statusCode': statusCode,
+      };
+      var client = await createClient();
+      params.removeWhere((key, value) => value == null);
+      var uri = uriForPath("/api/orders/$orderId", null);
+
+      var response = await client.put(uri, body: jsonEncode(params));
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
   Future<Map> getInvoiceHTML({orderId = ""}) async {
     try {
       Map<String, String> params = {

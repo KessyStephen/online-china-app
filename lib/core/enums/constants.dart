@@ -17,3 +17,5 @@ const String PRODUCT_TYPE_SIMPLE = 'simple';
 const String PRODUCT_TYPE_VARIABLE = 'variable';
 
 enum ProductAction { None, AddToItems, BuyNow, Update }
+
+const String ORDER_STATUSCODE_CANCELLED = 'cancelled';

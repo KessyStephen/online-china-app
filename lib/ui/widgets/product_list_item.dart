@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/quantity_input.dart';
 
 class ProductListItem extends StatelessWidget {
@@ -10,10 +12,12 @@ class ProductListItem extends StatelessWidget {
   final int quantity;
   final String imageUrl;
   final bool hideQuantityInput;
+  final bool showDelete;
   final Function addItem;
   final Function removeItem;
   final Function onPressed;
   final Function onEditQuantity;
+  final Function onDelete;
 
   const ProductListItem(
       {Key key,
@@ -23,10 +27,12 @@ class ProductListItem extends StatelessWidget {
       this.quantity,
       this.imageUrl,
       this.hideQuantityInput,
+      this.showDelete,
       this.addItem,
       this.removeItem,
       this.onPressed,
-      this.onEditQuantity})
+      this.onEditQuantity,
+      this.onDelete})
       : super(key: key);
 
   @override
@@ -72,7 +78,23 @@ class ProductListItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(this.title != null ? this.title : ""),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 1,
+                          child: Text(this.title != null ? this.title : "")),
+                      if (showDelete == true)
+                        IconButton(
+                          onPressed: onDelete,
+                          icon: Icon(
+                            FontAwesome.close,
+                            color: primaryColor,
+                            size: 16,
+                          ),
+                        )
+                    ],
+                  ),
                   SizedBox(
                     height: 5,
                   ),
