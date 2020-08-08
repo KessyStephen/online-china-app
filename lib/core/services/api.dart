@@ -54,8 +54,8 @@ class Api {
   }
 
   static Uri uriForPath(path, params) {
-    return Uri.http('$endpoint', path, params);
-    // return Uri.https('$endpoint', path, params);
+    // return Uri.http('$endpoint', path, params);
+    return Uri.https('$endpoint', path, params);
   }
 
   Future<Map<String, dynamic>> updatePushToken(

@@ -66,7 +66,7 @@ class _LoginViewState extends State<LoginView> {
                   alignment: Alignment.center,
                   child: Image(
                     height: 200.0,
-                    image: AssetImage('assets/images/logo.png'),
+                    image: AssetImage('assets/images/logo_and_label.png'),
                   ),
                 ),
                 Form(

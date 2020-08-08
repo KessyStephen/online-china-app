@@ -43,7 +43,7 @@ class SearchBar extends StatelessWidget {
                     this.disableTextField == false,
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Search Online China',
+                    hintText: 'Search Shamwaa',
                     hintStyle: TextStyle(
                         color: this.textColor != null ? this.textColor : null)),
               )),

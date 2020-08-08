@@ -10,8 +10,8 @@
     <application
         android:usesCleartextTraffic="true"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Online China"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Shamwaa"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

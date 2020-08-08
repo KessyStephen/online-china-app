@@ -63,14 +63,39 @@ class _HomeTabViewState extends State<HomeTabView> {
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.zero,
                   centerTitle: true,
-                  title: Container(
-                    margin: EdgeInsets.symmetric(vertical: 6),
-                    height: 50,
-                    child: Image.asset(
-                      "assets/images/logo_black.png",
-                      fit: BoxFit.contain,
+                  title: Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+                          height: 45,
+                          padding: EdgeInsets.only(right: 5),
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Text(
+                          "Shamwaa",
+                          style: TextStyle(
+                              fontFamily: "Century Gothic",
+                              fontSize: 24,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                   ),
+                  // title: Container(
+                  //   margin: EdgeInsets.symmetric(vertical: 6),
+                  //   height: 50,
+                  //   child: Image.asset(
+                  //     "assets/images/logo_black.png",
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // ),
                 ),
               ),
               SliverAppBar(
