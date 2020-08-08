@@ -194,6 +194,10 @@ class ApiClient extends http.BaseClient {
       String token = await _storageService.getRefreshToken();
       String accessToken = await _storageService.getAccessToken();
 
+      // if (token == null || token.isEmpty) {
+      //   return false;
+      // }
+
       Map<String, String> map = {'refreshToken': token};
       var uri = Api.uriForPath('/api/token', null);
       var response = await http.post(uri, body: jsonEncode(map), headers: {
