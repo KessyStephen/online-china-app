@@ -17,26 +17,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
-      child: MaterialApp(
-        title: APP_NAME,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          backgroundColor: backgroundColor,
-          primaryColor: primaryColor,
-          accentColor: primaryColor,
-          hintColor: Color(0xff707070),
-        ),
-        initialRoute: '/',
-        navigatorKey: Get.key,
-        onGenerateRoute: Router.generateRoute,
-        builder: (context, widget) => Navigator(
-          onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => SafeArea(
-              child: DialogManager(
-                dialogService: Provider.of(context),
-                child: AlertManager(
-                  child: widget,
-                  alertService: Provider.of(context),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: MaterialApp(
+          title: APP_NAME,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            backgroundColor: backgroundColor,
+            primaryColor: primaryColor,
+            accentColor: primaryColor,
+            hintColor: Color(0xff707070),
+          ),
+          initialRoute: '/',
+          navigatorKey: Get.key,
+          onGenerateRoute: Router.generateRoute,
+          builder: (context, widget) => Navigator(
+            onGenerateRoute: (settings) => MaterialPageRoute(
+              builder: (context) => SafeArea(
+                child: DialogManager(
+                  dialogService: Provider.of(context),
+                  child: AlertManager(
+                    child: widget,
+                    alertService: Provider.of(context),
+                  ),
                 ),
               ),
             ),

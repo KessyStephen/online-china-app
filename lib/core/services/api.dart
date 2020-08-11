@@ -574,4 +574,20 @@ class Api {
       };
     }
   }
+
+  Future<Map> getCompanySettings() async {
+    try {
+      var client = await createClient();
+
+      var uri = uriForPath("/api/settings", null);
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
 }

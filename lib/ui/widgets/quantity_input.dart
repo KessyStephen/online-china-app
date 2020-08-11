@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 
-class QuantityInput extends StatelessWidget {
+class QuantityInput extends StatefulWidget {
   final Function addItem;
   final Function removeItem;
+  final int minQuantity;
   final int quantity;
+  final ValueChanged<int> onQuantityChanged;
 
-  QuantityInput({this.addItem, this.removeItem, this.quantity});
+  QuantityInput(
+      {this.addItem,
+      this.removeItem,
+      this.quantity,
+      this.minQuantity,
+      this.onQuantityChanged});
+
+  @override
+  _QuantityInputState createState() => _QuantityInputState();
+}
+
+class _QuantityInputState extends State<QuantityInput> {
+  //int value;
+  TextEditingController _controller = TextEditingController()..text = '';
 
   @override
   Widget build(BuildContext context) {
+    // value = widget.quantity;
+    _controller.text = "${widget.quantity}";
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -17,7 +34,19 @@ class QuantityInput extends StatelessWidget {
       child: Row(
         children: <Widget>[
           InkWell(
-            onTap: this.removeItem,
+            onTap: () {
+              if (widget.onQuantityChanged != null) {
+                var intVal = int.tryParse(_controller.text) - 1;
+
+                if (widget.minQuantity != null &&
+                    intVal <= widget.minQuantity) {
+                  intVal = widget.minQuantity;
+                }
+
+                _controller.text = "$intVal";
+                widget.onQuantityChanged(intVal);
+              }
+            },
             child: Container(
               padding: const EdgeInsets.only(left: 10, right: 8),
               child: const Text(
@@ -32,7 +61,40 @@ class QuantityInput extends StatelessWidget {
             color: Colors.grey,
             child: const Text(""),
           ),
-          Text(this.quantity.toString()),
+          // Text(this.quantity.toString()),
+          Container(
+            height: 20,
+            width: 34,
+            child: TextField(
+              controller: _controller,
+              maxLines: 1,
+
+              maxLength:
+                  3, //setting maximum length of the textfieldmaxLengthEnforced:
+              maxLengthEnforced: true, //prevent the user from further typing
+              keyboardType: TextInputType.number,
+              autocorrect: false,
+              textAlign: TextAlign.center,
+              toolbarOptions: ToolbarOptions(
+                cut: true,
+                copy: false,
+                selectAll: true,
+                paste: false,
+              ),
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(bottom: 5),
+                  counterText: "",
+                  labelText: "",
+                  hintText: ""),
+              onChanged: (val) {
+                var intVal = int.tryParse(val);
+                widget.onQuantityChanged(intVal);
+              },
+              onSubmitted: (value) {},
+              onEditingComplete: () {},
+            ),
+          ),
           Container(
             width: 1,
             margin: const EdgeInsets.only(left: 8),
@@ -40,7 +102,13 @@ class QuantityInput extends StatelessWidget {
             child: const Text(""),
           ),
           InkWell(
-            onTap: this.addItem,
+            onTap: () {
+              if (widget.onQuantityChanged != null) {
+                var intVal = int.tryParse(_controller.text) + 1;
+                _controller.text = "$Invocation()";
+                widget.onQuantityChanged(intVal);
+              }
+            },
             child: Container(
               padding: const EdgeInsets.only(left: 8, right: 10),
               child: const Text(

@@ -138,10 +138,30 @@ class Product extends TranslatedModel {
     }
   }
 
+  void setQuantity(int newQuantity) {
+    quantity = newQuantity;
+
+    //minimum one item
+    if (quantity <= 0) {
+      quantity = 1;
+    }
+  }
+
   void increaseVariationQuantity(int index, int extraQuantity) {
     var variation = variations[index];
 
     variation.quantity += extraQuantity;
+    if (variation.quantity < 0) {
+      variation.quantity = 0;
+    }
+
+    variations[index] = variation;
+  }
+
+  void setVariationQuantity(int index, int newQuantity) {
+    var variation = variations[index];
+
+    variation.quantity = newQuantity;
     if (variation.quantity < 0) {
       variation.quantity = 0;
     }

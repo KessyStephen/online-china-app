@@ -86,6 +86,10 @@ class ProductOptionsModal extends StatelessWidget {
                       title: variation.attributesLabel,
                       price: variation.priceLabel,
                       quantity: variation.quantity,
+                      onQuantityChanged: (value) {
+                        product.setVariationQuantity(index, value);
+                        model.setState(ViewState.Idle);
+                      },
                       addItem: () {
                         //this.onQuantityChange(index, 1);
                         product.increaseVariationQuantity(index, 1);

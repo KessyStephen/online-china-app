@@ -164,6 +164,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                         if (product.variations == null ||
                                             product.variations.length == 0)
                                           QuantityInput(
+                                              minQuantity: 1,
+                                              onQuantityChanged: (value) {
+                                                product.setQuantity(value);
+                                                model.setState(ViewState.Idle);
+                                              },
                                               addItem: () {
                                                 product.increaseQuantity(1);
                                                 model.setState(ViewState.Idle);

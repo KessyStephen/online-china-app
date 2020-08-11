@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/ui/widgets/quantity_input.dart';
 
 class ProductOptionListItem extends StatelessWidget {
@@ -12,6 +10,7 @@ class ProductOptionListItem extends StatelessWidget {
   final Function addItem;
   final Function removeItem;
   final Function onPressed;
+  final ValueChanged<int> onQuantityChanged;
 
   const ProductOptionListItem(
       {Key key,
@@ -22,7 +21,8 @@ class ProductOptionListItem extends StatelessWidget {
       this.hideQuantityInput,
       this.addItem,
       this.removeItem,
-      this.onPressed})
+      this.onPressed,
+      this.onQuantityChanged})
       : super(key: key);
 
   @override
@@ -83,6 +83,9 @@ class ProductOptionListItem extends StatelessWidget {
                         ),
                         if (this.hideQuantityInput != true)
                           QuantityInput(
+                              minQuantity:
+                                  0, //allow zero, for variable products
+                              onQuantityChanged: this.onQuantityChanged,
                               addItem: this.addItem,
                               removeItem: this.removeItem,
                               quantity:

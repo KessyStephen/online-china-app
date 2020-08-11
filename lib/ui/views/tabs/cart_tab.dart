@@ -72,6 +72,11 @@ class CartTabView extends StatelessWidget {
                                 hideQuantityInput: false,
                                 showDelete: true,
                                 onDelete: () => model.removeFromCart(product),
+                                minQuantity: 1,
+                                onQuantityChanged: (value) {
+                                  product.setQuantity(value);
+                                  model.setState(ViewState.Idle);
+                                },
                                 addItem: () {
                                   product.increaseQuantity(1);
                                   model.setState(ViewState.Idle);

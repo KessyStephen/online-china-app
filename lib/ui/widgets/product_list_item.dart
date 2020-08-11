@@ -12,6 +12,8 @@ class ProductListItem extends StatelessWidget {
   final int quantity;
   final String imageUrl;
   final bool hideQuantityInput;
+  final int minQuantity;
+  final ValueChanged<int> onQuantityChanged;
   final bool showDelete;
   final Function addItem;
   final Function removeItem;
@@ -27,6 +29,8 @@ class ProductListItem extends StatelessWidget {
       this.quantity,
       this.imageUrl,
       this.hideQuantityInput,
+      this.minQuantity,
+      this.onQuantityChanged,
       this.showDelete,
       this.addItem,
       this.removeItem,
@@ -112,6 +116,8 @@ class ProductListItem extends StatelessWidget {
                             if (this.type == PRODUCT_TYPE_SIMPLE &&
                                 this.hideQuantityInput != true)
                               QuantityInput(
+                                  minQuantity: this.minQuantity,
+                                  onQuantityChanged: this.onQuantityChanged,
                                   addItem: this.addItem,
                                   removeItem: this.removeItem,
                                   quantity: this.quantity != null

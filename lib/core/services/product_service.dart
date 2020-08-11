@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
@@ -43,6 +44,10 @@ class ProductService {
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
+
+  //companySettings - eg commissionRate etc
+  CompanySettings _companySettings;
+  CompanySettings get companySettings => _companySettings;
 
   Future<bool> getProducts(
       {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
@@ -172,6 +177,28 @@ class ProductService {
       }
 
       return true;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
+    }
+  }
+
+  Future<bool> getCompanySettings() async {
+    var response = await this._api.getCompanySettings();
+
+    if (response != null && response['success']) {
+      var obj = response['data'];
+
+      if (obj != null) {
+        _companySettings = CompanySettings.fromJson(obj);
+        return true;
+      }
+
+      return false;
     } else {
       _alertService.showAlert(
           text: response != null
