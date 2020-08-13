@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
@@ -82,7 +83,7 @@ class ConfirmOrderView extends StatelessWidget {
                                 style: const TextStyle(fontSize: 16),
                               ),
                               Text(
-                                total.toStringAsFixed(2),
+                                Utils.formatNumber(total),
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),

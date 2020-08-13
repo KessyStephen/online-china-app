@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
+import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
@@ -49,6 +50,9 @@ class ProductService {
   CompanySettings _companySettings;
   CompanySettings get companySettings => _companySettings;
 
+  ExchangeRate _exchangeRate;
+  ExchangeRate get exchangeRate => _exchangeRate;
+
   Future<bool> getProducts(
       {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
     if (page == 1) {
@@ -64,7 +68,8 @@ class ProductService {
       }
 
       for (int i = 0; i < tmpArray.length; i++) {
-        _products.add(Product.fromMap(tmpArray[i]));
+        _products.add(Product.fromMap(
+            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -88,7 +93,8 @@ class ProductService {
       var obj = response['data'];
 
       if (obj != null) {
-        return Product.fromMap(obj);
+        return Product.fromMap(
+            obj, _companySettings.commissionRate, _exchangeRate);
       }
 
       return null;
@@ -117,7 +123,8 @@ class ProductService {
       }
 
       for (int i = 0; i < tmpArray.length; i++) {
-        _searchedProducts.add(Product.fromMap(tmpArray[i]));
+        _searchedProducts.add(Product.fromMap(
+            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -147,7 +154,8 @@ class ProductService {
       _newArrivalProducts.clear();
 
       for (int i = 0; i < tmpArray.length; i++) {
-        _newArrivalProducts.add(Product.fromMap(tmpArray[i]));
+        _newArrivalProducts.add(Product.fromMap(
+            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -173,7 +181,8 @@ class ProductService {
       _bestSellingProducts.clear();
 
       for (int i = 0; i < tmpArray.length; i++) {
-        _bestSellingProducts.add(Product.fromMap(tmpArray[i]));
+        _bestSellingProducts.add(Product.fromMap(
+            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -195,6 +204,28 @@ class ProductService {
 
       if (obj != null) {
         _companySettings = CompanySettings.fromJson(obj);
+        return true;
+      }
+
+      return false;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
+    }
+  }
+
+  Future<bool> getExchangeRate(String from, String to) async {
+    var response = await this._api.getExchangeRate(from, to);
+
+    if (response != null && response['success']) {
+      var obj = response['data'];
+
+      if (obj != null) {
+        _exchangeRate = ExchangeRate.fromJson(obj);
         return true;
       }
 

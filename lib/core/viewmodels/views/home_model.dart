@@ -54,4 +54,11 @@ class HomeModel extends BaseModel {
     setState(ViewState.Idle);
     return response;
   }
+
+  Future<bool> getExchangeRate({String from = 'USD', String to = "USD"}) async {
+    setState(ViewState.Busy);
+    var response = await _productService.getExchangeRate(from, to);
+    setState(ViewState.Idle);
+    return response;
+  }
 }

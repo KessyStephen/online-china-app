@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/base_widget.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -114,7 +115,7 @@ class ProductOptionsModal extends StatelessWidget {
                     style: const TextStyle(fontSize: 16),
                   ),
                   Text(
-                    product?.variationsTotalPrice?.toStringAsFixed(2),
+                    Utils.formatNumber(product?.variationsTotalPrice),
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),

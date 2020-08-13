@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
+import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
 
 class Product extends TranslatedModel {
@@ -58,16 +60,16 @@ class Product extends TranslatedModel {
         variations != null &&
         variations.length > 0) {
       if (variationsTotalPrice > 0) {
-        var tmpPrice = variationsTotalPrice.toStringAsFixed(2);
+        var tmpPrice = Utils.formatNumber(variationsTotalPrice);
         return "$currency $tmpPrice";
       }
 
       if (minPrice != null && maxPrice != null && currency != null) {
         if (minPrice == maxPrice) {
-          return "$currency $minPrice";
+          return "$currency ${Utils.formatNumber(minPrice)}";
         }
 
-        return "$currency $minPrice - $maxPrice";
+        return "$currency ${Utils.formatNumber(minPrice)} - ${Utils.formatNumber(maxPrice)}";
       }
 
       return "";
@@ -75,7 +77,7 @@ class Product extends TranslatedModel {
 
     //simple product
     if (price != null && currency != null) {
-      return currency + " " + price.toString();
+      return currency + " " + Utils.formatNumber(price);
     }
 
     return "";
@@ -93,7 +95,7 @@ class Product extends TranslatedModel {
   String get samplePriceLabel {
     if (canRequestSample) {
       if (samplePrice != null && sampleCurrency != null) {
-        return sampleCurrency + " " + samplePrice.toStringAsFixed(2);
+        return sampleCurrency + " " + Utils.formatNumber(samplePrice);
       }
       return "";
     } else {
@@ -169,13 +171,17 @@ class Product extends TranslatedModel {
     variations[index] = variation;
   }
 
-  Product.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
+  Product.fromMap(Map<String, dynamic> map, double commissionRate,
+      ExchangeRate exchangeRate)
+      : super.fromMap(map) {
     if (map == null) {
       return;
     }
 
     id = map['_id'];
     type = map['type'] != null ? map['type'] : map['productType'];
+
+    // ============= price and currency
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
     currency = map['currency'];
     categoryId = map['categoryId'];
@@ -194,6 +200,18 @@ class Product extends TranslatedModel {
     sampleQuantity = map['sampleQuantity'];
     sampleUnit = map['sampleUnit'];
 
+    if (commissionRate != null && exchangeRate != null) {
+      var commissionRateFraction = commissionRate / 100;
+
+      //simple product
+      price = (1 + commissionRateFraction) * (exchangeRate.value * price);
+      currency = exchangeRate.to;
+
+      //sample price
+      samplePrice =
+          (1 + commissionRateFraction) * (exchangeRate.value * samplePrice);
+      sampleCurrency = exchangeRate.to;
+    }
     //images
     var imagesArr = map['images'];
     List<ImageItem> imageItems = [];
@@ -237,7 +255,7 @@ class Product extends TranslatedModel {
     if (variationsArr != null && variationsArr.length > 0) {
       for (var i = 0; i < variationsArr.length; i++) {
         var varTmp = variationsArr[i];
-        var varItem = Variation.fromMap(varTmp);
+        var varItem = Variation.fromMap(varTmp, commissionRate, exchangeRate);
         variationItems.add(varItem);
       }
 
@@ -360,10 +378,18 @@ class Variation {
 
   Variation({this.id, this.price, this.currency}) : super();
 
-  Variation.fromMap(Map<String, dynamic> map) {
+  Variation.fromMap(Map<String, dynamic> map, double commissionRate,
+      ExchangeRate exchangeRate) {
     id = map['_id'];
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
     currency = map['currency'];
+
+    if (commissionRate != null && exchangeRate != null) {
+      var commissionRateFraction = commissionRate / 100;
+
+      price = (1 + commissionRateFraction) * (exchangeRate.value * price);
+      currency = exchangeRate.to;
+    }
 
     //attributes
     var attributesArr = map['attributes'];
@@ -390,7 +416,7 @@ class Variation {
 
   String get priceLabel {
     if (price != null && currency != null) {
-      return currency + " " + price.toString();
+      return currency + " " + Utils.formatNumber(price);
     }
 
     return "";

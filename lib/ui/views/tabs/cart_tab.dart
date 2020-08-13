@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -119,7 +120,7 @@ class CartTabView extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          model.cartTotal.toStringAsFixed(2),
+                          Utils.formatNumber(model.cartTotal),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

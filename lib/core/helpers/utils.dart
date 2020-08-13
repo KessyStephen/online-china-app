@@ -13,4 +13,9 @@ class Utils {
 
     return parsedString;
   }
+
+  static String formatNumber(double value) {
+    var f = new NumberFormat.currency(locale: "en_US", symbol: "");
+    return f.format(value);
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/order_item.dart';
 import 'package:online_china_app/core/models/product.dart';
 
@@ -25,7 +26,7 @@ class Order {
       : super();
 
   String get priceLabel {
-    return currency + " " + total.toStringAsFixed(2);
+    return currency + " " + Utils.formatNumber(total);
   }
 
   Order.fromMap(Map<String, dynamic> map) {
