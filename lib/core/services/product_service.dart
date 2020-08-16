@@ -69,7 +69,7 @@ class ProductService {
 
       for (int i = 0; i < tmpArray.length; i++) {
         _products.add(Product.fromMap(
-            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
+            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -94,7 +94,7 @@ class ProductService {
 
       if (obj != null) {
         return Product.fromMap(
-            obj, _companySettings.commissionRate, _exchangeRate);
+            obj, _companySettings?.commissionRate, _exchangeRate);
       }
 
       return null;
@@ -139,7 +139,7 @@ class ProductService {
 
       for (int i = 0; i < tmpArray.length; i++) {
         _searchedProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
+            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -170,7 +170,7 @@ class ProductService {
 
       for (int i = 0; i < tmpArray.length; i++) {
         _newArrivalProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
+            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
       }
 
       return true;
@@ -197,7 +197,7 @@ class ProductService {
 
       for (int i = 0; i < tmpArray.length; i++) {
         _bestSellingProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings.commissionRate, _exchangeRate));
+            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
       }
 
       return true;
