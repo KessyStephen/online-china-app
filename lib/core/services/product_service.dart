@@ -109,10 +109,25 @@ class ProductService {
   }
 
   Future<bool> searchProducts(
-      {query = '', perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
-    var response = await this
-        ._api
-        .searchProducts(query: query, perPage: perPage, page: page, sort: sort);
+      {query = '',
+      minPrice,
+      maxPrice,
+      minMOQ,
+      maxMOQ,
+      categoryIds,
+      perPage = PER_PAGE_COUNT,
+      page = 1,
+      sort = ""}) async {
+    var response = await this._api.searchProducts(
+        query: query,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        minMOQ: minMOQ,
+        maxMOQ: maxMOQ,
+        categoryIds: categoryIds,
+        perPage: perPage,
+        page: page,
+        sort: sort);
 
     _searchedProducts.clear();
     if (response != null && response['success']) {

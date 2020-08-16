@@ -333,10 +333,23 @@ class Api {
   }
 
   Future<Map> searchProducts(
-      {query = "", perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
+      {query = "",
+      minPrice,
+      maxPrice,
+      minMOQ,
+      maxMOQ,
+      categoryIds,
+      perPage = PER_PAGE_COUNT,
+      page = 1,
+      sort = ""}) async {
     try {
       Map<String, String> params = {
         "query": query,
+        "minPrice": minPrice,
+        "maxPrice": maxPrice,
+        "minMOQ": minMOQ,
+        "maxMOQ": maxMOQ,
+        "categoryIds": categoryIds,
         'page': page.toString(),
         'perPage': perPage.toString(),
         'sort': sort,

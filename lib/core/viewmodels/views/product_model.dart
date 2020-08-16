@@ -54,12 +54,25 @@ class ProductModel extends BaseModel {
       perPage = PER_PAGE_COUNT,
       page = 1,
       sort = "",
+      minPrice,
+      maxPrice,
+      minMOQ,
+      maxMOQ,
+      categoryIds,
       hideLoading = false}) async {
     if (!hideLoading) {
       setState(ViewState.Busy);
     }
     bool response = await _productService.searchProducts(
-        query: query, perPage: perPage, page: page, sort: sort);
+        query: query,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        minMOQ: minMOQ,
+        maxMOQ: maxMOQ,
+        categoryIds: categoryIds,
+        perPage: perPage,
+        page: page,
+        sort: sort);
     setState(ViewState.Idle);
     return response;
   }

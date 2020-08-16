@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:infinite_widgets/infinite_widgets.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
@@ -11,6 +12,9 @@ import 'package:provider/provider.dart';
 
 import '../base_widget.dart';
 
+const String ACTION_FILTER = 'filter';
+const String ACTION_SORT = 'sort';
+
 class ProductSearchView extends StatefulWidget {
   @override
   _ProductSearchViewState createState() => _ProductSearchViewState();
@@ -18,9 +22,16 @@ class ProductSearchView extends StatefulWidget {
 
 class _ProductSearchViewState extends State<ProductSearchView> {
   final _queryController = TextEditingController();
+
+  final _fromPriceController = TextEditingController();
+  final _toPriceController = TextEditingController();
+  final _fromMOQController = TextEditingController();
+  final _toMOQController = TextEditingController();
+
   String sort = "";
   int page = 2;
   bool showLoading = true;
+  String selectedAction = "";
 
   @override
   void dispose() {
@@ -35,100 +46,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
         model: ProductModel(productService: Provider.of(context)),
         onModelReady: (model) => model.clearSearchData(),
         builder: (context, model, child) => Scaffold(
-              endDrawer: Drawer(
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Sort',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('Done',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor)),
-                          )
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.trending_down),
-                          title: Text(
-                            'High to Low',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          // trailing: Icon(
-                          //   Icons.check_circle,
-                          //   color: Colors.green,
-                          // ),
-                          onTap: () {
-                            this.sort = "price:desc";
-                            model.searchProducts(
-                                query: _queryController.text,
-                                sort: this.sort,
-                                perPage: PER_PAGE_COUNT);
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Divider(),
-                        ListTile(
-                          leading: Icon(Icons.trending_up),
-                          title: Text(
-                            'Low to High',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          // trailing: Icon(
-                          //   Icons.check_circle,
-                          //   color: Colors.grey,
-                          // ),
-                          onTap: () {
-                            this.sort = "price:asc";
-
-                            model.searchProducts(
-                                query: _queryController.text,
-                                sort: this.sort,
-                                perPage: PER_PAGE_COUNT);
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Divider(),
-                        ListTile(
-                          leading: Icon(Icons.access_time),
-                          title: Text(
-                            'Newly Listed',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          // trailing: Icon(
-                          //   Icons.check_circle,
-                          //   color: Colors.grey,
-                          // ),
-                          onTap: () {
-                            this.sort = "createdAt:desc";
-                            model.searchProducts(
-                                query: _queryController.text,
-                                sort: this.sort,
-                                perPage: PER_PAGE_COUNT);
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              endDrawer: sortDrawer(context, model),
               backgroundColor: Theme.of(context).backgroundColor,
               // appBar: AppBar(title: Text("Search")),
               body: Builder(
@@ -208,6 +126,33 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                                         child: Row(
                                           children: <Widget>[
                                             Text(
+                                              'Filter',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Icon(
+                                              FontAwesome.filter,
+                                              color: primaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          //model.setIsSort(true);
+                                          setState(() {
+                                            selectedAction = ACTION_FILTER;
+                                          });
+                                          Scaffold.of(context).openEndDrawer();
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      InkWell(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
                                               'Sort',
                                               style: TextStyle(fontSize: 16),
                                             ),
@@ -221,9 +166,15 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                                           ],
                                         ),
                                         onTap: () {
-                                          model.setIsSort(true);
+                                          setState(() {
+                                            selectedAction = ACTION_SORT;
+                                          });
+                                          // model.setIsSort(true);
                                           Scaffold.of(context).openEndDrawer();
                                         },
+                                      ),
+                                      SizedBox(
+                                        width: 5,
                                       ),
                                     ],
                                   ),
@@ -270,6 +221,225 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                 ),
               ),
             ));
+  }
+
+  Drawer sortDrawer(BuildContext context, ProductModel model) {
+    return selectedAction == ACTION_FILTER
+        ? filterDrawer(context, model)
+        : Drawer(
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Sort',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Done',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor)),
+                      )
+                    ],
+                  ),
+                ),
+                Divider(),
+                Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.trending_down),
+                      title: Text(
+                        'High to Low',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      // trailing: Icon(
+                      //   Icons.check_circle,
+                      //   color: Colors.green,
+                      // ),
+                      onTap: () {
+                        this.sort = "price:desc";
+                        model.searchProducts(
+                            query: _queryController.text,
+                            sort: this.sort,
+                            perPage: PER_PAGE_COUNT);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.trending_up),
+                      title: Text(
+                        'Low to High',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      // trailing: Icon(
+                      //   Icons.check_circle,
+                      //   color: Colors.grey,
+                      // ),
+                      onTap: () {
+                        this.sort = "price:asc";
+
+                        model.searchProducts(
+                            query: _queryController.text,
+                            sort: this.sort,
+                            perPage: PER_PAGE_COUNT);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.access_time),
+                      title: Text(
+                        'Newly Listed',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      // trailing: Icon(
+                      //   Icons.check_circle,
+                      //   color: Colors.grey,
+                      // ),
+                      onTap: () {
+                        this.sort = "createdAt:desc";
+                        model.searchProducts(
+                            query: _queryController.text,
+                            sort: this.sort,
+                            perPage: PER_PAGE_COUNT);
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+  }
+
+  Drawer filterDrawer(BuildContext context, ProductModel model) {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Filter',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                InkWell(
+                  onTap: () {
+                    model.searchProducts(
+                        query: _queryController.text,
+                        minPrice: _fromPriceController.text,
+                        maxPrice: _toPriceController.text,
+                        minMOQ: _fromMOQController.text,
+                        maxMOQ: _toMOQController.text,
+                        sort: this.sort,
+                        perPage: PER_PAGE_COUNT);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Done',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor)),
+                )
+              ],
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Price"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: TextField(
+                            controller: this._fromPriceController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'from',
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ))),
+                    Expanded(
+                        flex: 1,
+                        child: TextField(
+                            controller: this._toPriceController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'to',
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ))),
+                  ]),
+                ),
+                Divider(),
+                Text("MOQ"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: TextField(
+                            controller: this._fromMOQController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'from',
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ))),
+                    Expanded(
+                        flex: 1,
+                        child: TextField(
+                            controller: this._toMOQController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'to',
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ))),
+                  ]),
+                ),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          _fromPriceController.text = "";
+                          _toPriceController.text = "";
+                          _fromMOQController.text = "";
+                          _toMOQController.text = "";
+                          // Navigator.pop(context);
+                        },
+                        child: Text('Reset All',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor)),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   void loadNextData(ProductModel model) async {
