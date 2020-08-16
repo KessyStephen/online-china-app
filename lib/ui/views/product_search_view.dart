@@ -370,6 +370,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                         flex: 1,
                         child: TextField(
                             controller: this._fromPriceController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'from',
@@ -379,6 +380,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                         flex: 1,
                         child: TextField(
                             controller: this._toPriceController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'to',
@@ -395,6 +397,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                         flex: 1,
                         child: TextField(
                             controller: this._fromMOQController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'from',
@@ -404,6 +407,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                         flex: 1,
                         child: TextField(
                             controller: this._toMOQController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'to',
