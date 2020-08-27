@@ -1,4 +1,5 @@
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/helpers/Utils.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
 
@@ -50,7 +51,7 @@ class OrderItem extends TranslatedModel {
 
   String get priceLabel {
     if (price != null && currency != null) {
-      return currency + " " + price.toString();
+      return currency + " " + Utils.formatNumber(price);
     }
 
     return "";
@@ -59,7 +60,7 @@ class OrderItem extends TranslatedModel {
   String get samplePriceLabel {
     if (canRequestSample) {
       if (samplePrice != null && sampleCurrency != null) {
-        return sampleCurrency + " " + samplePrice.toString();
+        return sampleCurrency + " " + Utils.formatNumber(samplePrice);
       }
       return "";
     } else {
