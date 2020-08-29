@@ -165,6 +165,10 @@ class OrderService {
     );
   }
 
+  void showAlertMessage({String message, bool error = false}) {
+    _alertService.showAlert(text: message, error: error);
+  }
+
   void clearOrderData({bool removeOrders = false}) {
     if (removeOrders) this._orders = [];
   }

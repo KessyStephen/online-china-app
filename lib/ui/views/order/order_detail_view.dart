@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
@@ -9,6 +10,7 @@ import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/orderitem_list_item.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -130,7 +132,13 @@ class OrderDetailView extends StatelessWidget {
                                           await model.generateInvoicePDF(
                                               htmlContent: response);
 
-                                      await sharePDF(invoicePDFData, order.id);
+                                      if (Platform.isAndroid) {
+                                        await savePDF(
+                                            model, invoicePDFData, order.id);
+                                      } else {
+                                        await sharePDF(
+                                            invoicePDFData, order.id);
+                                      }
                                     },
                                   ),
                                 ),
@@ -174,6 +182,24 @@ class OrderDetailView extends StatelessWidget {
 
 //share
     await Printing.sharePdf(bytes: pdf, filename: filename);
+  }
+}
+
+Future<void> savePDF(OrderModel model, var htmlContent, String filename) async {
+  if (await Permission.storage.request().isGranted) {
+    filename = "Shamwaaa_" + filename + ".pdf";
+
+    var output = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+
+    final file = File("${output}/${filename}");
+    await file.writeAsBytes(htmlContent);
+
+    model.showAlertMessage(message: "Invoice saved to Downloads", error: false);
+  } else {
+    model.showAlertMessage(
+        message: "Failed to save invoice, please grant storage permissions",
+        error: true);
   }
 }
 
