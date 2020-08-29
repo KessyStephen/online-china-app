@@ -18,6 +18,14 @@ class _LoginViewState extends State<LoginView> {
   final _passwordController = TextEditingController();
   final _phoneController = TextEditingController();
 
+  bool _hidePassword = true;
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<AuthModel>(
@@ -130,7 +138,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         child: TextFormField(
                           controller: _passwordController,
-                          obscureText: true,
+                          obscureText: _hidePassword,
                           showCursor: true,
                           validator: (value) {
                             if (value.isEmpty) {
@@ -144,6 +152,12 @@ class _LoginViewState extends State<LoginView> {
                                 fontSize: 14.0, fontWeight: FontWeight.w500),
                             border: new UnderlineInputBorder(
                                 borderSide: new BorderSide(color: Colors.grey)),
+                            suffixIcon: IconButton(
+                              onPressed: _toggleHidePassword,
+                              icon: Icon(_hidePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                            ),
                           ),
                         ),
                       ),

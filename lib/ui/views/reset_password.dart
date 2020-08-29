@@ -17,6 +17,21 @@ class _ResetPasswordState extends State<ResetPassword> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  bool _hidePassword = true;
+  bool _hideConfirmPassword = true;
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
+
+  void _toggleHideConfirmPassword() {
+    setState(() {
+      _hideConfirmPassword = !_hideConfirmPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<AuthModel>(
@@ -62,7 +77,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     margin: EdgeInsets.symmetric(horizontal: 18.0),
                     child: TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: _hidePassword,
                       showCursor: true,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -76,6 +91,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                             fontSize: 14.0, fontWeight: FontWeight.w500),
                         border: new UnderlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
+                        suffixIcon: IconButton(
+                          onPressed: _toggleHidePassword,
+                          icon: Icon(_hidePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
                       ),
                     ),
                   ),
@@ -86,7 +107,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     margin: EdgeInsets.symmetric(horizontal: 18.0),
                     child: TextFormField(
                       controller: _confirmPasswordController,
-                      obscureText: true,
+                      obscureText: _hideConfirmPassword,
                       showCursor: true,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -100,6 +121,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                             fontSize: 14.0, fontWeight: FontWeight.w500),
                         border: new UnderlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
+                        suffixIcon: IconButton(
+                          onPressed: _toggleHideConfirmPassword,
+                          icon: Icon(_hideConfirmPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
                       ),
                     ),
                   ),

@@ -18,6 +18,28 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  bool _hideCurrentPassword = true;
+  bool _hidePassword = true;
+  bool _hideConfirmPassword = true;
+
+  void _toggleHideCurrentPassword() {
+    setState(() {
+      _hideCurrentPassword = !_hideCurrentPassword;
+    });
+  }
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
+
+  void _toggleHideConfirmPassword() {
+    setState(() {
+      _hideConfirmPassword = !_hideConfirmPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<AuthModel>(
@@ -72,7 +94,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _currentPasswordController,
-                      obscureText: true,
+                      obscureText: _hideCurrentPassword,
                       showCursor: true,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -82,9 +104,16 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         return null;
                       },
                       decoration: InputDecoration(
-                          labelText: 'Current Password',
-                          labelStyle: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w500)),
+                        labelText: 'Current Password',
+                        labelStyle: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w500),
+                        suffixIcon: IconButton(
+                          onPressed: _toggleHideCurrentPassword,
+                          icon: Icon(_hideCurrentPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -94,7 +123,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     margin: EdgeInsets.symmetric(horizontal: 18.0),
                     child: TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: _hidePassword,
                       showCursor: true,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -107,7 +136,14 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         labelStyle: TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.w500),
                         border: new UnderlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.grey)),
+                          borderSide: new BorderSide(color: Colors.grey),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: _toggleHidePassword,
+                          icon: Icon(_hidePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
                       ),
                     ),
                   ),
@@ -121,7 +157,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         }
                         return null;
                       },
-                      obscureText: true,
+                      obscureText: _hideConfirmPassword,
                       showCursor: true,
                       decoration: InputDecoration(
                         labelText: 'Confirm New Password',
@@ -129,6 +165,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                             fontSize: 14.0, fontWeight: FontWeight.w500),
                         border: new UnderlineInputBorder(
                             borderSide: new BorderSide(color: Colors.grey)),
+                        suffixIcon: IconButton(
+                          onPressed: _toggleHideConfirmPassword,
+                          icon: Icon(_hideConfirmPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
                       ),
                     ),
                   ),
