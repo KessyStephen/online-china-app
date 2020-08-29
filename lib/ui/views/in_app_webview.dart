@@ -15,18 +15,22 @@ class _InAppWebviewState extends State<InAppWebview> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> params =
         ModalRoute.of(context).settings.arguments;
-    //String title = params != null ? params['title'] : "";
+    String title = params != null ? params['title'] : "";
     String body = params != null ? params['body'] : "";
+    String initialUrl = params != null ? params['initialUrl'] : "";
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(title: Text("Description")),
+      appBar: AppBar(title: Text(title)),
       body: SafeArea(
           child: WebView(
-        initialUrl: '',
+        initialUrl: initialUrl,
         onWebViewCreated: (WebViewController webViewController) {
           _controller = webViewController;
-          _loadHtmlFromAssets(body, _controller);
+
+          if (initialUrl.isEmpty) {
+            _loadHtmlFromAssets(body, _controller);
+          }
         },
       )),
     );

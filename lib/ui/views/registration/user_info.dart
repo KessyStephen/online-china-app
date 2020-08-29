@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/auth_model.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +20,8 @@ class _FinallyUserInfoViewState extends State<FinallyUserInfoView> {
   final _fullNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  bool _termsAccepted = false;
 
   bool _hidePassword = true;
   bool _hideConfirmPassword = true;
@@ -164,6 +169,35 @@ class _FinallyUserInfoViewState extends State<FinallyUserInfoView> {
                       ),
                     ),
                   ),
+                  CheckboxListTile(
+                    title: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Accept '),
+                          TextSpan(
+                            text: 'Terms and Conditions',
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pushNamed(
+                                      context, "/product_description_full",
+                                      arguments: {
+                                        "initialUrl": TERMS_URL,
+                                        "title": "Terms and Conditions",
+                                        "body": ""
+                                      }),
+                          )
+                        ],
+                      ),
+                    ),
+                    value: _termsAccepted,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _termsAccepted = newValue;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                  )
                 ],
               ),
             ),
@@ -178,7 +212,12 @@ class _FinallyUserInfoViewState extends State<FinallyUserInfoView> {
                     alignment: Alignment.bottomCenter,
                     child: BigButton(
                       buttonTitle: "Submit",
+                      color: _termsAccepted ? primaryColor : Colors.grey,
                       functionality: () async {
+                        if (!_termsAccepted) {
+                          return;
+                        }
+
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
 

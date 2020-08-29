@@ -245,7 +245,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                     onPressed: () => Navigator.pushNamed(
                                         context, "/product_description_full",
                                         arguments: {
-                                          "title": product.name,
+                                          "title": "Description",
                                           "body": product.description
                                         }),
                                   ),
