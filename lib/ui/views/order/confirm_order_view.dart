@@ -104,20 +104,15 @@ class ConfirmOrderView extends StatelessWidget {
                               onGetInvoice: () async {
                                 String orderId = orderIds[0];
 
-                                await Navigator.pop(context);
-                                // await Navigator.popAndPushNamed(context, "/",
-                                //     arguments: {"switchToIndex": ORDERS_INDEX});
+                                // await Navigator.pop(context);
+                                int count = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return count++ == 2;
+                                });
 
                                 Navigator.pushReplacementNamed(
                                     context, "/order_detail",
                                     arguments: {"orderId": orderId});
-
-                                // Get.back();
-                                // String response = await model.getInvoiceHTML(
-                                //     orderId: orderId);
-                                // var invoicePDFData = await model
-                                //     .generateInvoicePDF(htmlContent: response);
-                                // await sharePDF(invoicePDFData, orderId);
                               },
                             ));
                           }
