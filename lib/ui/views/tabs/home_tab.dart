@@ -32,15 +32,17 @@ class _HomeTabViewState extends State<HomeTabView> {
 
         await model.getCompanySettings();
 
-        if (model.bestSellingProducts == null ||
-            model.bestSellingProducts.length == 0) {
-          model.getBestSellingProducts();
-        }
+        // if (model.bestSellingProducts == null ||
+        //     model.bestSellingProducts.length == 0) {
+        //   model.getBestSellingProducts();
+        // }
+        model.getBestSellingProducts();
 
-        if (model.newArrivalProducts == null ||
-            model.newArrivalProducts.length == 0) {
-          model.getNewArrivalProducts();
-        }
+        // if (model.newArrivalProducts == null ||
+        //     model.newArrivalProducts.length == 0) {
+        //   model.getNewArrivalProducts();
+        // }
+        model.getNewArrivalProducts();
 
         if (model.favorites == null || model.favorites.length == 0) {
           model.getFavorites();
