@@ -24,6 +24,20 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>apple music not required</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>calender not required</string>
+	<key>NSContactsUsageDescription</key>
+	<string>contacts not required</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>location not required</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>location not required</string>
+	<key>NSMotionUsageDescription</key>
+	<string>motion not required</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>speech recognition not required</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
