@@ -456,7 +456,12 @@ class Api {
   }
 
   Future<Map> createOrder(
-      {List<Product> products, isSampleRequest = false}) async {
+      {List<Product> products,
+      isSampleRequest = false,
+      destCountry,
+      destCity,
+      destRegion,
+      destStreet}) async {
     try {
       if (products == null) {
         products = [];
@@ -470,7 +475,11 @@ class Api {
 
       Map<String, dynamic> params = {
         'items': items,
-        'isSampleRequest': isSampleRequest
+        'isSampleRequest': isSampleRequest,
+        'destCountry': destCountry,
+        'destCity': destCity,
+        'destRegion': destRegion,
+        'destStreet': destStreet,
       };
       var client = await createClient();
       params.removeWhere((key, value) => value == null);

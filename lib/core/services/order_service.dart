@@ -105,9 +105,19 @@ class OrderService {
     }
   }
 
-  Future<List<String>> createOrder({List<Product> products}) async {
+  Future<List<String>> createOrder(
+      {List<Product> products,
+      destCountry,
+      destCity,
+      destRegion,
+      destStreet}) async {
     var response = await this._api.createOrder(
-        products: products, isSampleRequest: _cartService.isSampleRequest);
+        products: products,
+        isSampleRequest: _cartService.isSampleRequest,
+        destCountry: destCountry,
+        destCity: destCity,
+        destRegion: destRegion,
+        destStreet: destStreet);
     if (response != null && response['success']) {
       //_alertService.showAlert(text: "Order successfully placed", error: false);
 

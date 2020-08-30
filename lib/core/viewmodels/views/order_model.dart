@@ -70,9 +70,19 @@ class OrderModel extends BaseModel {
     _orderService.showAlertMessage(message: message, error: error);
   }
 
-  Future<List<String>> createOrder({List<Product> products}) async {
+  Future<List<String>> createOrder(
+      {List<Product> products,
+      destCountry,
+      destCity,
+      destRegion,
+      destStreet}) async {
     setState(ViewState.Busy);
-    List<String> response = await _orderService.createOrder(products: products);
+    List<String> response = await _orderService.createOrder(
+        products: products,
+        destCountry: destCountry,
+        destCity: destCity,
+        destRegion: destRegion,
+        destStreet: destStreet);
     setState(ViewState.Idle);
     return response;
   }

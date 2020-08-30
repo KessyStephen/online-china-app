@@ -211,7 +211,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                           };
 
                                           Navigator.pushNamed(
-                                              context, '/confirm_order',
+                                              context, '/order_address',
                                               arguments: params);
 
                                           // Navigator.pushNamedAndRemoveUntil(
@@ -370,7 +370,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         'total': model.cartTotal,
       };
 
-      Navigator.pushNamed(context, '/confirm_order', arguments: params);
+      Navigator.pushNamed(context, '/order_address', arguments: params);
     }
   }
 }

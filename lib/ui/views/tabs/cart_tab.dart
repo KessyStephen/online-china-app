@@ -156,7 +156,7 @@ class CartTabView extends StatelessWidget {
                                   'total': model.cartTotal,
                                 };
 
-                                Navigator.pushNamed(context, '/confirm_order',
+                                Navigator.pushNamed(context, '/order_address',
                                     arguments: params);
                               }
                               if (model.cartTotal > 0 && !isLoggedIn) {
