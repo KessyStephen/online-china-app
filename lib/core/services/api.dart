@@ -613,17 +613,27 @@ class Api {
     }
   }
 
-  Future<Map> getExchangeRate(String from, String to) async {
+  Future<Map> getExchangeRates() async {
     try {
-      Map<String, String> params = {
-        'from': from,
-        'to': to,
-      };
-      params.removeWhere((key, value) => value == null);
-
       var client = await createClient();
 
-      var uri = uriForPath("/api/exchange_rate", params);
+      var uri = uriForPath("/api/exchange_rates", null);
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getCurrencies() async {
+    try {
+      var client = await createClient();
+
+      var uri = uriForPath("/api/currencies", null);
       var response = await client.get(uri);
       return json.decode(response.body);
     } catch (e) {

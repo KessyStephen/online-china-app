@@ -111,6 +111,9 @@ class AccountView extends StatelessWidget {
                   color: primaryColor,
                   size: 30.0,
                 ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/currency_list');
+                },
               ),
               SettingListItem(
                 title: 'Language',

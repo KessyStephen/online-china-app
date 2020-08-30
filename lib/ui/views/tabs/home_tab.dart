@@ -28,7 +28,7 @@ class _HomeTabViewState extends State<HomeTabView> {
     return BaseView<HomeModel>(
       model: HomeModel(productService: Provider.of(context)),
       onModelReady: (model) async {
-        await model.getExchangeRate();
+        await model.getExchangeRates();
 
         await model.getCompanySettings();
 

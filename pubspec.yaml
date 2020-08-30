@@ -46,6 +46,7 @@ dependencies:
   printing: ^3.5.0
   ext_storage: ^1.0.3
   permission_handler: ^5.0.1+1
+  shared_preferences: ^0.5.10
 
 dev_dependencies:
   flutter_test:

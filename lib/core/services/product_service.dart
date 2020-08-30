@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
+import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
@@ -41,6 +43,10 @@ class ProductService {
   //favorites
   List<Favorite> get favorites => _favoriteService.favorites;
 
+//currencies
+  List<Currency> _currencies = [];
+  List<Currency> get currencies => _currencies;
+
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
@@ -50,8 +56,8 @@ class ProductService {
   CompanySettings _companySettings;
   CompanySettings get companySettings => _companySettings;
 
-  ExchangeRate _exchangeRate;
-  ExchangeRate get exchangeRate => _exchangeRate;
+  List<ExchangeRate> _exchangeRates = [];
+  List<ExchangeRate> get exchangeRates => _exchangeRates;
 
   Future<bool> getProducts(
       {perPage = PER_PAGE_COUNT, page = 1, sort = "", categoryIds = ""}) async {
@@ -67,9 +73,10 @@ class ProductService {
         return false;
       }
 
+      String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _products.add(Product.fromMap(
-            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
+        _products.add(Product.fromMap(tmpArray[i],
+            _companySettings?.commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -93,8 +100,9 @@ class ProductService {
       var obj = response['data'];
 
       if (obj != null) {
+        String toCurrency = await LangUtils.getSelectedCurrency();
         return Product.fromMap(
-            obj, _companySettings?.commissionRate, _exchangeRate);
+            obj, _companySettings?.commissionRate, _exchangeRates, toCurrency);
       }
 
       return null;
@@ -137,9 +145,10 @@ class ProductService {
         return false;
       }
 
+      String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _searchedProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
+        _searchedProducts.add(Product.fromMap(tmpArray[i],
+            _companySettings?.commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -168,9 +177,10 @@ class ProductService {
 
       _newArrivalProducts.clear();
 
+      String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _newArrivalProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
+        _newArrivalProducts.add(Product.fromMap(tmpArray[i],
+            _companySettings?.commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -195,9 +205,10 @@ class ProductService {
 
       _bestSellingProducts.clear();
 
+      String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _bestSellingProducts.add(Product.fromMap(
-            tmpArray[i], _companySettings?.commissionRate, _exchangeRate));
+        _bestSellingProducts.add(Product.fromMap(tmpArray[i],
+            _companySettings?.commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -233,18 +244,49 @@ class ProductService {
     }
   }
 
-  Future<bool> getExchangeRate(String from, String to) async {
-    var response = await this._api.getExchangeRate(from, to);
+  Future<bool> getExchangeRates() async {
+    var response = await this._api.getExchangeRates();
 
     if (response != null && response['success']) {
-      var obj = response['data'];
+      var tmpArray = response['data'];
 
-      if (obj != null) {
-        _exchangeRate = ExchangeRate.fromJson(obj);
-        return true;
+      if (tmpArray.length == 0) {
+        return false;
       }
 
+      _exchangeRates.clear();
+
+      for (int i = 0; i < tmpArray.length; i++) {
+        _exchangeRates.add(ExchangeRate.fromJson(tmpArray[i]));
+      }
+
+      return true;
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
       return false;
+    }
+  }
+
+  Future<bool> getCurrencies() async {
+    var response = await this._api.getCurrencies();
+    if (response != null && response['success']) {
+      var tmpArray = response['data'];
+
+      if (tmpArray.length == 0) {
+        return false;
+      }
+
+      _currencies.clear();
+
+      for (int i = 0; i < tmpArray.length; i++) {
+        _currencies.add(Currency.fromJson(tmpArray[i]));
+      }
+
+      return true;
     } else {
       _alertService.showAlert(
           text: response != null

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_china_app/ui/views/account_view.dart';
 import 'package:online_china_app/ui/views/country_code_picker.dart';
+import 'package:online_china_app/ui/views/currency_list_view.dart';
 import 'package:online_china_app/ui/views/favorite_list_view.dart';
 import 'package:online_china_app/ui/views/home_view.dart';
 import 'package:online_china_app/ui/views/in_app_webview.dart';
@@ -71,6 +72,11 @@ class Router {
       case '/favorite_list':
         return MaterialPageRoute(
             builder: (_) => FavoriteListView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/currency_list':
+        return MaterialPageRoute(
+            builder: (_) => CurrencyListView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
       case '/subcategories':

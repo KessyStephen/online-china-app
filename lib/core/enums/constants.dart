@@ -8,6 +8,11 @@ const String API_ENDPONT = 'api.shamwaa.com';
 //use this language, if translation not available
 const String FALLBACK_LANG = 'en';
 
+//use this currency if not selected
+const String DEFAULT_CURRENCY = 'USD';
+const String SELECTED_CURRENCY_KEY =
+    'prefferedCurrency'; //key for local storage
+
 const String PLACEHOLDER_IMAGE = 'assets/images/logo.png';
 
 //zero based index of cart tab

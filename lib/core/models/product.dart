@@ -172,7 +172,7 @@ class Product extends TranslatedModel {
   }
 
   Product.fromMap(Map<String, dynamic> map, double commissionRate,
-      ExchangeRate exchangeRate)
+      List<ExchangeRate> exchangeRates, String toCurrency)
       : super.fromMap(map) {
     if (map == null) {
       return;
@@ -200,6 +200,9 @@ class Product extends TranslatedModel {
     sampleQuantity = map['sampleQuantity'];
     sampleUnit = map['sampleUnit'];
 
+    var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
+        from: currency, to: toCurrency);
+
     if (commissionRate != null && exchangeRate != null) {
       var commissionRateFraction = commissionRate / 100;
 
@@ -208,9 +211,11 @@ class Product extends TranslatedModel {
       currency = exchangeRate.to;
 
       //sample price
-      samplePrice =
-          (1 + commissionRateFraction) * (exchangeRate.value * samplePrice);
-      sampleCurrency = exchangeRate.to;
+      var exchangeRateSample = ExchangeRate.getExchangeRate(exchangeRates,
+          from: sampleCurrency, to: toCurrency);
+      samplePrice = (1 + commissionRateFraction) *
+          (exchangeRateSample.value * samplePrice);
+      sampleCurrency = exchangeRateSample.to;
     }
     //images
     var imagesArr = map['images'];
@@ -255,7 +260,8 @@ class Product extends TranslatedModel {
     if (variationsArr != null && variationsArr.length > 0) {
       for (var i = 0; i < variationsArr.length; i++) {
         var varTmp = variationsArr[i];
-        var varItem = Variation.fromMap(varTmp, commissionRate, exchangeRate);
+        var varItem = Variation.fromMap(
+            varTmp, commissionRate, exchangeRates, toCurrency);
         variationItems.add(varItem);
       }
 
@@ -379,11 +385,13 @@ class Variation {
   Variation({this.id, this.price, this.currency}) : super();
 
   Variation.fromMap(Map<String, dynamic> map, double commissionRate,
-      ExchangeRate exchangeRate) {
+      List<ExchangeRate> exchangeRates, String toCurrency) {
     id = map['_id'];
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
     currency = map['currency'];
 
+    var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
+        from: currency, to: toCurrency);
     if (commissionRate != null && exchangeRate != null) {
       var commissionRateFraction = commissionRate / 100;
 

@@ -20,7 +20,7 @@ class Favorite {
 
     //product
     if (map["product"] != null) {
-      product = Product.fromMap(map["product"], null, null);
+      product = Product.fromMap(map["product"], null, null, null);
     }
   }
 
