@@ -102,9 +102,9 @@ class Category extends TranslatedModel {
     var category = getCategory(id, allCategories);
 
     if (category == null) {
-      return 1.0;
+      return 0;
     }
 
-    return category.commissionRate ?? 1.0;
+    return category.commissionRate ?? 0;
   }
 }
