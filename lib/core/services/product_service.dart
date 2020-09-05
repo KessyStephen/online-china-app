@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
+import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
+import 'package:online_china_app/core/services/category_service.dart';
 import 'package:online_china_app/core/services/favorite_service.dart';
 
 import 'alert_service.dart';
@@ -17,16 +19,21 @@ class ProductService {
   final AlertService _alertService;
   final CartService _cartService;
   final FavoriteService _favoriteService;
+  final CategoryService _categoryService;
 
   ProductService({
     @required Api api,
     @required AlertService alertService,
     @required CartService cartService,
     @required FavoriteService favoriteService,
+    @required CategoryService categoryService,
   })  : _api = api,
         _alertService = alertService,
         _cartService = cartService,
-        _favoriteService = favoriteService;
+        _favoriteService = favoriteService,
+        _categoryService = categoryService;
+
+  List<Category> get allCategories => _categoryService.allCategories;
 
   List<Product> _products = [];
   List<Product> get products => _products;
@@ -75,8 +82,11 @@ class ProductService {
 
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _products.add(Product.fromMap(tmpArray[i],
-            _companySettings?.commissionRate, _exchangeRates, toCurrency));
+        var tmp = tmpArray[i];
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _products.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -101,8 +111,9 @@ class ProductService {
 
       if (obj != null) {
         String toCurrency = await LangUtils.getSelectedCurrency();
-        return Product.fromMap(
-            obj, _companySettings?.commissionRate, _exchangeRates, toCurrency);
+        double commissionRate = Category.getCategoryCommissionRate(
+            obj["categoryId"], allCategories);
+        return Product.fromMap(obj, commissionRate, _exchangeRates, toCurrency);
       }
 
       return null;
@@ -147,8 +158,11 @@ class ProductService {
 
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
-        _searchedProducts.add(Product.fromMap(tmpArray[i],
-            _companySettings?.commissionRate, _exchangeRates, toCurrency));
+        var tmp = tmpArray[i];
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _searchedProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
       }
 
       return true;
@@ -171,19 +185,7 @@ class ProductService {
     if (response != null && response['success']) {
       var tmpArray = response['data'];
 
-      if (tmpArray.length == 0) {
-        return false;
-      }
-
-      _newArrivalProducts.clear();
-
-      String toCurrency = await LangUtils.getSelectedCurrency();
-      for (int i = 0; i < tmpArray.length; i++) {
-        _newArrivalProducts.add(Product.fromMap(tmpArray[i],
-            _companySettings?.commissionRate, _exchangeRates, toCurrency));
-      }
-
-      return true;
+      return processNewArrivalProducts(tmpArray);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -194,24 +196,31 @@ class ProductService {
     }
   }
 
+  Future<bool> processNewArrivalProducts(tmpArray) async {
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    _newArrivalProducts.clear();
+
+    String toCurrency = await LangUtils.getSelectedCurrency();
+    for (int i = 0; i < tmpArray.length; i++) {
+      var tmp = tmpArray[i];
+      double commissionRate =
+          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
+      _newArrivalProducts.add(
+          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+    }
+
+    return true;
+  }
+
   Future<bool> getBestSellingProducts() async {
     var response = await this._api.getBestSellingProducts();
     if (response != null && response['success']) {
       var tmpArray = response['data'];
 
-      if (tmpArray.length == 0) {
-        return false;
-      }
-
-      _bestSellingProducts.clear();
-
-      String toCurrency = await LangUtils.getSelectedCurrency();
-      for (int i = 0; i < tmpArray.length; i++) {
-        _bestSellingProducts.add(Product.fromMap(tmpArray[i],
-            _companySettings?.commissionRate, _exchangeRates, toCurrency));
-      }
-
-      return true;
+      return processBestSellingProducts(tmpArray);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -220,6 +229,25 @@ class ProductService {
           error: true);
       return false;
     }
+  }
+
+  Future<bool> processBestSellingProducts(tmpArray) async {
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    _bestSellingProducts.clear();
+
+    String toCurrency = await LangUtils.getSelectedCurrency();
+    for (int i = 0; i < tmpArray.length; i++) {
+      var tmp = tmpArray[i];
+      double commissionRate =
+          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
+      _bestSellingProducts.add(
+          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+    }
+
+    return true;
   }
 
   Future<bool> getCompanySettings() async {
@@ -228,12 +256,7 @@ class ProductService {
     if (response != null && response['success']) {
       var obj = response['data'];
 
-      if (obj != null) {
-        _companySettings = CompanySettings.fromJson(obj);
-        return true;
-      }
-
-      return false;
+      return processCompanySettings(obj);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -244,23 +267,21 @@ class ProductService {
     }
   }
 
+  Future<bool> processCompanySettings(obj) async {
+    if (obj != null) {
+      _companySettings = CompanySettings.fromJson(obj);
+      return true;
+    }
+
+    return false;
+  }
+
   Future<bool> getExchangeRates() async {
     var response = await this._api.getExchangeRates();
 
     if (response != null && response['success']) {
       var tmpArray = response['data'];
-
-      if (tmpArray.length == 0) {
-        return false;
-      }
-
-      _exchangeRates.clear();
-
-      for (int i = 0; i < tmpArray.length; i++) {
-        _exchangeRates.add(ExchangeRate.fromJson(tmpArray[i]));
-      }
-
-      return true;
+      return processExchangeRates(tmpArray);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -269,6 +290,20 @@ class ProductService {
           error: true);
       return false;
     }
+  }
+
+  Future<bool> processExchangeRates(tmpArray) async {
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    _exchangeRates.clear();
+
+    for (int i = 0; i < tmpArray.length; i++) {
+      _exchangeRates.add(ExchangeRate.fromJson(tmpArray[i]));
+    }
+
+    return true;
   }
 
   Future<bool> getCurrencies() async {

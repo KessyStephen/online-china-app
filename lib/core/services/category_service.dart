@@ -78,17 +78,7 @@ class CategoryService {
     if (response != null && response['success']) {
       var categoriesArray = response['data'];
 
-      if (categoriesArray.length == 0) {
-        return false;
-      }
-
-      _trendingCategories.clear();
-
-      for (int i = 0; i < categoriesArray.length; i++) {
-        _trendingCategories.add(Category.fromMap(categoriesArray[i]));
-      }
-
-      return true;
+      return processTrendingCategories(categoriesArray);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -97,5 +87,19 @@ class CategoryService {
           error: true);
       return false;
     }
+  }
+
+  Future<bool> processTrendingCategories(categoriesArray) async {
+    if (categoriesArray == null || categoriesArray.length == 0) {
+      return false;
+    }
+
+    _trendingCategories.clear();
+
+    for (int i = 0; i < categoriesArray.length; i++) {
+      _trendingCategories.add(Category.fromMap(categoriesArray[i]));
+    }
+
+    return true;
   }
 }

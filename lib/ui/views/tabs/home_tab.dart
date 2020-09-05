@@ -26,23 +26,28 @@ class _HomeTabViewState extends State<HomeTabView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
-      model: HomeModel(productService: Provider.of(context)),
+      model: HomeModel(homeService: Provider.of(context)),
       onModelReady: (model) async {
-        await model.getExchangeRates();
+        //get this first it has commissionRates for products
+        await model.getAllCategories(hideLoading: true);
 
-        await model.getCompanySettings();
+        await model.getHomeItems();
+
+        // await model.getExchangeRates();
+
+        // await model.getCompanySettings();
 
         // if (model.bestSellingProducts == null ||
         //     model.bestSellingProducts.length == 0) {
         //   model.getBestSellingProducts();
         // }
-        model.getBestSellingProducts();
+        // model.getBestSellingProducts();
 
         // if (model.newArrivalProducts == null ||
         //     model.newArrivalProducts.length == 0) {
         //   model.getNewArrivalProducts();
         // }
-        model.getNewArrivalProducts();
+        // model.getNewArrivalProducts();
 
         if (model.favorites == null || model.favorites.length == 0) {
           model.getFavorites();

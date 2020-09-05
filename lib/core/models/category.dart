@@ -6,6 +6,7 @@ class Category extends TranslatedModel {
   String id;
   String parentId;
   List<Category> children;
+  double commissionRate;
   Category({
     this.id,
     this.parentId,
@@ -53,6 +54,7 @@ class Category extends TranslatedModel {
 
     id = map['_id'];
     parentId = map['parentId'];
+    commissionRate = map['commissionRate'];
   }
 
   Map<String, dynamic> toMap() {
@@ -60,6 +62,7 @@ class Category extends TranslatedModel {
     data['id'] = this.id;
     data['parentId'] = this.parentId;
     data['translations'] = this.translations;
+    data['commissionRate'] = this.commissionRate;
     return data;
   }
 
@@ -77,5 +80,31 @@ class Category extends TranslatedModel {
     });
 
     return results;
+  }
+
+  static Category getCategory(String id, List<Category> allCategories) {
+    if (id == null || allCategories == null || allCategories.length == 0) {
+      return null;
+    }
+
+    var result;
+    for (var element in allCategories) {
+      if (element.id == id) {
+        result = element;
+        break;
+      }
+    }
+    return result;
+  }
+
+  static double getCategoryCommissionRate(
+      String id, List<Category> allCategories) {
+    var category = getCategory(id, allCategories);
+
+    if (category == null) {
+      return 1.0;
+    }
+
+    return category.commissionRate ?? 1.0;
   }
 }

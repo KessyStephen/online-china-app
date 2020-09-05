@@ -3,6 +3,7 @@ import 'package:online_china_app/core/services/banner_service.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 import 'package:online_china_app/core/services/category_service.dart';
 import 'package:online_china_app/core/services/favorite_service.dart';
+import 'package:online_china_app/core/services/home_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
 import 'package:online_china_app/core/services/product_service.dart';
 import 'package:provider/provider.dart';
@@ -78,15 +79,16 @@ List<SingleChildWidget> dependentServices = [
   //       ProductService(
   //           api: api, alertService: alertService, cartService: cartService),
   // ),
-  ProxyProvider4<Api, AlertService, CartService, FavoriteService,
-      ProductService>(
+  ProxyProvider5<Api, AlertService, CartService, FavoriteService,
+      CategoryService, ProductService>(
     update: (context, api, alertService, cartService, favoriteService,
-            productService) =>
+            categoryService, productService) =>
         ProductService(
             api: api,
             alertService: alertService,
             cartService: cartService,
-            favoriteService: favoriteService),
+            favoriteService: favoriteService,
+            categoryService: categoryService),
   ),
   ProxyProvider4<OrderService, CartService, SecureStorageService,
       AuthenticationService, AccountService>(
@@ -97,6 +99,17 @@ List<SingleChildWidget> dependentServices = [
             storageService: storageService,
             cartService: cartService,
             authenticationService: authenticationService),
+  ),
+  ProxyProvider5<Api, AlertService, ProductService, CategoryService,
+      BannerService, HomeService>(
+    update: (context, api, alertService, productService, categoryService,
+            bannerService, homeService) =>
+        HomeService(
+            api: api,
+            alertService: alertService,
+            productService: productService,
+            categoryService: categoryService,
+            bannerService: bannerService),
   ),
 ];
 

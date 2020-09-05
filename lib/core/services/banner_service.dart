@@ -22,15 +22,7 @@ class BannerService {
     if (response != null && response['success']) {
       var tmpArray = response['data'];
 
-      if (tmpArray.length == 0) {
-        return false;
-      }
-
-      for (int i = 0; i < tmpArray.length; i++) {
-        _banners.add(BannerItem.fromJson(tmpArray[i]));
-      }
-
-      return true;
+      return processBanners(tmpArray);
     } else {
       _alertService.showAlert(
           text: response != null
@@ -39,5 +31,19 @@ class BannerService {
           error: true);
       return false;
     }
+  }
+
+  Future<bool> processBanners(tmpArray) async {
+    _banners.clear();
+
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    for (int i = 0; i < tmpArray.length; i++) {
+      _banners.add(BannerItem.fromJson(tmpArray[i]));
+    }
+
+    return true;
   }
 }

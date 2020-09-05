@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/category_model.dart';
+import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/category_grid_item.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +14,14 @@ class CategoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<CategoryModel>(
-        model: CategoryModel(categoryService: Provider.of(context)),
-        onModelReady: (model) {
-          if (model.trendingCategories == null ||
-              model.trendingCategories.length == 0) {
-            model.getTrendingCategories(hideLoading: true);
-          }
-        },
+    return BaseView<HomeModel>(
+        model: HomeModel(homeService: Provider.of(context)),
+        // onModelReady: (model) {
+        //   if (model.trendingCategories == null ||
+        //       model.trendingCategories.length == 0) {
+        //     model.getTrendingCategories(hideLoading: true);
+        //   }
+        // },
         builder: (context, model, child) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

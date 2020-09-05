@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/banner_item.dart';
 import 'package:online_china_app/core/viewmodels/views/banner_model.dart';
+import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -23,13 +24,13 @@ class _BannerRowState extends State<BannerRow> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<BannerModel>(
-      model: BannerModel(bannerService: Provider.of(context)),
-      onModelReady: (model) {
-        if (model.banners == null || model.banners.length == 0) {
-          model.getBanners();
-        }
-      },
+    return BaseView<HomeModel>(
+      model: HomeModel(homeService: Provider.of(context)),
+      // onModelReady: (model) {
+      //   if (model.banners == null || model.banners.length == 0) {
+      //     model.getBanners();
+      //   }
+      // },
       builder: (context, model, child) => (model.banners == null ||
               model.banners.length == 0)
           ? Container(
