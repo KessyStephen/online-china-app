@@ -4,17 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
+import 'package:online_china_app/core/models/base_pricing_rule.dart';
+import 'package:online_china_app/core/models/bulk_pricing_rule.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
 
 class Product extends TranslatedModel {
   String id;
   String type;
+  double noDiscountPrice;
   double price;
   String currency;
+  List<BasePricingRule> pricingRules;
   String categoryId;
   String quality;
-  int quantity = 1;
+  // int quantity = 1;
+  int _quantity = 1;
   int minOrderQuantity = 0;
   String minOrderUnit;
   String sku;
@@ -36,13 +41,28 @@ class Product extends TranslatedModel {
     this.currency,
     this.categoryId,
     this.quality,
-    this.quantity,
+    // this.quantity,
     this.minOrderQuantity,
     this.sku,
     this.thumbnail,
     this.images,
     this.canRequestSample,
   }) : super();
+
+  int get quantity {
+    return _quantity;
+  }
+
+  set quantity(int qty) {
+    _quantity = qty;
+
+    double tmpPrice = calculateDiscountedPrice();
+    if (tmpPrice > 0) {
+      price = tmpPrice;
+    } else {
+      price = noDiscountPrice;
+    }
+  }
 
   String get name {
     var lang = LangUtils.getCurrentLocale();
@@ -171,6 +191,20 @@ class Product extends TranslatedModel {
     variations[index] = variation;
   }
 
+  double calculateDiscountedPrice() {
+    if (pricingRules != null) {
+      for (var rule in pricingRules) {
+        var tmpPrice = rule.getDiscountedPrice(quantity, noDiscountPrice);
+
+        if (tmpPrice != null && tmpPrice > 0) {
+          return tmpPrice;
+        }
+      }
+    }
+
+    return -1;
+  }
+
   Product.fromMap(Map<String, dynamic> map, double commissionRate,
       List<ExchangeRate> exchangeRates, String toCurrency)
       : super.fromMap(map) {
@@ -183,6 +217,7 @@ class Product extends TranslatedModel {
 
     // ============= price and currency
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
+    noDiscountPrice = price;
     currency = map['currency'];
     categoryId = map['categoryId'];
     quality = map['quality'];
@@ -208,6 +243,7 @@ class Product extends TranslatedModel {
 
       //simple product
       price = (1 + commissionRateFraction) * (exchangeRate.value * price);
+      noDiscountPrice = price;
       currency = exchangeRate.to;
 
       //sample price
@@ -283,6 +319,20 @@ class Product extends TranslatedModel {
       maxPrice = maxValue;
       minPrice = minValue;
     }
+
+    //pricingRules
+    var pricingRulesArr = map['pricingRules'];
+    List<BasePricingRule> pricingRulesItems = [];
+    if (pricingRulesArr != null && pricingRulesArr.length > 0) {
+      for (var i = 0; i < pricingRulesArr.length; i++) {
+        var rule = pricingRulesArr[i];
+        if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
+          var ruleItem = BulkPricingRule.fromMap(rule);
+          pricingRulesItems.add(ruleItem);
+        }
+      }
+    }
+    pricingRules = pricingRulesItems;
   }
 
   Map<String, dynamic> toMap() {
@@ -377,10 +427,29 @@ class AttributeItem {
 
 class Variation {
   String id;
+  double noDiscountPrice;
   double price;
   String currency;
-  int quantity = 0;
+  // int quantity = 0;
+  int _quantity = 0;
+
   List<Attribute> attributes;
+  List<BasePricingRule> pricingRules;
+
+  int get quantity {
+    return _quantity;
+  }
+
+  set quantity(int qty) {
+    _quantity = qty;
+
+    double tmpPrice = calculateDiscountedPrice();
+    if (tmpPrice > 0) {
+      price = tmpPrice;
+    } else {
+      price = noDiscountPrice;
+    }
+  }
 
   Variation({this.id, this.price, this.currency}) : super();
 
@@ -388,6 +457,7 @@ class Variation {
       List<ExchangeRate> exchangeRates, String toCurrency) {
     id = map['_id'];
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
+    noDiscountPrice = price;
     currency = map['currency'];
 
     var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
@@ -396,6 +466,7 @@ class Variation {
       var commissionRateFraction = commissionRate / 100;
 
       price = (1 + commissionRateFraction) * (exchangeRate.value * price);
+      noDiscountPrice = price;
       currency = exchangeRate.to;
     }
 
@@ -410,6 +481,20 @@ class Variation {
       }
     }
     attributes = attributeItems;
+
+    //pricingRules
+    var pricingRulesArr = map['pricingRules'];
+    List<BasePricingRule> pricingRulesItems = [];
+    if (pricingRulesArr != null && pricingRulesArr.length > 0) {
+      for (var i = 0; i < pricingRulesArr.length; i++) {
+        var rule = pricingRulesArr[i];
+        if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
+          var ruleItem = BulkPricingRule.fromMap(rule);
+          pricingRulesItems.add(ruleItem);
+        }
+      }
+    }
+    pricingRules = pricingRulesItems;
   }
 
   Map<String, dynamic> toJson() {
@@ -443,6 +528,20 @@ class Variation {
     }
 
     return "";
+  }
+
+  double calculateDiscountedPrice() {
+    if (pricingRules != null) {
+      for (var rule in pricingRules) {
+        var tmpPrice = rule.getDiscountedPrice(quantity, noDiscountPrice);
+
+        if (tmpPrice != null && tmpPrice > 0) {
+          return tmpPrice;
+        }
+      }
+    }
+
+    return -1;
   }
 }
 

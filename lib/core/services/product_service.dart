@@ -83,10 +83,12 @@ class ProductService {
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
         var tmp = tmpArray[i];
-        double commissionRate = Category.getCategoryCommissionRate(
-            tmp["categoryId"], allCategories);
-        _products.add(
-            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        if (tmp != null) {
+          double commissionRate = Category.getCategoryCommissionRate(
+              tmp["categoryId"], allCategories);
+          _products.add(
+              Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        }
       }
 
       return true;
@@ -159,10 +161,12 @@ class ProductService {
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
         var tmp = tmpArray[i];
-        double commissionRate = Category.getCategoryCommissionRate(
-            tmp["categoryId"], allCategories);
-        _searchedProducts.add(
-            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        if (tmp != null) {
+          double commissionRate = Category.getCategoryCommissionRate(
+              tmp["categoryId"], allCategories);
+          _searchedProducts.add(
+              Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        }
       }
 
       return true;
@@ -206,10 +210,12 @@ class ProductService {
     String toCurrency = await LangUtils.getSelectedCurrency();
     for (int i = 0; i < tmpArray.length; i++) {
       var tmp = tmpArray[i];
-      double commissionRate =
-          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
-      _newArrivalProducts.add(
-          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _newArrivalProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
     }
 
     return true;
@@ -241,10 +247,13 @@ class ProductService {
     String toCurrency = await LangUtils.getSelectedCurrency();
     for (int i = 0; i < tmpArray.length; i++) {
       var tmp = tmpArray[i];
-      double commissionRate =
-          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
-      _bestSellingProducts.add(
-          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _bestSellingProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
     }
 
     return true;

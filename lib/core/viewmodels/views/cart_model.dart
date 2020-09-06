@@ -28,6 +28,13 @@ class CartModel extends BaseModel {
     return response;
   }
 
+  Future<bool> updateProductInCart(Product product) async {
+    setState(ViewState.Busy);
+    bool response = await _cartService.updateProductInCart(product);
+    setState(ViewState.Idle);
+    return response;
+  }
+
   Future<bool> clearCartData() async {
     _cartService.clearCartData();
     return true;

@@ -89,6 +89,20 @@ class CartService {
     return true;
   }
 
+  Future<bool> updateProductInCart(Product product) async {
+    var found = _cartProducts.firstWhere((item) => item.id == product.id,
+        orElse: () => null);
+
+    if (found != null) {
+      var index = _cartProducts.indexOf(found);
+      _cartProducts[index] = product;
+
+      return true;
+    }
+
+    return true;
+  }
+
   Future<bool> removeFromCart(Product product) async {
     _cartProducts.removeWhere((item) => item.id == product.id);
 

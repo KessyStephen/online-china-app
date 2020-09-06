@@ -76,15 +76,18 @@ class CartTabView extends StatelessWidget {
                                 minQuantity: 1,
                                 onQuantityChanged: (value) {
                                   product.setQuantity(value);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 addItem: () {
                                   product.increaseQuantity(1);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 removeItem: () {
                                   product.increaseQuantity(-1);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 onEditQuantity: () {
                                   if (product.type == PRODUCT_TYPE_VARIABLE) {
