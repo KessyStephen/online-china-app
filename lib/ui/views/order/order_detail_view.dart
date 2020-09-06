@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/order.dart';
@@ -185,6 +187,28 @@ class OrderDetailView extends StatelessWidget {
   }
 }
 
+Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
+  final android = AndroidNotificationDetails(
+      'channel id', 'channel name', 'channel description',
+      priority: Priority.High, importance: Importance.Max);
+  final iOS = IOSNotificationDetails();
+  final platform = NotificationDetails(android, iOS);
+  final json = jsonEncode(downloadStatus);
+  final success = downloadStatus['success'];
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin.show(
+      0, // notification id
+      success ? 'Success' : 'Failure',
+      success
+          ? 'File has been downloaded successfully!'
+          : 'There was an error while downloading the file.',
+      platform,
+      payload: json);
+}
+
 Future<void> savePDF(OrderModel model, var htmlContent, String filename) async {
   if (await Permission.storage.request().isGranted) {
     filename = "Shamwaaa_" + filename + ".pdf";
@@ -192,10 +216,20 @@ Future<void> savePDF(OrderModel model, var htmlContent, String filename) async {
     var output = await ExtStorage.getExternalStoragePublicDirectory(
         ExtStorage.DIRECTORY_DOWNLOADS);
 
-    final file = File("${output}/${filename}");
+    String fullPath = "${output}/${filename}";
+
+    final file = File(fullPath);
     await file.writeAsBytes(htmlContent);
 
     model.showAlertMessage(message: "Invoice saved to Downloads", error: false);
+
+    //post local notification
+    Map<String, dynamic> result = {
+      'success': true,
+      'filePath': fullPath,
+      'error': null,
+    };
+    _showNotification(result);
   } else {
     model.showAlertMessage(
         message: "Failed to save invoice, please grant storage permissions",

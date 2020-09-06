@@ -1,15 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/router.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'core/managers/alert_manager.dart';
 import 'core/managers/dialog_manager.dart';
 import 'provider_setup.dart';
 
 void main() {
+  //initialize local notification
+  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final iOS = IOSInitializationSettings();
+  final initSettings = InitializationSettings(android, iOS);
+  flutterLocalNotificationsPlugin.initialize(initSettings,
+      onSelectNotification: _onSelectNotification);
+
   runApp(MyApp());
+}
+
+Future<void> _onSelectNotification(String json) async {
+  // todo: handling clicked notification
+
+  final obj = jsonDecode(json);
+
+  if (obj != null && obj['success']) {
+    OpenFile.open(obj['filePath']);
+  }
 }
 
 class MyApp extends StatelessWidget {
