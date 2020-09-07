@@ -15,6 +15,10 @@ class Utils {
   }
 
   static String formatNumber(double value) {
+    if (value == null) {
+      return "";
+    }
+
     var f = new NumberFormat.currency(locale: "en_US", symbol: "");
     return f.format(value);
   }

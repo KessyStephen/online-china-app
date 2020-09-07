@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
@@ -29,6 +30,11 @@ class OrderService {
   List<Order> _orders = [];
   List<Order> get orders => _orders;
   bool get isSampleRequest => _cartService.isSampleRequest;
+
+  String get shippingMethod => _cartService.shippingMethod;
+  String get destCountry => _cartService.destCountry;
+
+  CompanySettings get companySettings => _cartService.companySettings;
 
   Future<bool> getOrders(
       {perPage = PER_PAGE_COUNT, page = 1, sort = ""}) async {
@@ -107,6 +113,7 @@ class OrderService {
 
   Future<List<String>> createOrder(
       {List<Product> products,
+      shippingMethod,
       destCountry,
       destCity,
       destRegion,
@@ -114,6 +121,7 @@ class OrderService {
     var response = await this._api.createOrder(
         products: products,
         isSampleRequest: _cartService.isSampleRequest,
+        shippingMethod: shippingMethod,
         destCountry: destCountry,
         destCity: destCity,
         destRegion: destRegion,
@@ -189,5 +197,13 @@ class OrderService {
 
   void clearCartData() {
     _cartService.clearCartData();
+  }
+
+  Future<void> updateShippingDetails({
+    String shippingMethod,
+    String destCountry,
+  }) async {
+    return _cartService.updateShippingDetails(
+        shippingMethod: shippingMethod, destCountry: destCountry);
   }
 }

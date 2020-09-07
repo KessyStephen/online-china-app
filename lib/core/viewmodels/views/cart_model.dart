@@ -14,6 +14,9 @@ class CartModel extends BaseModel {
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
 
+  String get shippingMethod => _cartService.shippingMethod;
+  String get destCountry => _cartService.destCountry;
+
   Future<bool> addToCart(Product product) async {
     setState(ViewState.Busy);
     bool response = await _cartService.addToCart(product);

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/category.dart';
-import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
@@ -58,10 +57,6 @@ class ProductService {
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
-
-  //companySettings - eg commissionRate etc
-  CompanySettings _companySettings;
-  CompanySettings get companySettings => _companySettings;
 
   List<ExchangeRate> _exchangeRates = [];
   List<ExchangeRate> get exchangeRates => _exchangeRates;
@@ -257,32 +252,6 @@ class ProductService {
     }
 
     return true;
-  }
-
-  Future<bool> getCompanySettings() async {
-    var response = await this._api.getCompanySettings();
-
-    if (response != null && response['success']) {
-      var obj = response['data'];
-
-      return processCompanySettings(obj);
-    } else {
-      _alertService.showAlert(
-          text: response != null
-              ? response['message']
-              : 'It appears you are Offline',
-          error: true);
-      return false;
-    }
-  }
-
-  Future<bool> processCompanySettings(obj) async {
-    if (obj != null) {
-      _companySettings = CompanySettings.fromJson(obj);
-      return true;
-    }
-
-    return false;
   }
 
   Future<bool> getExchangeRates() async {

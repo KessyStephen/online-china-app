@@ -10,6 +10,7 @@ import 'package:online_china_app/ui/widgets/auth_modal.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/order_success_modal.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
+import 'package:online_china_app/ui/widgets/shipping_summary.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
@@ -76,9 +77,18 @@ class ConfirmOrderView extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              "Total Amount",
-                              style: const TextStyle(fontSize: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Total Amount",
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "(Without Shipping)",
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
                             ),
                             Text(
                               Utils.formatNumber(total),
@@ -88,12 +98,29 @@ class ConfirmOrderView extends StatelessWidget {
                           ],
                         ),
                       ),
+                      ShippingSummary(
+                        country: model.destCountry,
+                        shippingMethod: model.shippingMethod,
+                        estimatedPrice: "TZS 125,000",
+                        estimatedDeliveryTime: model.shippingMethod ==
+                                SHIPPING_METHOD_AIR_VALUE
+                            ? model.companySettings?.estimatedDeliveryTimeByAir
+                            : model
+                                .companySettings?.estimatedDeliveryTimeByShip,
+                        onPressed: () {
+                          navigator.pushNamed("/order_shipping_method");
+                        },
+                      ),
                       BigButton(
                         buttonTitle: "CONFIRM",
                         functionality: () async {
                           List<String> orderIds = await model.createOrder(
                               products: products,
-                              destCountry: destCountry,
+                              shippingMethod: model.shippingMethod ==
+                                      SHIPPING_METHOD_AIR_VALUE
+                                  ? SHIPPING_METHOD_AIR_KEY
+                                  : SHIPPING_METHOD_SEA_KEY,
+                              destCountry: model.destCountry,
                               destCity: destCity,
                               destRegion: destRegion,
                               destStreet: destStreet);

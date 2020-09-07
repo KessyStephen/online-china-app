@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/services/settings_service.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -8,10 +10,15 @@ import 'api.dart';
 class CartService {
   final Api _api;
   final AlertService _alertService;
+  final SettingsService _settingsService;
 
-  CartService({@required Api api, @required AlertService alertService})
+  CartService(
+      {@required Api api,
+      @required AlertService alertService,
+      @required SettingsService settingsService})
       : _api = api,
-        _alertService = alertService;
+        _alertService = alertService,
+        _settingsService = settingsService;
 
   List<Product> _cartProducts = [];
   List<Product> get cartProducts => _cartProducts;
@@ -21,6 +28,15 @@ class CartService {
 
   bool _isBuyNow = false;
   bool get isBuyNow => _isBuyNow;
+
+  String _shippingMethod = SHIPPING_METHOD_SEA_VALUE;
+  String get shippingMethod => _shippingMethod;
+
+  String _destCountry = "";
+  String get destCountry => _destCountry;
+
+  //estimated delivery times
+  CompanySettings get companySettings => _settingsService.companySettings;
 
   double get cartTotal {
     var sum = 0.0;
@@ -116,6 +132,8 @@ class CartService {
 
   void clearCartData() {
     _isSampleRequest = false;
+    _shippingMethod = SHIPPING_METHOD_SEA_VALUE;
+    _destCountry = "";
     this._cartProducts.clear();
   }
 
@@ -125,5 +143,18 @@ class CartService {
 
   void setBuyNowOrder(bool val) {
     _isBuyNow = val;
+  }
+
+  Future<void> updateShippingDetails({
+    String shippingMethod = SHIPPING_METHOD_SEA_VALUE,
+    String destCountry,
+  }) async {
+    if (shippingMethod != null) {
+      _shippingMethod = shippingMethod;
+    }
+
+    if (destCountry != null) {
+      _destCountry = destCountry;
+    }
   }
 }

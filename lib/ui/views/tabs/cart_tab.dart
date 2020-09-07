@@ -14,6 +14,7 @@ import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
 import 'package:online_china_app/ui/widgets/product_options_modal.dart';
+import 'package:online_china_app/ui/widgets/shipping_summary.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -118,9 +119,18 @@ class CartTabView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          "Total Amount",
-                          style: const TextStyle(fontSize: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Total Amount",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              "(Without Shipping)",
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                          ],
                         ),
                         Text(
                           Utils.formatNumber(model.cartTotal),
@@ -130,6 +140,15 @@ class CartTabView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  // ShippingSummary(
+                  //   country: model.destCountry,
+                  //   shippingMethod: model.shippingMethod,
+                  //   estimatedPrice: "TZS 125,000",
+                  //   estimatedDeliveryTime: "28 - 30 days",
+                  //   onPressed: () {
+                  //     navigator.pushNamed("/order_shipping_method");
+                  //   },
+                  // ),
                   Row(
                     children: <Widget>[
                       Expanded(

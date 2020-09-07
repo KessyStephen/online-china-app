@@ -174,6 +174,9 @@ class _OrderAddressViewState extends State<OrderAddressView> {
                           if (_formKey.currentState.validate()) {
                             _formKey.currentState.save();
 
+                            await model.updateShippingDetails(
+                                destCountry: _countryController.text);
+
                             Navigator.pushNamed(context, '/confirm_order',
                                 arguments: {
                                   'items': products,

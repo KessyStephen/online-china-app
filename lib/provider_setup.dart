@@ -6,6 +6,7 @@ import 'package:online_china_app/core/services/favorite_service.dart';
 import 'package:online_china_app/core/services/home_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
 import 'package:online_china_app/core/services/product_service.dart';
+import 'package:online_china_app/core/services/settings_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -39,6 +40,10 @@ List<SingleChildWidget> dependentServices = [
             navigationService: navigationService,
             alertService: alertService),
   ),
+  ProxyProvider2<Api, AlertService, SettingsService>(
+    update: (context, api, alertService, settingsService) =>
+        SettingsService(api: api, alertService: alertService),
+  ),
   ProxyProvider2<Api, AlertService, FavoriteService>(
     update: (context, api, alertService, favoriteService) =>
         FavoriteService(api: api, alertService: alertService),
@@ -65,9 +70,12 @@ List<SingleChildWidget> dependentServices = [
     update: (context, authenticationService, startupService) =>
         StartUpService(authenticationService: authenticationService),
   ),
-  ProxyProvider2<Api, AlertService, CartService>(
-    update: (context, api, alertService, cartService) =>
-        CartService(api: api, alertService: alertService),
+  ProxyProvider3<Api, AlertService, SettingsService, CartService>(
+    update: (context, api, alertService, settingsService, cartService) =>
+        CartService(
+            api: api,
+            alertService: alertService,
+            settingsService: settingsService),
   ),
   ProxyProvider3<Api, AlertService, CartService, OrderService>(
     update: (context, api, alertService, cartService, orderService) =>
@@ -100,16 +108,17 @@ List<SingleChildWidget> dependentServices = [
             cartService: cartService,
             authenticationService: authenticationService),
   ),
-  ProxyProvider5<Api, AlertService, ProductService, CategoryService,
-      BannerService, HomeService>(
+  ProxyProvider6<Api, AlertService, ProductService, CategoryService,
+      BannerService, SettingsService, HomeService>(
     update: (context, api, alertService, productService, categoryService,
-            bannerService, homeService) =>
+            bannerService, settingsService, homeService) =>
         HomeService(
             api: api,
             alertService: alertService,
             productService: productService,
             categoryService: categoryService,
-            bannerService: bannerService),
+            bannerService: bannerService,
+            settingsService: settingsService),
   ),
 ];
 
