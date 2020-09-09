@@ -34,6 +34,13 @@ class Product extends TranslatedModel {
   String sampleCurrency;
   int sampleQuantity;
   String sampleUnit;
+
+//dimensions, cm and kg
+  double length;
+  double width;
+  double height;
+  double weight;
+
   Product({
     this.id,
     this.type,
@@ -234,6 +241,12 @@ class Product extends TranslatedModel {
     sampleCurrency = map['sampleCurrency'];
     sampleQuantity = map['sampleQuantity'];
     sampleUnit = map['sampleUnit'];
+
+    //dimensions
+    length = map['length'] != null ? double.parse(map['length'].toString()) : 0;
+    width = map['width'] != null ? double.parse(map['width'].toString()) : 0;
+    height = map['height'] != null ? double.parse(map['height'].toString()) : 0;
+    weight = map['weight'] != null ? double.parse(map['weight'].toString()) : 0;
 
     var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
         from: currency, to: toCurrency);

@@ -140,15 +140,21 @@ class CartTabView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // ShippingSummary(
-                  //   country: model.destCountry,
-                  //   shippingMethod: model.shippingMethod,
-                  //   estimatedPrice: "TZS 125,000",
-                  //   estimatedDeliveryTime: "28 - 30 days",
-                  //   onPressed: () {
-                  //     navigator.pushNamed("/order_shipping_method");
-                  //   },
-                  // ),
+                  ShippingSummary(
+                    country: model.destCountry,
+                    shippingMethod: model.shippingMethod,
+                    estimatedPrice:
+                        model.shippingMethod == SHIPPING_METHOD_AIR_VALUE
+                            ? Utils.formatNumber(model.airShippingCost)
+                            : Utils.formatNumber(model.seaShippingCost),
+                    estimatedDeliveryTime: model.shippingMethod ==
+                            SHIPPING_METHOD_AIR_VALUE
+                        ? model.companySettings?.estimatedDeliveryTimeByAir
+                        : model.companySettings?.estimatedDeliveryTimeByShip,
+                    onPressed: () {
+                      navigator.pushNamed("/order_shipping_method");
+                    },
+                  ),
                   Row(
                     children: <Widget>[
                       Expanded(

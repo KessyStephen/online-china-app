@@ -15,7 +15,7 @@ class OrderAddressView extends StatefulWidget {
 
 class _OrderAddressViewState extends State<OrderAddressView> {
   final _formKey = GlobalKey<FormState>();
-  final _countryController = TextEditingController();
+  final _countryController = TextEditingController(text: "Tanzania");
   final _cityController = TextEditingController();
   final _regionController = TextEditingController();
   final _streetController = TextEditingController();
@@ -92,7 +92,9 @@ class _OrderAddressViewState extends State<OrderAddressView> {
                       margin: EdgeInsets.symmetric(horizontal: 18.0),
                       child: TextFormField(
                         keyboardType: TextInputType.text,
-                        controller: _countryController,
+                        readOnly: true,
+                        initialValue: "Tanzania",
+                        //controller: _countryController,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter country name';

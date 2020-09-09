@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 
@@ -16,6 +17,11 @@ class CartModel extends BaseModel {
 
   String get shippingMethod => _cartService.shippingMethod;
   String get destCountry => _cartService.destCountry;
+
+  double get airShippingCost => _cartService.airShippingCost;
+  double get seaShippingCost => _cartService.seaShippingCost;
+
+  CompanySettings get companySettings => _cartService.companySettings;
 
   Future<bool> addToCart(Product product) async {
     setState(ViewState.Busy);
@@ -41,5 +47,13 @@ class CartModel extends BaseModel {
   Future<bool> clearCartData() async {
     _cartService.clearCartData();
     return true;
+  }
+
+  double calculateAirShippingCost() {
+    return _cartService.calculateAirShippingCost();
+  }
+
+  double calculateSeaShippingCost() {
+    return _cartService.calculateSeaShippingCost();
   }
 }

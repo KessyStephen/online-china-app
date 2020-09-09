@@ -3,6 +3,7 @@ import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/settings_service.dart';
+import 'package:online_china_app/core/services/shipping_service.dart';
 
 import 'alert_service.dart';
 import 'api.dart';
@@ -11,14 +12,17 @@ class CartService {
   final Api _api;
   final AlertService _alertService;
   final SettingsService _settingsService;
+  final ShippingService _shippingService;
 
   CartService(
       {@required Api api,
       @required AlertService alertService,
-      @required SettingsService settingsService})
+      @required SettingsService settingsService,
+      @required ShippingService shippingService})
       : _api = api,
         _alertService = alertService,
-        _settingsService = settingsService;
+        _settingsService = settingsService,
+        _shippingService = shippingService;
 
   List<Product> _cartProducts = [];
   List<Product> get cartProducts => _cartProducts;
@@ -32,7 +36,12 @@ class CartService {
   String _shippingMethod = SHIPPING_METHOD_SEA_VALUE;
   String get shippingMethod => _shippingMethod;
 
-  String _destCountry = "";
+  double _airShippingCost = 0;
+  double get airShippingCost => _airShippingCost;
+  double _seaShippingCost = 0;
+  double get seaShippingCost => _seaShippingCost;
+
+  String _destCountry = "Tanzania";
   String get destCountry => _destCountry;
 
   //estimated delivery times
@@ -91,6 +100,10 @@ class CartService {
       var index = _cartProducts.indexOf(found);
       _cartProducts[index] = product;
 
+      //update shipping cost
+      calculateAirShippingCost();
+      calculateSeaShippingCost();
+
       if (!_isSampleRequest && !_isBuyNow) {
         _alertService.showAlert(text: 'Added to items', error: false);
       }
@@ -98,6 +111,10 @@ class CartService {
     }
 
     _cartProducts.add(product);
+
+    //update shipping cost
+    calculateAirShippingCost();
+    calculateSeaShippingCost();
 
     if (!_isSampleRequest && !_isBuyNow) {
       _alertService.showAlert(text: 'Added to items', error: false);
@@ -113,6 +130,10 @@ class CartService {
       var index = _cartProducts.indexOf(found);
       _cartProducts[index] = product;
 
+      //update shipping cost
+      calculateAirShippingCost();
+      calculateSeaShippingCost();
+
       return true;
     }
 
@@ -121,6 +142,10 @@ class CartService {
 
   Future<bool> removeFromCart(Product product) async {
     _cartProducts.removeWhere((item) => item.id == product.id);
+
+    //update shipping cost
+    calculateAirShippingCost();
+    calculateSeaShippingCost();
 
     return false;
   }
@@ -133,6 +158,8 @@ class CartService {
   void clearCartData() {
     _isSampleRequest = false;
     _shippingMethod = SHIPPING_METHOD_SEA_VALUE;
+    _airShippingCost = 0;
+    _seaShippingCost = 0;
     _destCountry = "";
     this._cartProducts.clear();
   }
@@ -156,5 +183,13 @@ class CartService {
     if (destCountry != null) {
       _destCountry = destCountry;
     }
+  }
+
+  double calculateAirShippingCost() {
+    return _shippingService.calculateAirShippingCost(products: _cartProducts);
+  }
+
+  double calculateSeaShippingCost() {
+    return _shippingService.calculateSeaShippingCost(products: _cartProducts);
   }
 }

@@ -7,6 +7,7 @@ import 'package:online_china_app/core/services/home_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
 import 'package:online_china_app/core/services/product_service.dart';
 import 'package:online_china_app/core/services/settings_service.dart';
+import 'package:online_china_app/core/services/shipping_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -56,6 +57,16 @@ List<SingleChildWidget> dependentServices = [
     update: (context, api, alertService, categoryService) =>
         CategoryService(api: api, alertService: alertService),
   ),
+  ProxyProvider4<Api, AlertService, CategoryService, SettingsService,
+      ShippingService>(
+    update: (context, api, alertService, categoryService, settingsService,
+            shippingService) =>
+        ShippingService(
+            api: api,
+            alertService: alertService,
+            categoryService: categoryService,
+            settingsService: settingsService),
+  ),
   ProxyProvider4<Api, AlertService, SecureStorageService, NavigationService,
       AuthenticationService>(
     update: (context, api, alertService, storageService, navigationService,
@@ -70,12 +81,15 @@ List<SingleChildWidget> dependentServices = [
     update: (context, authenticationService, startupService) =>
         StartUpService(authenticationService: authenticationService),
   ),
-  ProxyProvider3<Api, AlertService, SettingsService, CartService>(
-    update: (context, api, alertService, settingsService, cartService) =>
+  ProxyProvider4<Api, AlertService, SettingsService, ShippingService,
+      CartService>(
+    update: (context, api, alertService, settingsService, shippingService,
+            cartService) =>
         CartService(
             api: api,
             alertService: alertService,
-            settingsService: settingsService),
+            settingsService: settingsService,
+            shippingService: shippingService),
   ),
   ProxyProvider3<Api, AlertService, CartService, OrderService>(
     update: (context, api, alertService, cartService, orderService) =>

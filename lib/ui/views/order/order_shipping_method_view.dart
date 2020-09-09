@@ -56,9 +56,14 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                           ),
                           child: Row(
                             children: <Widget>[
-                              Icon(
-                                FontAwesome.dropbox,
-                                size: 40,
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 6),
+                                alignment: Alignment.center,
+                                child: Image(
+                                  height: 80.0,
+                                  image: AssetImage(
+                                      'assets/images/packing_icon.png'),
+                                ),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

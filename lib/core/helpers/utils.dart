@@ -22,4 +22,12 @@ class Utils {
     var f = new NumberFormat.currency(locale: "en_US", symbol: "");
     return f.format(value);
   }
+
+  static double calculateCBM(double lengthCM, double widthCM, double heightCM) {
+    if (lengthCM == null || widthCM == null || heightCM == null) {
+      return 0;
+    }
+
+    return (lengthCM * widthCM * heightCM) / 1000000;
+  }
 }
