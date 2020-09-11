@@ -186,10 +186,14 @@ class CartService {
   }
 
   double calculateAirShippingCost() {
-    return _shippingService.calculateAirShippingCost(products: _cartProducts);
+    _airShippingCost =
+        _shippingService.calculateAirShippingCost(products: _cartProducts);
+    return _airShippingCost;
   }
 
   double calculateSeaShippingCost() {
-    return _shippingService.calculateSeaShippingCost(products: _cartProducts);
+    _seaShippingCost =
+        _shippingService.calculateSeaShippingCost(products: _cartProducts);
+    return _seaShippingCost;
   }
 }

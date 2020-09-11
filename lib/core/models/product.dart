@@ -25,6 +25,7 @@ class Product extends TranslatedModel {
   String sku;
   String thumbnail;
   List<ImageItem> images;
+  List<KeyValueItem> specifications;
   List<AttributeItem> attributes;
   List<Variation> variations;
   double minPrice; //for variable product
@@ -290,6 +291,19 @@ class Product extends TranslatedModel {
           : imgItem.src;
     }
 
+    //specifications
+    var specificationsArr = map['specifications'];
+    List<KeyValueItem> specificationItems = [];
+    if (specificationsArr != null && specificationsArr.length > 0) {
+      for (var i = 0; i < specificationsArr.length; i++) {
+        var spec = specificationsArr[i];
+        var specItem = KeyValueItem.fromMap(spec);
+        specificationItems.add(specItem);
+      }
+    }
+
+    specifications = specificationItems;
+
     //attributes
     var attributesArr = map['attributes'];
     List<AttributeItem> attributeItems = [];
@@ -432,6 +446,25 @@ class AttributeItem {
       'name': name,
       'value': value,
       'valueString': valueString,
+    };
+  }
+}
+
+class KeyValueItem {
+  String name;
+  String value;
+
+  KeyValueItem({this.name, this.value}) : super();
+
+  KeyValueItem.fromMap(Map<String, dynamic> map) {
+    name = map['name'];
+    value = map['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'value': value,
     };
   }
 }

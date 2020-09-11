@@ -34,6 +34,9 @@ class OrderService {
   String get shippingMethod => _cartService.shippingMethod;
   String get destCountry => _cartService.destCountry;
 
+  double get airShippingCost => _cartService.airShippingCost;
+  double get seaShippingCost => _cartService.seaShippingCost;
+
   CompanySettings get companySettings => _cartService.companySettings;
 
   Future<bool> getOrders(

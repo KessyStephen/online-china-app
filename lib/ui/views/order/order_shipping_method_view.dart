@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/Utils.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/shipping_method_list_item.dart';
@@ -72,11 +73,11 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                                     padding: const EdgeInsets.only(bottom: 6),
                                     child: Text("Quantity : 100 pairs"),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 6),
-                                    child: Text(
-                                        "Size : 20cm * 20cm * 20cm / pair"),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(bottom: 6),
+                                  //   child: Text(
+                                  //       "Size : 20cm * 20cm * 20cm / pair"),
+                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 6),
                                     child: Text("Total Weight : 0.3 kg"),
@@ -130,7 +131,8 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                         ),
                         ShippingMethodListItem(
                           shippingMethod: SHIPPING_METHOD_AIR_VALUE,
-                          estimatedPrice: "TZS 300,000",
+                          estimatedPrice:
+                              Utils.formatNumber(model.airShippingCost),
                           estimatedDeliveryTime:
                               model.companySettings?.estimatedDeliveryTimeByAir,
                           checked: selectedShippingMethod ==
@@ -144,7 +146,8 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                         ),
                         ShippingMethodListItem(
                           shippingMethod: SHIPPING_METHOD_SEA_VALUE,
-                          estimatedPrice: "TZS 125,000",
+                          estimatedPrice:
+                              Utils.formatNumber(model.seaShippingCost),
                           estimatedDeliveryTime: model
                               .companySettings?.estimatedDeliveryTimeByShip,
                           checked: selectedShippingMethod ==

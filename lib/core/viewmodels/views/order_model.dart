@@ -21,6 +21,9 @@ class OrderModel extends BaseModel {
   String get shippingMethod => _orderService.shippingMethod;
   String get destCountry => _orderService.destCountry;
 
+  double get airShippingCost => _orderService.airShippingCost;
+  double get seaShippingCost => _orderService.seaShippingCost;
+
   CompanySettings get companySettings => _orderService.companySettings;
 
   Future<bool> getOrders(
