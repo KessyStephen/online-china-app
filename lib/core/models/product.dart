@@ -42,6 +42,11 @@ class Product extends TranslatedModel {
   double height;
   double weight;
 
+  double shippingCBMQuantity;
+  double shippingCBMValue;
+  double shippingWeightQuantity;
+  double shippingWeightValue;
+
   Product({
     this.id,
     this.type,
@@ -248,6 +253,19 @@ class Product extends TranslatedModel {
     width = map['width'] != null ? double.parse(map['width'].toString()) : 0;
     height = map['height'] != null ? double.parse(map['height'].toString()) : 0;
     weight = map['weight'] != null ? double.parse(map['weight'].toString()) : 0;
+
+    shippingCBMQuantity = map['shippingCBMQuantity'] != null
+        ? double.parse(map['shippingCBMQuantity'].toString())
+        : null;
+    shippingCBMValue = map['shippingCBMValue'] != null
+        ? double.parse(map['shippingCBMValue'].toString())
+        : null;
+    shippingWeightQuantity = map['shippingWeightQuantity'] != null
+        ? double.parse(map['shippingWeightQuantity'].toString())
+        : null;
+    shippingWeightValue = map['shippingWeightValue'] != null
+        ? double.parse(map['shippingWeightValue'].toString())
+        : null;
 
     var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
         from: currency, to: toCurrency);

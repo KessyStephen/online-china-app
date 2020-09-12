@@ -31,7 +31,14 @@ class ShippingService {
 
     double total = 0;
     for (var item in products) {
-      total += item.weight * item.quantity;
+      if (item.shippingWeightQuantity != null &&
+          item.shippingWeightQuantity > 0 &&
+          item.shippingWeightValue != null) {
+        total += (item.shippingWeightValue / item.shippingWeightQuantity) *
+            item.quantity;
+      } else {
+        total += item.weight * item.quantity;
+      }
     }
 
     double shippingPricePerKg =
@@ -50,7 +57,15 @@ class ShippingService {
 
     double total = 0;
     for (var item in products) {
-      double tmpCBM = Utils.calculateCBM(item.length, item.width, item.height);
+      double tmpCBM = 0;
+      if (item.shippingCBMQuantity != null &&
+          item.shippingCBMQuantity > 0 &&
+          item.shippingCBMValue != null) {
+        tmpCBM = item.shippingCBMValue / item.shippingCBMQuantity;
+      } else {
+        tmpCBM = Utils.calculateCBM(item.length, item.width, item.height);
+      }
+
       double totalCBM = tmpCBM * item.quantity;
       globalTotalCBM += totalCBM;
 
