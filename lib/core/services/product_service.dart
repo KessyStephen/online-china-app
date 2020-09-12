@@ -278,7 +278,21 @@ class ProductService {
     _exchangeRates.clear();
 
     for (int i = 0; i < tmpArray.length; i++) {
-      _exchangeRates.add(ExchangeRate.fromJson(tmpArray[i]));
+      var tmpObj = tmpArray[i];
+      if (tmpObj["from"] != null &&
+          tmpObj["to"] != null &&
+          tmpObj["value"] != null &&
+          tmpObj["value"] > 0) {
+        _exchangeRates.add(ExchangeRate.fromJson(tmpObj));
+
+        //inverse
+        var to = tmpObj["from"];
+        tmpObj["from"] = tmpObj["to"];
+        tmpObj["to"] = to;
+        tmpObj["value"] = 1 / double.parse(tmpObj['value'].toString());
+
+        _exchangeRates.add(ExchangeRate.fromJson(tmpObj));
+      }
     }
 
     return true;
