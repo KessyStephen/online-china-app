@@ -1,3 +1,4 @@
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/services/account_service.dart';
 import 'package:online_china_app/core/services/banner_service.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
@@ -142,5 +143,10 @@ List<SingleChildWidget> uiConsumableProviders = [
     initialData: User.initial(),
     create: (context) =>
         Provider.of<AuthenticationService>(context, listen: false).user,
+  ),
+  StreamProvider<ShippingDetails>(
+    updateShouldNotify: (ShippingDetails var1, ShippingDetails var2) => true,
+    initialData: ShippingDetails.initial(),
+    create: (context) => Provider.of<CartService>(context, listen: false).user,
   )
 ];

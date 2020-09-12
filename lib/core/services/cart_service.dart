@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/services/settings_service.dart';
 import 'package:online_china_app/core/services/shipping_service.dart';
 
@@ -43,6 +46,10 @@ class CartService {
 
   String _destCountry = "Tanzania";
   String get destCountry => _destCountry;
+
+  StreamController<ShippingDetails> _shippingDetailsController =
+      StreamController<ShippingDetails>();
+  Stream<ShippingDetails> get user => _shippingDetailsController.stream;
 
   //estimated delivery times
   CompanySettings get companySettings => _settingsService.companySettings;
@@ -162,6 +169,14 @@ class CartService {
     _seaShippingCost = 0;
     _destCountry = "";
     this._cartProducts.clear();
+
+    //update stream
+    var details = ShippingDetails(
+        shippingMethod: _shippingMethod,
+        airShippingCost: _airShippingCost,
+        seaShippingCost: seaShippingCost,
+        destCountry: _destCountry);
+    _shippingDetailsController.add(details);
   }
 
   void setSampleRequestOrder(bool val) {
@@ -183,17 +198,43 @@ class CartService {
     if (destCountry != null) {
       _destCountry = destCountry;
     }
+
+    //update stream
+    var details = ShippingDetails(
+        shippingMethod: _shippingMethod,
+        airShippingCost: _airShippingCost,
+        seaShippingCost: seaShippingCost,
+        destCountry: _destCountry);
+    _shippingDetailsController.add(details);
   }
 
   double calculateAirShippingCost() {
     _airShippingCost =
         _shippingService.calculateAirShippingCost(products: _cartProducts);
+
+    //update stream
+    var details = ShippingDetails(
+        shippingMethod: _shippingMethod,
+        airShippingCost: _airShippingCost,
+        seaShippingCost: seaShippingCost,
+        destCountry: _destCountry);
+    _shippingDetailsController.add(details);
+
     return _airShippingCost;
   }
 
   double calculateSeaShippingCost() {
     _seaShippingCost =
         _shippingService.calculateSeaShippingCost(products: _cartProducts);
+
+    //update stream
+    var details = ShippingDetails(
+        shippingMethod: _shippingMethod,
+        airShippingCost: _airShippingCost,
+        seaShippingCost: seaShippingCost,
+        destCountry: _destCountry);
+    _shippingDetailsController.add(details);
+
     return _seaShippingCost;
   }
 }

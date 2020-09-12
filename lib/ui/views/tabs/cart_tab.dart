@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -22,6 +23,8 @@ class CartTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = Provider.of<User>(context).isLoggedIn;
+    ShippingDetails shippingDetails = Provider.of<ShippingDetails>(context);
+
     return BaseView<CartModel>(
       model: CartModel(cartService: Provider.of(context)),
       onModelReady: (model) => {},
@@ -141,13 +144,13 @@ class CartTabView extends StatelessWidget {
                     ),
                   ),
                   ShippingSummary(
-                    country: model.destCountry,
-                    shippingMethod: model.shippingMethod,
-                    estimatedPrice:
-                        model.shippingMethod == SHIPPING_METHOD_AIR_VALUE
-                            ? Utils.formatNumber(model.airShippingCost)
-                            : Utils.formatNumber(model.seaShippingCost),
-                    estimatedDeliveryTime: model.shippingMethod ==
+                    country: shippingDetails.destCountry,
+                    shippingMethod: shippingDetails.shippingMethod,
+                    estimatedPrice: shippingDetails.shippingMethod ==
+                            SHIPPING_METHOD_AIR_VALUE
+                        ? Utils.formatNumber(shippingDetails.airShippingCost)
+                        : Utils.formatNumber(shippingDetails.seaShippingCost),
+                    estimatedDeliveryTime: shippingDetails.shippingMethod ==
                             SHIPPING_METHOD_AIR_VALUE
                         ? model.companySettings?.estimatedDeliveryTimeByAir
                         : model.companySettings?.estimatedDeliveryTimeByShip,
