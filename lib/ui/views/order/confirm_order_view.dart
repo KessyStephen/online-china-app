@@ -4,6 +4,7 @@ import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/widgets/auth_modal.dart';
@@ -19,6 +20,7 @@ import '../../base_widget.dart';
 class ConfirmOrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ShippingDetails shippingDetails = Provider.of<ShippingDetails>(context);
     final Map<String, dynamic> params =
         ModalRoute.of(context).settings.arguments;
     List<Product> products = params != null ? params['items'] : null;
@@ -99,10 +101,15 @@ class ConfirmOrderView extends StatelessWidget {
                         ),
                       ),
                       ShippingSummary(
-                        country: model.destCountry,
-                        shippingMethod: model.shippingMethod,
-                        estimatedPrice: "TZS 125,000",
-                        estimatedDeliveryTime: model.shippingMethod ==
+                        country: shippingDetails.destCountry,
+                        shippingMethod: shippingDetails.shippingMethod,
+                        estimatedPrice: shippingDetails.shippingMethod ==
+                                SHIPPING_METHOD_AIR_VALUE
+                            ? Utils.formatNumber(
+                                shippingDetails.airShippingCost)
+                            : Utils.formatNumber(
+                                shippingDetails.seaShippingCost),
+                        estimatedDeliveryTime: shippingDetails.shippingMethod ==
                                 SHIPPING_METHOD_AIR_VALUE
                             ? model.companySettings?.estimatedDeliveryTimeByAir
                             : model
