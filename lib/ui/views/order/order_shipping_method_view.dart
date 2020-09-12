@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/Utils.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/shipping_method_list_item.dart';
@@ -22,6 +23,7 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
 
   @override
   Widget build(BuildContext context) {
+    ShippingDetails shippingDetails = Provider.of<ShippingDetails>(context);
     return BaseView<OrderModel>(
       model: OrderModel(orderService: Provider.of(context)),
       onModelReady: (model) {
@@ -71,7 +73,8 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 6),
-                                    child: Text("Quantity : 100 pairs"),
+                                    child: Text(
+                                        "Quantity : ${model.cartItemCountWithVariations}"),
                                   ),
                                   // Padding(
                                   //   padding: const EdgeInsets.only(bottom: 6),
@@ -80,11 +83,13 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                                   // ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 6),
-                                    child: Text("Total Weight : 0.3 kg"),
+                                    child: Text(
+                                        "Total Weight : ${shippingDetails.totalWeight.toStringAsFixed(2)} kg"),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 6),
-                                    child: Text("Total CBM : 0.05"),
+                                    child: Text(
+                                        "Total CBM : ${shippingDetails.totalCBM.toStringAsFixed(6)}"),
                                   ),
                                 ],
                               ),

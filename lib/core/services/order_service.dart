@@ -30,6 +30,8 @@ class OrderService {
   List<Order> _orders = [];
   List<Order> get orders => _orders;
   bool get isSampleRequest => _cartService.isSampleRequest;
+  int get cartItemCountWithVariations =>
+      _cartService.cartItemCountWithVariations;
 
   String get shippingMethod => _cartService.shippingMethod;
   String get destCountry => _cartService.destCountry;

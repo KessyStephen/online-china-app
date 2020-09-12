@@ -17,6 +17,8 @@ class OrderModel extends BaseModel {
 
   List<Order> get orders => _orderService.orders;
   bool get isSampleRequest => _orderService.isSampleRequest;
+  int get cartItemCountWithVariations =>
+      _orderService.cartItemCountWithVariations;
 
   String get shippingMethod => _orderService.shippingMethod;
   String get destCountry => _orderService.destCountry;

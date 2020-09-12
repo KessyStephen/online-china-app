@@ -43,7 +43,10 @@ class CartService {
   double get airShippingCost => _airShippingCost;
   double _seaShippingCost = 0;
   double get seaShippingCost => _seaShippingCost;
-
+  double _totalWeight = 0;
+  double get totalWeight => _totalWeight;
+  double _totalCBM = 0;
+  double get totalCBM => _totalCBM;
   String _destCountry = "Tanzania";
   String get destCountry => _destCountry;
 
@@ -75,6 +78,19 @@ class CartService {
     // });
 
     // return sum;
+  }
+
+  int get cartItemCountWithVariations {
+    var sum = 0;
+    _cartProducts.forEach((element) {
+      if (element.type == PRODUCT_TYPE_VARIABLE) {
+        sum += element.variationsItemCount;
+      } else {
+        sum += element.quantity;
+      }
+    });
+
+    return sum;
   }
 
   Future<bool> addToCart(Product product) async {
@@ -174,7 +190,9 @@ class CartService {
     var details = ShippingDetails(
         shippingMethod: _shippingMethod,
         airShippingCost: _airShippingCost,
-        seaShippingCost: seaShippingCost,
+        seaShippingCost: _seaShippingCost,
+        totalWeight: _totalWeight,
+        totalCBM: _totalCBM,
         destCountry: _destCountry);
     _shippingDetailsController.add(details);
   }
@@ -203,20 +221,27 @@ class CartService {
     var details = ShippingDetails(
         shippingMethod: _shippingMethod,
         airShippingCost: _airShippingCost,
-        seaShippingCost: seaShippingCost,
+        seaShippingCost: _seaShippingCost,
+        totalWeight: _totalWeight,
+        totalCBM: _totalCBM,
         destCountry: _destCountry);
     _shippingDetailsController.add(details);
   }
 
   double calculateAirShippingCost() {
-    _airShippingCost =
+    var airShippingCostDetails =
         _shippingService.calculateAirShippingCost(products: _cartProducts);
+
+    _airShippingCost = airShippingCostDetails["totalCost"];
+    _totalWeight = airShippingCostDetails["totalWeight"];
 
     //update stream
     var details = ShippingDetails(
         shippingMethod: _shippingMethod,
         airShippingCost: _airShippingCost,
-        seaShippingCost: seaShippingCost,
+        seaShippingCost: _seaShippingCost,
+        totalWeight: _totalWeight,
+        totalCBM: _totalCBM,
         destCountry: _destCountry);
     _shippingDetailsController.add(details);
 
@@ -224,14 +249,19 @@ class CartService {
   }
 
   double calculateSeaShippingCost() {
-    _seaShippingCost =
+    var seaShippingCostDetails =
         _shippingService.calculateSeaShippingCost(products: _cartProducts);
+
+    _seaShippingCost = seaShippingCostDetails["totalCost"];
+    _totalCBM = seaShippingCostDetails["totalCBM"];
 
     //update stream
     var details = ShippingDetails(
         shippingMethod: _shippingMethod,
         airShippingCost: _airShippingCost,
-        seaShippingCost: seaShippingCost,
+        seaShippingCost: _seaShippingCost,
+        totalWeight: _totalWeight,
+        totalCBM: _totalCBM,
         destCountry: _destCountry);
     _shippingDetailsController.add(details);
 

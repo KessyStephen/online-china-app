@@ -24,9 +24,9 @@ class ShippingService {
         _categoryService = categoryService,
         _settingsService = settingsService;
 
-  double calculateAirShippingCost({List<Product> products}) {
+  Map<String, dynamic> calculateAirShippingCost({List<Product> products}) {
     if (products == null || products.length == 0) {
-      return 0;
+      return {"totalWeight": 0, "totalCost": 0};
     }
 
     double total = 0;
@@ -36,18 +36,23 @@ class ShippingService {
 
     double shippingPricePerKg =
         _settingsService?.companySettings?.shippingPricePerKg ?? 0;
-    return total * shippingPricePerKg;
+    var totalPrice = total * shippingPricePerKg;
+
+    return {"totalWeight": total, "totalCost": totalPrice};
   }
 
-  double calculateSeaShippingCost({List<Product> products}) {
+  Map<String, dynamic> calculateSeaShippingCost({List<Product> products}) {
     if (products == null || products.length == 0) {
-      return 0;
+      return {"totalCBM": 0, "totalCost": 0};
     }
+
+    double globalTotalCBM = 0;
 
     double total = 0;
     for (var item in products) {
       double tmpCBM = Utils.calculateCBM(item.length, item.width, item.height);
       double totalCBM = tmpCBM * item.quantity;
+      globalTotalCBM += totalCBM;
 
       Category category =
           Category.getCategory(item.categoryId, _categoryService.allCategories);
@@ -55,6 +60,6 @@ class ShippingService {
       total += shippingPricePerCBM * totalCBM;
     }
 
-    return total;
+    return {"totalCBM": globalTotalCBM, "totalCost": total};
   }
 }
