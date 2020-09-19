@@ -46,6 +46,9 @@ class ProductService {
   List<Product> _bestSellingProducts = [];
   List<Product> get bestSellingProducts => _bestSellingProducts;
 
+  List<Product> _recommendedProducts = [];
+  List<Product> get recommendedProducts => _recommendedProducts;
+
   //favorites
   List<Favorite> get favorites => _favoriteService.favorites;
 
@@ -209,6 +212,29 @@ class ProductService {
         double commissionRate = Category.getCategoryCommissionRate(
             tmp["categoryId"], allCategories);
         _newArrivalProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
+    }
+
+    return true;
+  }
+
+  Future<bool> processRecommendedProducts(tmpArray, {page = 1}) async {
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    if (page == 1) {
+      _recommendedProducts.clear();
+    }
+
+    String toCurrency = await LangUtils.getSelectedCurrency();
+    for (int i = 0; i < tmpArray.length; i++) {
+      var tmp = tmpArray[i];
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _recommendedProducts.add(
             Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
       }
     }

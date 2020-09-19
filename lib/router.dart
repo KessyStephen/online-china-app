@@ -70,6 +70,11 @@ class Router {
             builder: (_) => ProductListView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
+      case '/in_app_webview':
+        return MaterialPageRoute(
+            builder: (_) => InAppWebview(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
       case '/favorite_list':
         return MaterialPageRoute(
             builder: (_) => FavoriteListView(),

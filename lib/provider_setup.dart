@@ -46,9 +46,12 @@ List<SingleChildWidget> dependentServices = [
     update: (context, api, alertService, settingsService) =>
         SettingsService(api: api, alertService: alertService),
   ),
-  ProxyProvider2<Api, AlertService, FavoriteService>(
-    update: (context, api, alertService, favoriteService) =>
-        FavoriteService(api: api, alertService: alertService),
+  ProxyProvider3<Api, AlertService, SecureStorageService, FavoriteService>(
+    update: (context, api, alertService, storageService, favoriteService) =>
+        FavoriteService(
+            api: api,
+            alertService: alertService,
+            storageService: storageService),
   ),
   ProxyProvider2<Api, AlertService, BannerService>(
     update: (context, api, alertService, bannerService) =>

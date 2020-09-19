@@ -28,7 +28,7 @@ class _InAppWebviewState extends State<InAppWebview> {
         onWebViewCreated: (WebViewController webViewController) {
           _controller = webViewController;
 
-          if (initialUrl.isEmpty) {
+          if (initialUrl == null || initialUrl.isEmpty) {
             _loadHtmlFromAssets(body, _controller);
           }
         },

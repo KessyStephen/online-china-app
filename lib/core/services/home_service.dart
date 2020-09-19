@@ -88,6 +88,7 @@ class HomeService {
         _categoryService.processTrendingCategories(obj["trendingCategories"]);
         _productService.processBestSellingProducts(obj["bestSellingProducts"]);
         _productService.processNewArrivalProducts(obj["newArrivalProducts"]);
+        _productService.processRecommendedProducts(obj["recommendedProducts"]);
       }
 
       return false;
