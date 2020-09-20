@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/order_service.dart';
@@ -16,6 +17,16 @@ class OrderModel extends BaseModel {
 
   List<Order> get orders => _orderService.orders;
   bool get isSampleRequest => _orderService.isSampleRequest;
+  int get cartItemCountWithVariations =>
+      _orderService.cartItemCountWithVariations;
+
+  String get shippingMethod => _orderService.shippingMethod;
+  String get destCountry => _orderService.destCountry;
+
+  double get airShippingCost => _orderService.airShippingCost;
+  double get seaShippingCost => _orderService.seaShippingCost;
+
+  CompanySettings get companySettings => _orderService.companySettings;
 
   Future<bool> getOrders(
       {perPage = PER_PAGE_COUNT,
@@ -72,6 +83,7 @@ class OrderModel extends BaseModel {
 
   Future<List<String>> createOrder(
       {List<Product> products,
+      shippingMethod,
       destCountry,
       destCity,
       destRegion,
@@ -79,6 +91,7 @@ class OrderModel extends BaseModel {
     setState(ViewState.Busy);
     List<String> response = await _orderService.createOrder(
         products: products,
+        shippingMethod: shippingMethod,
         destCountry: destCountry,
         destCity: destCity,
         destRegion: destRegion,
@@ -93,5 +106,13 @@ class OrderModel extends BaseModel {
 
   void clearCartData() async {
     _orderService.clearCartData();
+  }
+
+  Future<void> updateShippingDetails({
+    String shippingMethod,
+    String destCountry,
+  }) async {
+    return _orderService.updateShippingDetails(
+        shippingMethod: shippingMethod, destCountry: destCountry);
   }
 }

@@ -5,6 +5,7 @@ import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/helpers/shared_prefs.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
+import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:provider/provider.dart';
 
 import '../base_widget.dart';
@@ -56,7 +57,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
                       trailing: Icon(
                         Icons.check,
                         color: selectedCurrency == val.code
-                            ? Colors.green
+                            ? primaryColor
                             : Colors.transparent,
                       ),
                       onTap: () async {

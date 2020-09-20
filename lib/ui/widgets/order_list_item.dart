@@ -38,43 +38,49 @@ class OrderListItem extends StatelessWidget {
           ]),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           margin: const EdgeInsets.only(bottom: 10),
-          child: Column(children: <Widget>[
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Order ID: " + this.orderID),
-                  Text(this.orderDate)
-                ]),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      this.paymentStatus == "Pending"
-                          ? "UNPAID"
-                          : this.paymentStatus.toUpperCase(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: this.paymentStatus == "Pending"
-                              ? Colors.red
-                              : this.paymentStatus == "Paid"
-                                  ? Colors.green
-                                  : null),
-                    ),
-                    Text(this.itemCount != null ? this.itemCount : "")
-                  ]),
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(this.price),
-                  const Icon(
-                    Icons.chevron_right,
-                    color: primaryColor,
-                  )
-                ])
-          ])),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Order ID: " + this.orderID),
+                      // Text(this.orderDate)
+                    ]),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          this.paymentStatus == "Pending"
+                              ? "UNPAID"
+                              : this.paymentStatus.toUpperCase(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: this.paymentStatus == "Pending"
+                                  ? Colors.red
+                                  : this.paymentStatus == "Paid"
+                                      ? Colors.green
+                                      : null),
+                        ),
+                        Text(this.itemCount != null ? this.itemCount : "")
+                      ]),
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(this.price),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: primaryColor,
+                      )
+                    ]),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(this.orderDate),
+                )
+              ])),
     );
   }
 }

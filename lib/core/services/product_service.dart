@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/category.dart';
-import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
@@ -47,6 +46,9 @@ class ProductService {
   List<Product> _bestSellingProducts = [];
   List<Product> get bestSellingProducts => _bestSellingProducts;
 
+  List<Product> _recommendedProducts = [];
+  List<Product> get recommendedProducts => _recommendedProducts;
+
   //favorites
   List<Favorite> get favorites => _favoriteService.favorites;
 
@@ -58,10 +60,6 @@ class ProductService {
   double get cartTotal => _cartService.cartTotal;
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
-
-  //companySettings - eg commissionRate etc
-  CompanySettings _companySettings;
-  CompanySettings get companySettings => _companySettings;
 
   List<ExchangeRate> _exchangeRates = [];
   List<ExchangeRate> get exchangeRates => _exchangeRates;
@@ -83,10 +81,12 @@ class ProductService {
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
         var tmp = tmpArray[i];
-        double commissionRate = Category.getCategoryCommissionRate(
-            tmp["categoryId"], allCategories);
-        _products.add(
-            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        if (tmp != null) {
+          double commissionRate = Category.getCategoryCommissionRate(
+              tmp["categoryId"], allCategories);
+          _products.add(
+              Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        }
       }
 
       return true;
@@ -159,10 +159,12 @@ class ProductService {
       String toCurrency = await LangUtils.getSelectedCurrency();
       for (int i = 0; i < tmpArray.length; i++) {
         var tmp = tmpArray[i];
-        double commissionRate = Category.getCategoryCommissionRate(
-            tmp["categoryId"], allCategories);
-        _searchedProducts.add(
-            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        if (tmp != null) {
+          double commissionRate = Category.getCategoryCommissionRate(
+              tmp["categoryId"], allCategories);
+          _searchedProducts.add(
+              Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+        }
       }
 
       return true;
@@ -206,10 +208,35 @@ class ProductService {
     String toCurrency = await LangUtils.getSelectedCurrency();
     for (int i = 0; i < tmpArray.length; i++) {
       var tmp = tmpArray[i];
-      double commissionRate =
-          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
-      _newArrivalProducts.add(
-          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _newArrivalProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
+    }
+
+    return true;
+  }
+
+  Future<bool> processRecommendedProducts(tmpArray, {page = 1}) async {
+    if (tmpArray == null || tmpArray.length == 0) {
+      return false;
+    }
+
+    if (page == 1) {
+      _recommendedProducts.clear();
+    }
+
+    String toCurrency = await LangUtils.getSelectedCurrency();
+    for (int i = 0; i < tmpArray.length; i++) {
+      var tmp = tmpArray[i];
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _recommendedProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
     }
 
     return true;
@@ -241,39 +268,16 @@ class ProductService {
     String toCurrency = await LangUtils.getSelectedCurrency();
     for (int i = 0; i < tmpArray.length; i++) {
       var tmp = tmpArray[i];
-      double commissionRate =
-          Category.getCategoryCommissionRate(tmp["categoryId"], allCategories);
-      _bestSellingProducts.add(
-          Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+
+      if (tmp != null) {
+        double commissionRate = Category.getCategoryCommissionRate(
+            tmp["categoryId"], allCategories);
+        _bestSellingProducts.add(
+            Product.fromMap(tmp, commissionRate, _exchangeRates, toCurrency));
+      }
     }
 
     return true;
-  }
-
-  Future<bool> getCompanySettings() async {
-    var response = await this._api.getCompanySettings();
-
-    if (response != null && response['success']) {
-      var obj = response['data'];
-
-      return processCompanySettings(obj);
-    } else {
-      _alertService.showAlert(
-          text: response != null
-              ? response['message']
-              : 'It appears you are Offline',
-          error: true);
-      return false;
-    }
-  }
-
-  Future<bool> processCompanySettings(obj) async {
-    if (obj != null) {
-      _companySettings = CompanySettings.fromJson(obj);
-      return true;
-    }
-
-    return false;
   }
 
   Future<bool> getExchangeRates() async {
@@ -300,7 +304,21 @@ class ProductService {
     _exchangeRates.clear();
 
     for (int i = 0; i < tmpArray.length; i++) {
-      _exchangeRates.add(ExchangeRate.fromJson(tmpArray[i]));
+      var tmpObj = tmpArray[i];
+      if (tmpObj["from"] != null &&
+          tmpObj["to"] != null &&
+          tmpObj["value"] != null &&
+          tmpObj["value"] > 0) {
+        _exchangeRates.add(ExchangeRate.fromJson(tmpObj));
+
+        //inverse
+        var to = tmpObj["from"];
+        tmpObj["from"] = tmpObj["to"];
+        tmpObj["to"] = to;
+        tmpObj["value"] = 1 / double.parse(tmpObj['value'].toString());
+
+        _exchangeRates.add(ExchangeRate.fromJson(tmpObj));
+      }
     }
 
     return true;

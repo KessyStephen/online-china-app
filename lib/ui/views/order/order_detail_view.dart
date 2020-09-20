@@ -122,28 +122,29 @@ class OrderDetailView extends StatelessWidget {
                                       },
                                     ),
                                   ),
-                                Expanded(
-                                  flex: 1,
-                                  child: BigButton(
-                                    color: primaryColor,
-                                    buttonTitle: "GET INVOICE",
-                                    functionality: () async {
-                                      String response = await model
-                                          .getInvoiceHTML(orderId: order.id);
-                                      var invoicePDFData =
-                                          await model.generateInvoicePDF(
-                                              htmlContent: response);
+                                if (order.status != "Cancelled")
+                                  Expanded(
+                                    flex: 1,
+                                    child: BigButton(
+                                      color: primaryColor,
+                                      buttonTitle: "GET INVOICE",
+                                      functionality: () async {
+                                        String response = await model
+                                            .getInvoiceHTML(orderId: order.id);
+                                        var invoicePDFData =
+                                            await model.generateInvoicePDF(
+                                                htmlContent: response);
 
-                                      if (Platform.isAndroid) {
-                                        await savePDF(
-                                            model, invoicePDFData, order.id);
-                                      } else {
-                                        await sharePDF(
-                                            invoicePDFData, order.id);
-                                      }
-                                    },
+                                        if (Platform.isAndroid) {
+                                          await savePDF(
+                                              model, invoicePDFData, order.id);
+                                        } else {
+                                          await sharePDF(
+                                              invoicePDFData, order.id);
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
                               ],
                             )
                           ],

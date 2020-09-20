@@ -458,6 +458,7 @@ class Api {
   Future<Map> createOrder(
       {List<Product> products,
       isSampleRequest = false,
+      shippingMethod,
       destCountry,
       destCity,
       destRegion,
@@ -476,6 +477,7 @@ class Api {
       Map<String, dynamic> params = {
         'items': items,
         'isSampleRequest': isSampleRequest,
+        'shippingMethod': shippingMethod,
         'destCountry': destCountry,
         'destCity': destCity,
         'destRegion': destRegion,

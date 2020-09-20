@@ -4,12 +4,14 @@ import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/widgets/auth_modal.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/order_success_modal.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
+import 'package:online_china_app/ui/widgets/shipping_summary.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,7 @@ import '../../base_widget.dart';
 class ConfirmOrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ShippingDetails shippingDetails = Provider.of<ShippingDetails>(context);
     final Map<String, dynamic> params =
         ModalRoute.of(context).settings.arguments;
     List<Product> products = params != null ? params['items'] : null;
@@ -76,9 +79,18 @@ class ConfirmOrderView extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              "Total Amount",
-                              style: const TextStyle(fontSize: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Total Amount",
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "(Without Shipping)",
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
                             ),
                             Text(
                               Utils.formatNumber(total),
@@ -88,12 +100,34 @@ class ConfirmOrderView extends StatelessWidget {
                           ],
                         ),
                       ),
+                      ShippingSummary(
+                        country: shippingDetails.destCountry,
+                        shippingMethod: shippingDetails.shippingMethod,
+                        estimatedPrice: shippingDetails.shippingMethod ==
+                                SHIPPING_METHOD_AIR_VALUE
+                            ? Utils.formatNumber(
+                                shippingDetails.airShippingCost)
+                            : Utils.formatNumber(
+                                shippingDetails.seaShippingCost),
+                        estimatedDeliveryTime: shippingDetails.shippingMethod ==
+                                SHIPPING_METHOD_AIR_VALUE
+                            ? model.companySettings?.estimatedDeliveryTimeByAir
+                            : model
+                                .companySettings?.estimatedDeliveryTimeByShip,
+                        onPressed: () {
+                          navigator.pushNamed("/order_shipping_method");
+                        },
+                      ),
                       BigButton(
                         buttonTitle: "CONFIRM",
                         functionality: () async {
                           List<String> orderIds = await model.createOrder(
                               products: products,
-                              destCountry: destCountry,
+                              shippingMethod: model.shippingMethod ==
+                                      SHIPPING_METHOD_AIR_VALUE
+                                  ? SHIPPING_METHOD_AIR_KEY
+                                  : SHIPPING_METHOD_SEA_KEY,
+                              destCountry: model.destCountry,
                               destCity: destCity,
                               destRegion: destRegion,
                               destStreet: destStreet);

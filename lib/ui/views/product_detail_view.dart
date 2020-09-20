@@ -32,6 +32,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     final String productId = params != null ? params['productId'] : "";
 
     var attributeWidgets = List<Widget>();
+    var specificationWidgets = List<Widget>();
 
     Product product;
     Favorite favorite;
@@ -42,12 +43,24 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         product = await model.getProduct(productId: productId);
         favorite = await model.getFavoriteForProduct(productId: productId);
 
+        //attributes
         if (product != null && product.attributes != null) {
           attributeWidgets.clear();
           for (var attr in product.attributes) {
             attributeWidgets.add(ProductAttribute(
               leftText: attr.name,
               rightText: attr.valueString,
+            ));
+          }
+        }
+
+        //specifications
+        if (product != null && product.specifications != null) {
+          specificationWidgets.clear();
+          for (var spec in product.specifications) {
+            specificationWidgets.add(ProductAttribute(
+              leftText: spec.name,
+              rightText: spec.value,
             ));
           }
         }
@@ -236,9 +249,23 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
                                   ...attributeWidgets,
 
+                                  if (specificationWidgets.length > 0)
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+
+                                  if (specificationWidgets.length > 0)
+                                    DetailsHeader(
+                                      title: "Specifications",
+                                      rightText: "",
+                                    ),
+
+                                  ...specificationWidgets,
+
                                   SizedBox(
                                     height: 10,
                                   ),
+
                                   DetailsHeader(
                                     title: "Description",
                                     rightText: "See all >",

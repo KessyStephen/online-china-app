@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/helpers/utils.dart';
+import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/cart_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -14,6 +15,7 @@ import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_list_item.dart';
 import 'package:online_china_app/ui/widgets/product_options_modal.dart';
+import 'package:online_china_app/ui/widgets/shipping_summary.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -21,6 +23,8 @@ class CartTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = Provider.of<User>(context).isLoggedIn;
+    ShippingDetails shippingDetails = Provider.of<ShippingDetails>(context);
+
     return BaseView<CartModel>(
       model: CartModel(cartService: Provider.of(context)),
       onModelReady: (model) => {},
@@ -76,15 +80,18 @@ class CartTabView extends StatelessWidget {
                                 minQuantity: 1,
                                 onQuantityChanged: (value) {
                                   product.setQuantity(value);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 addItem: () {
                                   product.increaseQuantity(1);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 removeItem: () {
                                   product.increaseQuantity(-1);
-                                  model.setState(ViewState.Idle);
+                                  model.updateProductInCart(product);
+                                  // model.setState(ViewState.Idle);
                                 },
                                 onEditQuantity: () {
                                   if (product.type == PRODUCT_TYPE_VARIABLE) {
@@ -115,9 +122,18 @@ class CartTabView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          "Total Amount",
-                          style: const TextStyle(fontSize: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Total Amount",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              "(Without Shipping)",
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                          ],
                         ),
                         Text(
                           Utils.formatNumber(model.cartTotal),
@@ -126,6 +142,21 @@ class CartTabView extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                  ShippingSummary(
+                    country: shippingDetails.destCountry,
+                    shippingMethod: shippingDetails.shippingMethod,
+                    estimatedPrice: shippingDetails.shippingMethod ==
+                            SHIPPING_METHOD_AIR_VALUE
+                        ? Utils.formatNumber(shippingDetails.airShippingCost)
+                        : Utils.formatNumber(shippingDetails.seaShippingCost),
+                    estimatedDeliveryTime: shippingDetails.shippingMethod ==
+                            SHIPPING_METHOD_AIR_VALUE
+                        ? model.companySettings?.estimatedDeliveryTimeByAir
+                        : model.companySettings?.estimatedDeliveryTimeByShip,
+                    onPressed: () {
+                      navigator.pushNamed("/order_shipping_method");
+                    },
                   ),
                   Row(
                     children: <Widget>[

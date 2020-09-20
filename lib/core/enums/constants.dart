@@ -26,3 +26,17 @@ const String PRODUCT_TYPE_VARIABLE = 'variable';
 enum ProductAction { None, AddToItems, BuyNow, Update }
 
 const String ORDER_STATUSCODE_CANCELLED = 'cancelled';
+
+//Discount types
+const String DISCOUNT_AMOUNT = 'discountAmount';
+const String DISCOUNT_PERCENT = 'discountPercent';
+const String DISCOUNT_FIXED_PRICE = 'fixedPrice';
+
+// Rule Types
+const String PRICING_RULE_TYPE_BULK = 'bulk';
+
+// Shipping Methods
+const String SHIPPING_METHOD_AIR_KEY = 'AirCargo';
+const String SHIPPING_METHOD_AIR_VALUE = 'Air Cargo';
+const String SHIPPING_METHOD_SEA_KEY = 'SeaFreight';
+const String SHIPPING_METHOD_SEA_VALUE = 'Sea Freight';
