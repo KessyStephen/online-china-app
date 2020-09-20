@@ -41,6 +41,23 @@ class ExchangeRate {
       }
     }
 
+    ExchangeRate usdToCurrency;
+    ExchangeRate currencyToUSD;
+    for (var obj in allRates) {
+      if (obj.to == to && obj.from == "USD") {
+        usdToCurrency = obj;
+      }
+
+      if (obj.from == from && obj.to == "USD") {
+        currencyToUSD = obj;
+      }
+    }
+
+    if (usdToCurrency != null && currencyToUSD != null) {
+      return ExchangeRate(
+          from: from, to: to, value: currencyToUSD.value * usdToCurrency.value);
+    }
+
     return ExchangeRate(from: DEFAULT_CURRENCY, to: DEFAULT_CURRENCY, value: 1);
     // return null;
   }
