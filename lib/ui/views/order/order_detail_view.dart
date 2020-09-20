@@ -15,6 +15,7 @@ import 'package:online_china_app/ui/widgets/orderitem_list_item.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:online_china_app/core/enums/notification.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -189,16 +190,17 @@ class OrderDetailView extends StatelessWidget {
 }
 
 Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
+  // final android = AndroidNotificationDetails(
+  //     'channel id', 'channel name', 'channel description',
+  //     priority: Priority.High, importance: Importance.Max);
+
   final android = AndroidNotificationDetails(
-      'channel id', 'channel name', 'channel description',
+      'sh_invoice', 'invoice', 'local notifications for invoice',
       priority: Priority.High, importance: Importance.Max);
   final iOS = IOSNotificationDetails();
   final platform = NotificationDetails(android, iOS);
   final json = jsonEncode(downloadStatus);
   final success = downloadStatus['success'];
-
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
 
   await flutterLocalNotificationsPlugin.show(
       0, // notification id

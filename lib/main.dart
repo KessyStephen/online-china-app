@@ -11,11 +11,14 @@ import 'package:provider/provider.dart';
 import 'core/managers/alert_manager.dart';
 import 'core/managers/dialog_manager.dart';
 import 'provider_setup.dart';
+import 'package:online_china_app/core/enums/notification.dart';
 
 void main() {
+  // needed if you intend to initialize in the `main` function
+  WidgetsFlutterBinding.ensureInitialized();
+
   //initialize local notification
-  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final android = AndroidInitializationSettings('@mipmap/launcher_icon');
   final iOS = IOSInitializationSettings();
   final initSettings = InitializationSettings(android, iOS);
   flutterLocalNotificationsPlugin.initialize(initSettings,
