@@ -206,7 +206,7 @@ Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
       0, // notification id
       success ? 'Success' : 'Failure',
       success
-          ? 'File has been downloaded successfully!'
+          ? 'Invoice saved to Downloads!'
           : 'There was an error while downloading the file.',
       platform,
       payload: json);
@@ -224,7 +224,7 @@ Future<void> savePDF(OrderModel model, var htmlContent, String filename) async {
     final file = File(fullPath);
     await file.writeAsBytes(htmlContent);
 
-    model.showAlertMessage(message: "Invoice saved to Downloads", error: false);
+    // model.showAlertMessage(message: "Invoice saved to Downloads", error: false);
 
     //post local notification
     Map<String, dynamic> result = {
