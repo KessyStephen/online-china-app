@@ -266,29 +266,33 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                     height: 10,
                                   ),
 
-                                  DetailsHeader(
-                                    title: "Description",
-                                    rightText: "See all >",
-                                    onPressed: () => Navigator.pushNamed(
-                                        context, "/product_description_full",
-                                        arguments: {
-                                          "title": "Description",
-                                          "body": product.description
-                                        }),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Text(
-                                      product.description != null
-                                          ? Utils.removeHtmlTags(
-                                              product.description)
-                                          : "",
-                                      maxLines: 5,
-                                      overflow: TextOverflow.ellipsis,
+                                  if (product.description != null &&
+                                      product.description.isNotEmpty)
+                                    DetailsHeader(
+                                      title: "Description",
+                                      rightText: "See all >",
+                                      onPressed: () => Navigator.pushNamed(
+                                          context, "/product_description_full",
+                                          arguments: {
+                                            "title": "Description",
+                                            "body": product.description
+                                          }),
                                     ),
-                                  ),
+
+                                  if (product.description != null &&
+                                      product.description.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        product.description != null
+                                            ? Utils.removeHtmlTags(
+                                                product.description)
+                                            : "",
+                                        maxLines: 5,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
 
                                   // InkWell(
                                   //   child: Text("ADD"),

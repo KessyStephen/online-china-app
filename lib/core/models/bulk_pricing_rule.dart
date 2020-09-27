@@ -24,14 +24,21 @@ class BulkPricingRule extends BasePricingRule {
   double getDiscountedPrice(int quantity, double price) {
     // TODO: implement getDiscountedPrice
 
-    if (price == null || quantity == null || quantity <= 0) {
+    if (quantity == null || quantity <= 0) {
       return -1;
     }
 
     if (quantity >= minQuantity && quantity <= maxQuantity) {
       if (discountType == DISCOUNT_AMOUNT) {
+        if (price == null) {
+          return 0;
+        }
+
         return price - amount;
       } else if (discountType == DISCOUNT_PERCENT) {
+        if (price == null) {
+          return 0;
+        }
         return (1 - amount) * price;
       } else if (discountType == DISCOUNT_FIXED_PRICE) {
         return amount;
@@ -39,5 +46,7 @@ class BulkPricingRule extends BasePricingRule {
         return amount;
       }
     }
+
+    return -1;
   }
 }
