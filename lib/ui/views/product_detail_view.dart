@@ -418,6 +418,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     Navigator.push(
       context,
       MaterialPageRoute(
+        fullscreenDialog: true,
         builder: (context) => GalleryPhotoViewWrapper(
           galleryItems: galleryItems,
           backgroundDecoration: const BoxDecoration(
