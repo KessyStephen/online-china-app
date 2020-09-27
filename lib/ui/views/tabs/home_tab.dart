@@ -325,7 +325,46 @@ class _HomeTabViewState extends State<HomeTabView> {
                       )
                   ],
                 )
-              ]))
+              ])),
+              if (model.recommendedProducts != null &&
+                  model.recommendedProducts.length > 0)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18.0),
+                        child: Text(
+                          "Recommended",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (model.recommendedProducts != null &&
+                  model.recommendedProducts.length > 0)
+                SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      // crossAxisCount: 2,
+                      maxCrossAxisExtent: 200.0,
+                      childAspectRatio: 0.8,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        var product = model.recommendedProducts[index];
+                        return ProductGridItem(
+                          title: product.name,
+                          price: product.priceLabel,
+                          minOrderQuantity: product.minOrderLabel,
+                          imageUrl: product.thumbnail,
+                          onPressed: () => Navigator.pushNamed(
+                              context, "/product_detail",
+                              arguments: {"productId": product.id}),
+                        );
+                      },
+                      childCount: model?.recommendedProducts?.length,
+                    )),
             ],
           ),
         ),

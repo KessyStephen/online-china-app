@@ -21,6 +21,7 @@ class HomeModel extends BaseModel {
   List<Category> get trendingCategories => _homeService.trendingCategories;
   List<Product> get newArrivalProducts => _homeService.newArrivalProducts;
   List<Product> get bestSellingProducts => _homeService.bestSellingProducts;
+  List<Product> get recommendedProducts => _homeService.recommendedProducts;
 
   List<Favorite> get favorites => _homeService.favorites;
 

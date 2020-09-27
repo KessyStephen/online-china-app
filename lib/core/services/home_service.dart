@@ -40,6 +40,7 @@ class HomeService {
 
   List<Product> get newArrivalProducts => _productService.newArrivalProducts;
   List<Product> get bestSellingProducts => _productService.bestSellingProducts;
+  List<Product> get recommendedProducts => _productService.recommendedProducts;
 
   List<Favorite> get favorites => _productService.favorites;
 
