@@ -147,15 +147,18 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                             openInGallery(context,
                                                 product.images, itemIndex);
                                           },
-                                          child: CachedNetworkImage(
-                                            imageUrl: imageItem.src != null
-                                                ? imageItem.src
-                                                : "",
-                                            fit: BoxFit.contain,
-                                            placeholder: (context, url) =>
-                                                Image.asset(
-                                              PLACEHOLDER_IMAGE,
-                                              fit: BoxFit.contain,
+                                          child: Container(
+                                            width: double.infinity,
+                                            child: CachedNetworkImage(
+                                              imageUrl: imageItem.src != null
+                                                  ? imageItem.src
+                                                  : "",
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  Image.asset(
+                                                PLACEHOLDER_IMAGE,
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                           ),
                                         );
