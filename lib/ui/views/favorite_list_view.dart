@@ -41,8 +41,11 @@ class _FavoriteListViewState extends State<FavoriteListView> {
                   ),
                 )
               : InfiniteGridView(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    // crossAxisCount: 2,
+                    maxCrossAxisExtent: 230.0,
+                    childAspectRatio: 0.8,
+                  ),
                   itemBuilder: (context, index) {
                     Favorite favorite = model.favorites[index];
 

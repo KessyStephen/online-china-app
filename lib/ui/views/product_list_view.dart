@@ -197,8 +197,11 @@ class _ProductListViewState extends State<ProductListView> {
                     Expanded(
                       child: InfiniteGridView(
                         shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          // crossAxisCount: 2,
+                          maxCrossAxisExtent: 230.0,
+                          childAspectRatio: 0.8,
+                        ),
                         itemBuilder: (context, index) {
                           Product product = model.products[index];
                           return ProductGridItem(

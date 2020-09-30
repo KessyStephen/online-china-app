@@ -347,7 +347,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                 SliverGrid(
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       // crossAxisCount: 2,
-                      maxCrossAxisExtent: 200.0,
+                      maxCrossAxisExtent: 230.0,
                       childAspectRatio: 0.8,
                     ),
                     delegate: SliverChildBuilderDelegate(

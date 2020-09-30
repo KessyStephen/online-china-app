@@ -184,8 +184,11 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                                   flex: 1,
                                   child: InfiniteGridView(
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2),
+                                        SliverGridDelegateWithMaxCrossAxisExtent(
+                                      // crossAxisCount: 2,
+                                      maxCrossAxisExtent: 230.0,
+                                      childAspectRatio: 0.8,
+                                    ),
                                     itemBuilder: (context, index) {
                                       Product product =
                                           model.searchedProducts[index];
