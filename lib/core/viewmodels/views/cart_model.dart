@@ -49,11 +49,11 @@ class CartModel extends BaseModel {
     return true;
   }
 
-  double calculateAirShippingCost() {
+  Future<double> calculateAirShippingCost() async {
     return _cartService.calculateAirShippingCost();
   }
 
-  double calculateSeaShippingCost() {
+  Future<double> calculateSeaShippingCost() async {
     return _cartService.calculateSeaShippingCost();
   }
 }

@@ -124,8 +124,8 @@ class CartService {
       _cartProducts[index] = product;
 
       //update shipping cost
-      calculateAirShippingCost();
-      calculateSeaShippingCost();
+      await calculateAirShippingCost();
+      await calculateSeaShippingCost();
 
       if (!_isSampleRequest && !_isBuyNow) {
         _alertService.showAlert(text: 'Added to items', error: false);
@@ -136,8 +136,8 @@ class CartService {
     _cartProducts.add(product);
 
     //update shipping cost
-    calculateAirShippingCost();
-    calculateSeaShippingCost();
+    await calculateAirShippingCost();
+    await calculateSeaShippingCost();
 
     if (!_isSampleRequest && !_isBuyNow) {
       _alertService.showAlert(text: 'Added to items', error: false);
@@ -154,8 +154,8 @@ class CartService {
       _cartProducts[index] = product;
 
       //update shipping cost
-      calculateAirShippingCost();
-      calculateSeaShippingCost();
+      await calculateAirShippingCost();
+      await calculateSeaShippingCost();
 
       return true;
     }
@@ -167,8 +167,8 @@ class CartService {
     _cartProducts.removeWhere((item) => item.id == product.id);
 
     //update shipping cost
-    calculateAirShippingCost();
-    calculateSeaShippingCost();
+    await calculateAirShippingCost();
+    await calculateSeaShippingCost();
 
     return false;
   }
@@ -228,9 +228,9 @@ class CartService {
     _shippingDetailsController.add(details);
   }
 
-  double calculateAirShippingCost() {
-    var airShippingCostDetails =
-        _shippingService.calculateAirShippingCost(products: _cartProducts);
+  Future<double> calculateAirShippingCost() async {
+    var airShippingCostDetails = await _shippingService
+        .calculateAirShippingCost(products: _cartProducts);
 
     _airShippingCost = airShippingCostDetails["totalCost"];
     _totalWeight = airShippingCostDetails["totalWeight"];
@@ -248,9 +248,9 @@ class CartService {
     return _airShippingCost;
   }
 
-  double calculateSeaShippingCost() {
-    var seaShippingCostDetails =
-        _shippingService.calculateSeaShippingCost(products: _cartProducts);
+  Future<double> calculateSeaShippingCost() async {
+    var seaShippingCostDetails = await _shippingService
+        .calculateSeaShippingCost(products: _cartProducts);
 
     _seaShippingCost = seaShippingCostDetails["totalCost"];
     _totalCBM = seaShippingCostDetails["totalCBM"];

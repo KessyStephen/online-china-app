@@ -8,7 +8,8 @@ class BasePricingRule {
 
   BasePricingRule({this.id, this.ruleType, this.discountType, this.amount});
 
-  BasePricingRule.fromMap(Map<String, dynamic> map, double exchangeRate) {
+  BasePricingRule.fromMap(
+      Map<String, dynamic> map, double commissionRate, double exchangeRate) {
     if (map == null) {
       return;
     }
@@ -18,9 +19,16 @@ class BasePricingRule {
     discountType = map['discountType'];
     amount = map['amount'] != null ? double.parse(map['amount'].toString()) : 0;
 
+    //------- price transformations
     //convert amount if exchange rate given
     if (exchangeRate != null) {
       amount = amount * exchangeRate;
+    }
+
+    //apply commission
+    if (commissionRate != null) {
+      var commissionRateFraction = commissionRate / 100;
+      amount = (1 + commissionRateFraction) * amount;
     }
   }
 

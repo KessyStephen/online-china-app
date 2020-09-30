@@ -170,7 +170,7 @@ class _OrderShippingMethodViewState extends State<OrderShippingMethodView> {
                   BigButton(
                     buttonTitle: "Apply",
                     functionality: () async {
-                      model.updateShippingDetails(
+                      await model.updateShippingDetails(
                           shippingMethod: selectedShippingMethod);
                       Navigator.pop(context);
                     },

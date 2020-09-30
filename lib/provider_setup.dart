@@ -3,6 +3,7 @@ import 'package:online_china_app/core/services/account_service.dart';
 import 'package:online_china_app/core/services/banner_service.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 import 'package:online_china_app/core/services/category_service.dart';
+import 'package:online_china_app/core/services/exchange_rate_service.dart';
 import 'package:online_china_app/core/services/favorite_service.dart';
 import 'package:online_china_app/core/services/home_service.dart';
 import 'package:online_china_app/core/services/order_service.dart';
@@ -46,6 +47,10 @@ List<SingleChildWidget> dependentServices = [
     update: (context, api, alertService, settingsService) =>
         SettingsService(api: api, alertService: alertService),
   ),
+  ProxyProvider2<Api, AlertService, ExchangeRateService>(
+    update: (context, api, alertService, exchangeRateService) =>
+        ExchangeRateService(api: api, alertService: alertService),
+  ),
   ProxyProvider3<Api, AlertService, SecureStorageService, FavoriteService>(
     update: (context, api, alertService, storageService, favoriteService) =>
         FavoriteService(
@@ -61,15 +66,16 @@ List<SingleChildWidget> dependentServices = [
     update: (context, api, alertService, categoryService) =>
         CategoryService(api: api, alertService: alertService),
   ),
-  ProxyProvider4<Api, AlertService, CategoryService, SettingsService,
-      ShippingService>(
+  ProxyProvider5<Api, AlertService, CategoryService, SettingsService,
+      ExchangeRateService, ShippingService>(
     update: (context, api, alertService, categoryService, settingsService,
-            shippingService) =>
+            exchangeRateService, shippingService) =>
         ShippingService(
             api: api,
             alertService: alertService,
             categoryService: categoryService,
-            settingsService: settingsService),
+            settingsService: settingsService,
+            exchangeRateService: exchangeRateService),
   ),
   ProxyProvider4<Api, AlertService, SecureStorageService, NavigationService,
       AuthenticationService>(
@@ -105,16 +111,17 @@ List<SingleChildWidget> dependentServices = [
   //       ProductService(
   //           api: api, alertService: alertService, cartService: cartService),
   // ),
-  ProxyProvider5<Api, AlertService, CartService, FavoriteService,
-      CategoryService, ProductService>(
+  ProxyProvider6<Api, AlertService, CartService, FavoriteService,
+      CategoryService, ExchangeRateService, ProductService>(
     update: (context, api, alertService, cartService, favoriteService,
-            categoryService, productService) =>
+            categoryService, exchangeRateService, productService) =>
         ProductService(
             api: api,
             alertService: alertService,
             cartService: cartService,
             favoriteService: favoriteService,
-            categoryService: categoryService),
+            categoryService: categoryService,
+            exchangeRateService: exchangeRateService),
   ),
   ProxyProvider4<OrderService, CartService, SecureStorageService,
       AuthenticationService, AccountService>(

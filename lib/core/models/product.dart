@@ -372,7 +372,8 @@ class Product extends TranslatedModel {
       for (var i = 0; i < pricingRulesArr.length; i++) {
         var rule = pricingRulesArr[i];
         if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
-          var ruleItem = BulkPricingRule.fromMap(rule, exchangeRate.value);
+          var ruleItem =
+              BulkPricingRule.fromMap(rule, commissionRate, exchangeRate.value);
           pricingRulesItems.add(ruleItem);
         }
       }
@@ -553,7 +554,8 @@ class Variation {
       for (var i = 0; i < pricingRulesArr.length; i++) {
         var rule = pricingRulesArr[i];
         if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
-          var ruleItem = BulkPricingRule.fromMap(rule, exchangeRate.value);
+          var ruleItem =
+              BulkPricingRule.fromMap(rule, commissionRate, exchangeRate.value);
           pricingRulesItems.add(ruleItem);
         }
       }
