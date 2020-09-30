@@ -7,7 +7,8 @@ class BulkPricingRule extends BasePricingRule {
 
   BulkPricingRule({this.minQuantity, this.maxQuantity}) : super();
 
-  BulkPricingRule.fromMap(Map<String, dynamic> map) : super.fromMap(map) {
+  BulkPricingRule.fromMap(Map<String, dynamic> map, double exchangeRate)
+      : super.fromMap(map, exchangeRate) {
     if (map == null) {
       return;
     }
