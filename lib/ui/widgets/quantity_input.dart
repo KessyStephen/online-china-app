@@ -24,6 +24,12 @@ class _QuantityInputState extends State<QuantityInput> {
   TextEditingController _controller = TextEditingController()..text = '';
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _controller.value = TextEditingValue(
         text: "${widget.quantity}",

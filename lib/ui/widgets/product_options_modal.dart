@@ -128,7 +128,7 @@ class ProductOptionsModal extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: BigButtonOutline(
-                    buttonTitle: 'CANCEL',
+                    buttonTitle: 'DISMISS',
                     functionality: () {
                       Get.back();
                     },
