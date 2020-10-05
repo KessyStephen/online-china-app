@@ -56,7 +56,9 @@ class _QuantityInputState extends State<QuantityInput> {
                 }
 
                 _controller.text = "$intVal";
-                widget.onQuantityChanged(intVal);
+                if (intVal != null) {
+                  widget.onQuantityChanged(intVal);
+                }
                 _controller.selection = TextSelection.fromPosition(
                     TextPosition(offset: _controller.text.length));
               }
@@ -116,7 +118,9 @@ class _QuantityInputState extends State<QuantityInput> {
                 ),
                 onChanged: (val) {
                   var intVal = int.tryParse(val);
-                  widget.onQuantityChanged(intVal);
+                  if (intVal != null) {
+                    widget.onQuantityChanged(intVal);
+                  }
                 },
                 onSubmitted: (value) {},
                 onEditingComplete: () {},
@@ -136,7 +140,9 @@ class _QuantityInputState extends State<QuantityInput> {
                   _controller.text.isNotEmpty) {
                 var intVal = int.tryParse(_controller.text) + 1;
                 _controller.text = "$intVal";
-                widget.onQuantityChanged(intVal);
+                if (intVal != null) {
+                  widget.onQuantityChanged(intVal);
+                }
                 _controller.selection = TextSelection.fromPosition(
                     TextPosition(offset: _controller.text.length));
               }
