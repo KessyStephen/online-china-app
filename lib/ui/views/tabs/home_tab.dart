@@ -181,67 +181,70 @@ class _HomeTabViewState extends State<HomeTabView> {
                                     fontWeight: FontWeight.w500, fontSize: 16),
                               ),
                       ),
-                    // if (model.bestSellingProducts.length > 0 || model.state == ViewState.Busy)
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minHeight: 150.0,
-                        maxHeight: 220.0,
-                      ),
-                      child: ViewState.Busy == model.state
-                          ? Shimmer.fromColors(
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    height: 200,
-                                    padding: EdgeInsets.symmetric(vertical: 16),
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: List.generate(4, (index) {
-                                        return Container(
-                                          width: 200,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black26,
-                                                  blurRadius: 5.0,
-                                                ),
-                                              ],
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8.0))),
-                                          child: SizedBox(
-                                            height: 100,
-                                            width: 150,
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              baseColor: Colors.grey[400],
-                              highlightColor: Colors.white)
-                          : ListView.builder(
-                              itemCount: model.bestSellingProducts.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                var product = model.bestSellingProducts[index];
-                                return ProductGridItem(
-                                  title: product.name,
-                                  price: product.priceLabel,
-                                  minOrderQuantity: product.minOrderLabel,
-                                  imageUrl: product.thumbnail,
-                                  onPressed: () => Navigator.pushNamed(
-                                      context, "/product_detail",
-                                      arguments: {"productId": product.id}),
-                                );
-                              }),
-                    ),
                     if (model.bestSellingProducts.length > 0 ||
+                        model.state == ViewState.Busy)
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minHeight: 150.0,
+                          maxHeight: 220.0,
+                        ),
+                        child: ViewState.Busy == model.state
+                            ? Shimmer.fromColors(
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 200,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: List.generate(4, (index) {
+                                          return Container(
+                                            width: 200,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black26,
+                                                    blurRadius: 5.0,
+                                                  ),
+                                                ],
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8.0))),
+                                            child: SizedBox(
+                                              height: 100,
+                                              width: 150,
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                baseColor: Colors.grey[400],
+                                highlightColor: Colors.white)
+                            : ListView.builder(
+                                itemCount: model.bestSellingProducts.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var product =
+                                      model.bestSellingProducts[index];
+                                  return ProductGridItem(
+                                    title: product.name,
+                                    price: product.priceLabel,
+                                    minOrderQuantity: product.minOrderLabel,
+                                    imageUrl: product.thumbnail,
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, "/product_detail",
+                                        arguments: {"productId": product.id}),
+                                  );
+                                }),
+                      ),
+                    if (model.newArrivalProducts.length > 0 ||
                         model.state == ViewState.Busy)
                       Padding(
                         padding: const EdgeInsets.only(left: 18),
@@ -261,7 +264,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                                     fontWeight: FontWeight.w500, fontSize: 16),
                               ),
                       ),
-                    if (model.bestSellingProducts.length > 0 ||
+                    if (model.newArrivalProducts.length > 0 ||
                         model.state == ViewState.Busy)
                       ConstrainedBox(
                         constraints: const BoxConstraints(
