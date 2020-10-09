@@ -79,6 +79,11 @@ class CategoryRow extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (BuildContext context, int index) {
                               var category = model.trendingCategories[index];
+
+                              if (category?.id == null) {
+                                return Container();
+                              }
+
                               return CategoryGridItem(
                                 title: category.name,
                                 imageUrl: category.image,
