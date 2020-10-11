@@ -6,6 +6,7 @@ import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:online_china_app/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
@@ -112,114 +113,134 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                               ),
                             ),
                           )
-                        : Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.all(4),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      InkWell(
-                                        child: Row(
-                                          children: <Widget>[
-                                            Text(
-                                              'Filter',
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Icon(
-                                              FontAwesome.filter,
-                                              color: primaryColor,
-                                            ),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          //model.setIsSort(true);
-                                          setState(() {
-                                            selectedAction = ACTION_FILTER;
-                                          });
-                                          Scaffold.of(context).openEndDrawer();
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      InkWell(
-                                        child: Row(
-                                          children: <Widget>[
-                                            Text(
-                                              'Sort',
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Icon(
-                                              Icons.sort,
-                                              color: primaryColor,
-                                            ),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            selectedAction = ACTION_SORT;
-                                          });
-                                          // model.setIsSort(true);
-                                          Scaffold.of(context).openEndDrawer();
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                    ],
+                        : model.products.length == 0
+                            ? Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: EmptyListWidget(
+                                    icon: Icons.list,
+                                    message: "Empty list",
                                   ),
                                 ),
-                                Divider(),
-                                Expanded(
-                                  flex: 1,
-                                  child: InfiniteGridView(
-                                    gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                      // crossAxisCount: 2,
-                                      maxCrossAxisExtent: 230.0,
-                                      childAspectRatio: 0.8,
+                              )
+                            : Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.all(4),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: <Widget>[
+                                          InkWell(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  'Filter',
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Icon(
+                                                  FontAwesome.filter,
+                                                  color: primaryColor,
+                                                ),
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              //model.setIsSort(true);
+                                              setState(() {
+                                                selectedAction = ACTION_FILTER;
+                                              });
+                                              Scaffold.of(context)
+                                                  .openEndDrawer();
+                                            },
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          InkWell(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  'Sort',
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Icon(
+                                                  Icons.sort,
+                                                  color: primaryColor,
+                                                ),
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                selectedAction = ACTION_SORT;
+                                              });
+                                              // model.setIsSort(true);
+                                              Scaffold.of(context)
+                                                  .openEndDrawer();
+                                            },
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    itemBuilder: (context, index) {
-                                      Product product =
-                                          model.searchedProducts[index];
-                                      return ProductGridItem(
-                                        title: product.name,
-                                        price: product.priceLabel,
-                                        minOrderQuantity: product.minOrderLabel,
-                                        imageUrl: product.thumbnail,
-                                        onPressed: () => Navigator.pushNamed(
-                                            context, "/product_detail",
-                                            arguments: {
-                                              "productId": product.id
-                                            }),
-                                      );
-                                    },
-                                    itemCount: model.searchedProducts == null
-                                        ? 0
-                                        : model.searchedProducts
-                                            .length, // Current itemCount you have
-                                    hasNext: model.searchedProducts.length >=
-                                            PER_PAGE_COUNT
-                                        ? this.showLoading
-                                        : false, // if we have fewer than requested, there is no next
-                                    nextData: () {
-                                      this.loadNextData(model);
-                                    }, // callback called when end to the list is reach and hasNext is true
-                                  ),
+                                    Divider(),
+                                    Expanded(
+                                      flex: 1,
+                                      child: InfiniteGridView(
+                                        gridDelegate:
+                                            SliverGridDelegateWithMaxCrossAxisExtent(
+                                          // crossAxisCount: 2,
+                                          maxCrossAxisExtent: 230.0,
+                                          childAspectRatio: 0.8,
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          Product product =
+                                              model.searchedProducts[index];
+                                          return ProductGridItem(
+                                            title: product.name,
+                                            price: product.priceLabel,
+                                            minOrderQuantity:
+                                                product.minOrderLabel,
+                                            imageUrl: product.thumbnail,
+                                            onPressed: () =>
+                                                Navigator.pushNamed(
+                                                    context, "/product_detail",
+                                                    arguments: {
+                                                  "productId": product.id
+                                                }),
+                                          );
+                                        },
+                                        itemCount: model.searchedProducts ==
+                                                null
+                                            ? 0
+                                            : model.searchedProducts
+                                                .length, // Current itemCount you have
+                                        hasNext: model
+                                                    .searchedProducts.length >=
+                                                PER_PAGE_COUNT
+                                            ? this.showLoading
+                                            : false, // if we have fewer than requested, there is no next
+                                        nextData: () {
+                                          this.loadNextData(model);
+                                        }, // callback called when end to the list is reach and hasNext is true
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
                   ],
                 ),
               ),

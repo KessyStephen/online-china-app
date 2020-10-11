@@ -79,7 +79,7 @@ class ProductGridItem extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 6, right: 6, top: 4),
                 child: Text(
                   this.minOrderQuantity != null
-                      ? "MOQ: " + this.minOrderQuantity.toString()
+                      ? "Min. Order: " + this.minOrderQuantity.toString()
                       : "",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 12),

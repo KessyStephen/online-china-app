@@ -6,6 +6,7 @@ import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:online_china_app/ui/widgets/empty_list.dart';
 import 'package:online_china_app/ui/widgets/product_grid_item.dart';
 import 'package:provider/provider.dart';
 
@@ -139,94 +140,100 @@ class _ProductListViewState extends State<ProductListView> {
                     backgroundColor: Colors.white,
                   ),
                 )
-              : Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          InkWell(
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  'Sort',
-                                  style: TextStyle(fontSize: 16),
+              : model.products.length == 0
+                  ? EmptyListWidget(
+                      icon: Icons.list,
+                      message: "Empty list",
+                    )
+                  : Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              InkWell(
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Sort',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Icon(
+                                      Icons.sort,
+                                      color: primaryColor,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Icon(
-                                  Icons.sort,
-                                  color: primaryColor,
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              model.setIsSort(true);
-                              Scaffold.of(context).openEndDrawer();
-                            },
+                                onTap: () {
+                                  model.setIsSort(true);
+                                  Scaffold.of(context).openEndDrawer();
+                                },
+                              ),
+                              // Text(
+                              //   ' | ',
+                              //   style: TextStyle(fontSize: 20),
+                              // ),
+                              // InkWell(
+                              //   child: Row(
+                              //     children: <Widget>[
+                              //       Text(
+                              //         'Filter',
+                              //         style: TextStyle(fontSize: 16),
+                              //       ),
+                              //       SizedBox(
+                              //         width: 5,
+                              //       ),
+                              //       Icon(Icons.filter_list, color: primaryColor),
+                              //     ],
+                              //   ),
+                              //   onTap: () {
+                              //     model.setIsSort(false);
+                              //     Scaffold.of(context).openEndDrawer();
+                              //   },
+                              // )
+                            ],
                           ),
-                          // Text(
-                          //   ' | ',
-                          //   style: TextStyle(fontSize: 20),
-                          // ),
-                          // InkWell(
-                          //   child: Row(
-                          //     children: <Widget>[
-                          //       Text(
-                          //         'Filter',
-                          //         style: TextStyle(fontSize: 16),
-                          //       ),
-                          //       SizedBox(
-                          //         width: 5,
-                          //       ),
-                          //       Icon(Icons.filter_list, color: primaryColor),
-                          //     ],
-                          //   ),
-                          //   onTap: () {
-                          //     model.setIsSort(false);
-                          //     Scaffold.of(context).openEndDrawer();
-                          //   },
-                          // )
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Expanded(
-                      child: InfiniteGridView(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          // crossAxisCount: 2,
-                          maxCrossAxisExtent: 230.0,
-                          childAspectRatio: 0.8,
                         ),
-                        itemBuilder: (context, index) {
-                          Product product = model.products[index];
-                          return ProductGridItem(
-                            title: product.name,
-                            price: product.priceLabel,
-                            minOrderQuantity: product.minOrderLabel,
-                            imageUrl: product.thumbnail,
-                            onPressed: () => Navigator.pushNamed(
-                                context, "/product_detail",
-                                arguments: {"productId": product.id}),
-                          );
-                        },
-                        itemCount: model.products != null
-                            ? model.products.length
-                            : 0, // Current itemCount you have
-                        hasNext: model.products.length >= PER_PAGE_COUNT
-                            ? this.showLoading
-                            : false, // if we have fewer than requested, there is no next
-                        nextData: () {
-                          this.loadNextData(model, parentCategory.id);
-                        }, // callback called when end to the list is reach and hasNext is true
-                      ),
+                        Divider(),
+                        Expanded(
+                          child: InfiniteGridView(
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              // crossAxisCount: 2,
+                              maxCrossAxisExtent: 230.0,
+                              childAspectRatio: 0.8,
+                            ),
+                            itemBuilder: (context, index) {
+                              Product product = model.products[index];
+                              return ProductGridItem(
+                                title: product.name,
+                                price: product.priceLabel,
+                                minOrderQuantity: product.minOrderLabel,
+                                imageUrl: product.thumbnail,
+                                onPressed: () => Navigator.pushNamed(
+                                    context, "/product_detail",
+                                    arguments: {"productId": product.id}),
+                              );
+                            },
+                            itemCount: model.products != null
+                                ? model.products.length
+                                : 0, // Current itemCount you have
+                            hasNext: model.products.length >= PER_PAGE_COUNT
+                                ? this.showLoading
+                                : false, // if we have fewer than requested, there is no next
+                            nextData: () {
+                              this.loadNextData(model, parentCategory.id);
+                            }, // callback called when end to the list is reach and hasNext is true
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
         ),
       ),
     );

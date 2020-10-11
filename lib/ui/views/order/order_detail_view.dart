@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/order.dart';
@@ -11,6 +12,7 @@ import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/views/base_view.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
+import 'package:online_china_app/ui/widgets/order_cancel_modal.dart';
 import 'package:online_china_app/ui/widgets/orderitem_list_item.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -105,21 +107,28 @@ class OrderDetailView extends StatelessWidget {
                                     flex: 1,
                                     child: BigButton(
                                       color: Color.fromRGBO(152, 2, 32, 1.0),
-                                      buttonTitle: "CANCEL",
+                                      buttonTitle: "CANCEL ORDER",
                                       functionality: () async {
-                                        bool success = await model.updateOrder(
-                                            orderId: order.id,
-                                            statusCode:
-                                                ORDER_STATUSCODE_CANCELLED);
+                                        Get.bottomSheet(OrderCancelModal(
+                                          onCancelOrder: () async {
+                                            bool success = await model.updateOrder(
+                                                orderId: order.id,
+                                                statusCode:
+                                                    ORDER_STATUSCODE_CANCELLED);
 
-                                        if (success) {
-                                          // Navigator.pop(context);
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              "/",
-                                              (Route<dynamic> route) => false,
-                                              arguments: {"switchToIndex": 0});
-                                        }
+                                            if (success) {
+                                              // Navigator.pop(context);
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  "/",
+                                                  (Route<dynamic> route) =>
+                                                      false,
+                                                  arguments: {
+                                                    "switchToIndex": 0
+                                                  });
+                                            }
+                                          },
+                                        ));
                                       },
                                     ),
                                   ),

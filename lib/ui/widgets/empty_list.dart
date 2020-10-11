@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class EmptyListWidget extends StatelessWidget {
+  final IconData icon;
   final String message;
 
-  const EmptyListWidget({Key key, this.message}) : super(key: key);
+  const EmptyListWidget({Key key, this.icon, this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class EmptyListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
-              Entypo.archive,
+              this.icon != null ? this.icon : Entypo.archive,
               size: 64,
               color: Colors.white,
             ),
