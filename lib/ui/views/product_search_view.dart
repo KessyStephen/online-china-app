@@ -113,7 +113,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                               ),
                             ),
                           )
-                        : model.products.length == 0
+                        : model.searchedProducts.length == 0
                             ? Expanded(
                                 flex: 1,
                                 child: Center(
