@@ -41,10 +41,7 @@ class OrderCancelModal extends StatelessWidget {
                   color: primaryColor,
                 ),
                 onPressed: () {
-                  // Get.back();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/", (Route<dynamic> route) => false,
-                      arguments: {"switchToIndex": ORDERS_INDEX});
+                  Get.back();
                 },
               )
             ],
