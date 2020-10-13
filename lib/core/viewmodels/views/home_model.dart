@@ -75,9 +75,10 @@ class HomeModel extends BaseModel {
     return response;
   }
 
-  Future<bool> getHomeItems() async {
+  Future<bool> getHomeItems({perPage = PER_PAGE_COUNT, page = 1}) async {
     setState(ViewState.Busy);
-    var response = await _homeService.getHomeItems();
+    var response =
+        await _homeService.getHomeItems(perPage: perPage, page: page);
     setState(ViewState.Idle);
     return response;
   }

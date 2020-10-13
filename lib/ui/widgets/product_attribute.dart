@@ -11,10 +11,20 @@ class ProductAttribute extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(this.leftText != null ? this.leftText : ""),
-          Text(this.rightText != null ? this.rightText : ""),
+          Text(
+            this.leftText != null ? this.leftText : "",
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              flex: 1,
+              child: Text(
+                this.rightText != null ? this.rightText : "",
+                textAlign: TextAlign.end,
+              )),
         ],
       ),
     );

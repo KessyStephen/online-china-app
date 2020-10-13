@@ -647,11 +647,17 @@ class Api {
     }
   }
 
-  Future<Map> getHomeItems() async {
+  Future<Map> getHomeItems({perPage = PER_PAGE_COUNT, page = 1}) async {
     try {
+      Map<String, String> params = {
+        'page': page.toString(),
+        'perPage': perPage.toString(),
+      };
+      params.removeWhere((key, value) => value == null);
+
       var client = await createClient();
 
-      var uri = uriForPath("/api/home", null);
+      var uri = uriForPath("/api/home", params);
       var response = await client.get(uri);
       return json.decode(response.body);
     } catch (e) {

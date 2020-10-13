@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -31,7 +32,7 @@ class _HomeTabViewState extends State<HomeTabView> {
         //get this first it has commissionRates for products
         await model.getAllCategories(hideLoading: true);
 
-        await model.getHomeItems();
+        await model.getHomeItems(perPage: 30, page: 1);
 
         // await model.getExchangeRates();
 

@@ -71,8 +71,8 @@ class HomeService {
     return _categoryService.getAllCategories();
   }
 
-  Future<bool> getHomeItems() async {
-    var response = await this._api.getHomeItems();
+  Future<bool> getHomeItems({perPage = PER_PAGE_COUNT, page = 1}) async {
+    var response = await this._api.getHomeItems(perPage: perPage, page: page);
 
     if (response != null && response['success']) {
       var obj = response['data'];
