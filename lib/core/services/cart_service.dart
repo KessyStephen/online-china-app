@@ -234,6 +234,7 @@ class CartService {
 
     _airShippingCost = airShippingCostDetails["totalCost"];
     _totalWeight = airShippingCostDetails["totalWeight"];
+    _totalCBM = airShippingCostDetails["totalCBM"];
 
     //update stream
     var details = ShippingDetails(
@@ -253,6 +254,7 @@ class CartService {
         .calculateSeaShippingCost(products: _cartProducts);
 
     _seaShippingCost = seaShippingCostDetails["totalCost"];
+    _totalWeight = seaShippingCostDetails["totalWeight"];
     _totalCBM = seaShippingCostDetails["totalCBM"];
 
     //update stream

@@ -40,3 +40,8 @@ const String SHIPPING_METHOD_AIR_KEY = 'AirCargo';
 const String SHIPPING_METHOD_AIR_VALUE = 'Air Cargo';
 const String SHIPPING_METHOD_SEA_KEY = 'SeaFreight';
 const String SHIPPING_METHOD_SEA_VALUE = 'Sea Freight';
+
+// Shipping Price Modes
+const String SHIPPING_PRICE_MODE_PER_KG = 'perKg';
+const String SHIPPING_PRICE_MODE_PER_CBM = 'perCBM';
+const String SHIPPING_PRICE_MODE_FLAT = 'flat';

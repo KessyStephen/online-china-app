@@ -8,6 +8,13 @@ class Category extends TranslatedModel {
   List<Category> children;
   double commissionRate;
   double shippingPricePerCBM;
+
+  double shippingPriceSea;
+  String shippingPriceModeSea; //perKg, perCBM, flat
+
+  double shippingPriceAir;
+  String shippingPriceModeAir; //perKg, perCBM, flat
+
   Category({
     this.id,
     this.parentId,
@@ -61,6 +68,16 @@ class Category extends TranslatedModel {
     shippingPricePerCBM = map['shippingPricePerCBM'] != null
         ? double.parse(map['shippingPricePerCBM'].toString())
         : 0;
+
+    shippingPriceSea = map['shippingPriceSea'] != null
+        ? double.parse(map['shippingPriceSea'].toString())
+        : 0;
+
+    shippingPriceAir = map['shippingPriceAir'] != null
+        ? double.parse(map['shippingPriceAir'].toString())
+        : 0;
+    shippingPriceModeSea = map['shippingPriceModeSea'];
+    shippingPriceModeAir = map['shippingPriceModeAir'];
   }
 
   Map<String, dynamic> toMap() {
@@ -70,6 +87,11 @@ class Category extends TranslatedModel {
     data['translations'] = this.translations;
     data['commissionRate'] = this.commissionRate;
     data['shippingPricePerCBM'] = this.shippingPricePerCBM;
+
+    data['shippingPriceSea'] = this.shippingPriceSea;
+    data['shippingPriceAir'] = this.shippingPriceAir;
+    data['shippingPriceModeSea'] = this.shippingPriceModeSea;
+    data['shippingPriceModeAir'] = this.shippingPriceModeAir;
 
     return data;
   }
