@@ -1,4 +1,4 @@
-package com.example.online_china_app
+package com.shamwaa.shamwaa
 
 import io.flutter.embedding.android.FlutterActivity
 
