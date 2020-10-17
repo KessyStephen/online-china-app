@@ -54,6 +54,11 @@ class HomeService {
     return _productService.getBestSellingProducts();
   }
 
+  Future<List<Product>> getRecommendedProducts(
+      {perPage = PER_PAGE_COUNT, page = 1}) async {
+    return _productService.getRecommendedProducts(page: page, perPage: perPage);
+  }
+
   Future<bool> getFavorites(
       {perPage = PER_PAGE_COUNT, page = 1, hideLoading = false}) async {
     return _productService.getFavorites(perPage: perPage, page: page);

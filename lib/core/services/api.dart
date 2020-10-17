@@ -401,6 +401,28 @@ class Api {
     }
   }
 
+  Future<Map> getRecommendedProducts(
+      {perPage = PER_PAGE_COUNT, page = 1}) async {
+    try {
+      Map<String, String> params = {
+        'page': page.toString(),
+        'perPage': perPage.toString(),
+      };
+      params.removeWhere((key, value) => value == null);
+      var client = await createClient();
+      var uri = uriForPath("/api/products_recommended", params);
+
+      var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
   Future<Map> getCountryCodes() async {
     try {
       var client = await createClient();

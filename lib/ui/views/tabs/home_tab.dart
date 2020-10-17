@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:loading_more_list/loading_more_list.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/home_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
 import 'package:online_china_app/ui/widgets/banner_row.dart';
@@ -23,12 +25,27 @@ class HomeTabView extends StatefulWidget {
 
 class _HomeTabViewState extends State<HomeTabView> {
   final RefreshController _refreshController = RefreshController();
+  RecommendedRepository recommendedRepository;
+
+  @override
+  void initState() {
+    recommendedRepository = RecommendedRepository();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    recommendedRepository?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
       model: HomeModel(homeService: Provider.of(context)),
       onModelReady: (model) async {
+        recommendedRepository.setModel(model);
+
         //get this first it has commissionRates for products
         await model.getAllCategories(hideLoading: true);
 
@@ -346,33 +363,100 @@ class _HomeTabViewState extends State<HomeTabView> {
                     ],
                   ),
                 ),
-              if (model.recommendedProducts != null &&
-                  model.recommendedProducts.length > 0)
-                SliverGrid(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      // crossAxisCount: 2,
-                      maxCrossAxisExtent: 230.0,
-                      childAspectRatio: 0.8,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        var product = model.recommendedProducts[index];
-                        return ProductGridItem(
-                          title: product.name,
-                          price: product.priceLabel,
-                          minOrderQuantity: product.minOrderLabel,
-                          imageUrl: product.thumbnail,
-                          onPressed: () => Navigator.pushNamed(
-                              context, "/product_detail",
-                              arguments: {"productId": product.id}),
-                        );
-                      },
-                      childCount: model?.recommendedProducts?.length,
-                    )),
+              // if (model.recommendedProducts != null &&
+              //     model.recommendedProducts.length > 0)
+              //   SliverGrid(
+              //       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              //         // crossAxisCount: 2,
+              //         maxCrossAxisExtent: 230.0,
+              //         childAspectRatio: 0.8,
+              //       ),
+              //       delegate: SliverChildBuilderDelegate(
+              //         (BuildContext context, int index) {
+              //           var product = model.recommendedProducts[index];
+              //           return ProductGridItem(
+              //             title: product.name,
+              //             price: product.priceLabel,
+              //             minOrderQuantity: product.minOrderLabel,
+              //             imageUrl: product.thumbnail,
+              //             onPressed: () => Navigator.pushNamed(
+              //                 context, "/product_detail",
+              //                 arguments: {"productId": product.id}),
+              //           );
+              //         },
+              //         childCount: model?.recommendedProducts?.length,
+              //       )),
+              LoadingMoreSliverList(
+                SliverListConfig<Product>(
+                  itemBuilder:
+                      (BuildContext context, Product product, int index) {
+                    // var product = model.recommendedProducts[index];
+                    return ProductGridItem(
+                      title: product.name,
+                      price: product.priceLabel,
+                      minOrderQuantity: product.minOrderLabel,
+                      imageUrl: product.thumbnail,
+                      onPressed: () => Navigator.pushNamed(
+                          context, "/product_detail",
+                          arguments: {"productId": product.id}),
+                    );
+                  },
+                  sourceList: recommendedRepository,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    // crossAxisCount: 2,
+                    maxCrossAxisExtent: 230.0,
+                    childAspectRatio: 0.8,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class RecommendedRepository extends LoadingMoreBase<Product> {
+  RecommendedRepository();
+  int _pageIndex = 1;
+  bool _hasMore = true;
+  @override
+  bool get hasMore => _hasMore;
+
+  HomeModel model;
+
+  void setModel(HomeModel model) {
+    this.model = model;
+  }
+
+  @override
+  Future<bool> loadData([bool isloadMoreAction = false]) async {
+    bool isSuccess = false;
+    try {
+      List<Product> results = await model.getRecommendedProducts(
+          perPage: 30, page: _pageIndex, hideLoading: isloadMoreAction);
+
+      if (_pageIndex == 1) {
+        clear();
+      }
+
+      for (final Product item in results) {
+        if (!hasMore) {
+          break;
+        }
+
+        add(item);
+      }
+
+      _hasMore = results?.isNotEmpty;
+      _pageIndex++;
+      isSuccess = true;
+    } catch (exception, stack) {
+      isSuccess = false;
+      print(exception);
+      print(stack);
+    }
+    return isSuccess;
   }
 }

@@ -237,14 +237,34 @@ class ProductService {
     return true;
   }
 
-  Future<bool> processRecommendedProducts(tmpArray, {page = 1}) async {
+  Future<List<Product>> getRecommendedProducts(
+      {perPage = PER_PAGE_COUNT, page = 1}) async {
+    var response =
+        await this._api.getRecommendedProducts(page: page, perPage: perPage);
+    if (response != null && response['success']) {
+      var tmpArray = response['data'];
+
+      return processRecommendedProducts(tmpArray, page: page);
+    } else {
+      _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return null;
+    }
+  }
+
+  Future<List<Product>> processRecommendedProducts(tmpArray, {page = 1}) async {
     if (tmpArray == null || tmpArray.length == 0) {
-      return false;
+      return null;
     }
 
     if (page == 1) {
       _recommendedProducts.clear();
     }
+
+    List<Product> currentResults = [];
 
     String toCurrency = await LangUtils.getSelectedCurrency();
     for (int i = 0; i < tmpArray.length; i++) {
@@ -252,12 +272,15 @@ class ProductService {
       if (tmp != null) {
         double commissionRate = Category.getCategoryCommissionRate(
             tmp["categoryId"], allCategories);
-        _recommendedProducts.add(
-            Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency));
+
+        var tmpProduct =
+            Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency);
+        _recommendedProducts.add(tmpProduct);
+        currentResults.add(tmpProduct);
       }
     }
 
-    return true;
+    return currentResults;
   }
 
   Future<bool> getBestSellingProducts() async {

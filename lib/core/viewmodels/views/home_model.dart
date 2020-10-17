@@ -50,6 +50,18 @@ class HomeModel extends BaseModel {
     return response;
   }
 
+  Future<List<Product>> getRecommendedProducts(
+      {perPage = PER_PAGE_COUNT, page = 1, hideLoading = false}) async {
+    if (!hideLoading) {
+      setState(ViewState.Busy);
+    }
+
+    var response =
+        await _homeService.getRecommendedProducts(page: page, perPage: perPage);
+    setState(ViewState.Idle);
+    return response;
+  }
+
   Future<bool> getFavorites(
       {perPage = PER_PAGE_COUNT, page = 1, hideLoading = false}) async {
     if (!hideLoading) {
