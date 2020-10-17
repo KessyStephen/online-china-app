@@ -3,12 +3,14 @@ class CompanySettings {
   double shippingPricePerKg;
   String estimatedDeliveryTimeByAir;
   String estimatedDeliveryTimeByShip;
+  double serviceChargePercent;
 
   CompanySettings(
       {this.commissionRate,
       this.shippingPricePerKg,
       this.estimatedDeliveryTimeByAir,
-      this.estimatedDeliveryTimeByShip});
+      this.estimatedDeliveryTimeByShip,
+      this.serviceChargePercent});
 
   CompanySettings.fromJson(Map<String, dynamic> map) {
     if (map == null) {
@@ -24,6 +26,10 @@ class CompanySettings {
 
     estimatedDeliveryTimeByAir = map['estimatedDeliveryTimeByAir'];
     estimatedDeliveryTimeByShip = map['estimatedDeliveryTimeByShip'];
+
+    serviceChargePercent = map['serviceChargePercent'] != null
+        ? double.parse(map['serviceChargePercent'].toString())
+        : 0;
   }
 
   Map<String, dynamic> toJSON() {
@@ -32,6 +38,7 @@ class CompanySettings {
     data['shippingPricePerKg'] = this.shippingPricePerKg;
     data['estimatedDeliveryTimeByAir'] = this.estimatedDeliveryTimeByAir;
     data['estimatedDeliveryTimeByShip'] = this.estimatedDeliveryTimeByShip;
+    data['serviceChargePercent'] = this.serviceChargePercent;
 
     return data;
   }

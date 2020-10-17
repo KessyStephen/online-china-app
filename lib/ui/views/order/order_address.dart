@@ -32,6 +32,10 @@ class _OrderAddressViewState extends State<OrderAddressView> {
         ModalRoute.of(context).settings.arguments;
     List<Product> products = params != null ? params['items'] : null;
     double total = params != null ? params['total'] : null;
+    double totalWithServiceCharge =
+        params != null ? params['totalWithServiceCharge'] : null;
+    double serviceChargeAmount =
+        params != null ? params['serviceChargeAmount'] : null;
 
     return BaseView<OrderModel>(
       model: OrderModel(orderService: Provider.of(context)),
@@ -183,6 +187,9 @@ class _OrderAddressViewState extends State<OrderAddressView> {
                                 arguments: {
                                   'items': products,
                                   'total': total,
+                                  'totalWithServiceCharge':
+                                      totalWithServiceCharge,
+                                  'serviceChargeAmount': serviceChargeAmount,
                                   'destCountry': _countryController.text,
                                   'destCity': _cityController.text,
                                   'destRegion': _regionController.text,

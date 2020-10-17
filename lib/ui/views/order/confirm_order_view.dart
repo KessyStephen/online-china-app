@@ -25,6 +25,10 @@ class ConfirmOrderView extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
     List<Product> products = params != null ? params['items'] : null;
     double total = params != null ? params['total'] : null;
+    double totalWithServiceCharge =
+        params != null ? params['totalWithServiceCharge'] : null;
+    double serviceChargeAmount =
+        params != null ? params['serviceChargeAmount'] : null;
 
     String destCountry = params != null ? params['destCountry'] : null;
     String destCity = params != null ? params['destCity'] : null;
@@ -76,27 +80,51 @@ class ConfirmOrderView extends StatelessWidget {
                         color: Colors.white,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 18, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
                           children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(
-                                  "Total Amount",
-                                  style: const TextStyle(fontSize: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Total Amount",
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    Text(
+                                      "(Without Shipping)",
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                  ],
                                 ),
                                 Text(
-                                  "(Without Shipping)",
-                                  style: const TextStyle(fontSize: 11),
+                                  Utils.formatNumber(totalWithServiceCharge),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
-                            Text(
-                              Utils.formatNumber(total),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
+                            if (model?.companySettings?.serviceChargePercent !=
+                                null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      "Service Charge (${model?.companySettings?.serviceChargePercent}%)",
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                    Text(
+                                      Utils.formatNumber(serviceChargeAmount),
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                  ],
+                                ),
+                              )
                           ],
                         ),
                       ),

@@ -12,6 +12,10 @@ class CartModel extends BaseModel {
 
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
+  double get cartTotalWithServiceCharge =>
+      _cartService.cartTotalWithServiceCharge;
+  double get serviceChargeAmount => _cartService.serviceChargeAmount;
+
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
 

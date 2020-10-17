@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/category.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
@@ -62,8 +63,14 @@ class ProductService {
 
   List<Product> get cartProducts => _cartService.cartProducts;
   double get cartTotal => _cartService.cartTotal;
+  double get cartTotalWithServiceCharge =>
+      _cartService.cartTotalWithServiceCharge;
+  double get serviceChargeAmount => _cartService.serviceChargeAmount;
+
   int get cartItemCount => _cartService.cartItemCount;
   bool get isSampleRequest => _cartService.isSampleRequest;
+
+  CompanySettings get companySettings => _cartService.companySettings;
 
   List<ExchangeRate> get exchangeRates => _exchangeRateService.exchangeRates;
 

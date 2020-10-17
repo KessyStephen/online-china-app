@@ -119,27 +119,50 @@ class CartTabView extends StatelessWidget {
                     color: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              "Total Amount",
-                              style: const TextStyle(fontSize: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Total Amount",
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "(Without Shipping)",
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
                             ),
                             Text(
-                              "(Without Shipping)",
-                              style: const TextStyle(fontSize: 11),
+                              Utils.formatNumber(
+                                  model.cartTotalWithServiceCharge),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
-                        Text(
-                          Utils.formatNumber(model.cartTotal),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        if (model?.companySettings?.serviceChargePercent !=
+                            null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Service Charge (${model?.companySettings?.serviceChargePercent}%)",
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                                Text(
+                                  Utils.formatNumber(model.serviceChargeAmount),
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          )
                       ],
                     ),
                   ),
@@ -185,6 +208,10 @@ class CartTabView extends StatelessWidget {
                                 Map<String, dynamic> params = {
                                   'items': model.cartProducts,
                                   'total': model.cartTotal,
+                                  'totalWithServiceCharge':
+                                      model.cartTotalWithServiceCharge,
+                                  'serviceChargeAmount':
+                                      model.serviceChargeAmount,
                                 };
 
                                 Navigator.pushNamed(context, '/order_address',

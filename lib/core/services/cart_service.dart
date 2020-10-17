@@ -70,6 +70,20 @@ class CartService {
     return sum;
   }
 
+  double get serviceChargeAmount {
+    var tmpTotal = cartTotal;
+
+    if (tmpTotal != null && companySettings.serviceChargePercent != null) {
+      return (companySettings.serviceChargePercent * tmpTotal) / 100;
+    }
+
+    return 0.0;
+  }
+
+  double get cartTotalWithServiceCharge {
+    return cartTotal + serviceChargeAmount;
+  }
+
   int get cartItemCount {
     return _cartProducts.length;
     // var sum = 0;

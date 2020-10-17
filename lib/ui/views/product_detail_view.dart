@@ -229,9 +229,23 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                           model.setSampleRequestOrder(true);
                                           await model.addToCart(product);
 
+                                          double sampleServiceChargePercent =
+                                              model.companySettings
+                                                      .serviceChargePercent ??
+                                                  0;
+                                          double sampleServiceChargeAmount =
+                                              (sampleServiceChargePercent *
+                                                      product.samplePrice) /
+                                                  100;
+
                                           Map<String, dynamic> params = {
                                             'items': model.cartProducts,
                                             'total': product.samplePrice,
+                                            'totalWithServiceCharge':
+                                                product.samplePrice +
+                                                    sampleServiceChargeAmount,
+                                            'serviceChargeAmount':
+                                                sampleServiceChargeAmount,
                                           };
 
                                           Navigator.pushNamed(
@@ -410,6 +424,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       Map<String, dynamic> params = {
         'items': model.cartProducts,
         'total': model.cartTotal,
+        'totalWithServiceCharge': model.cartTotalWithServiceCharge,
+        'serviceChargeAmount': model.serviceChargeAmount,
       };
 
       Navigator.pushNamed(context, '/order_address', arguments: params);

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
@@ -24,8 +25,14 @@ class ProductModel extends BaseModel {
 //cart
   List<Product> get cartProducts => _productService.cartProducts;
   double get cartTotal => _productService.cartTotal;
+  double get cartTotalWithServiceCharge =>
+      _productService.cartTotalWithServiceCharge;
+  double get serviceChargeAmount => _productService.serviceChargeAmount;
+
   int get cartItemCount => _productService.cartItemCount;
   bool get isSampleRequest => _productService.isSampleRequest;
+
+  CompanySettings get companySettings => _productService.companySettings;
 
   Future<bool> getProducts(
       {categoryIds = "",
