@@ -53,7 +53,9 @@ class AuthenticationService {
   Stream<User> get user => userController.stream;
 
   Future<bool> login(String phone, String password) async {
-    Map response = await _api.login(_selectedCountryCode.code, phone, password);
+    var selectedCode = _selectedCountryCode?.code ?? "TZ";
+
+    Map response = await _api.login(selectedCode, phone, password);
     if (response != null && response['success']) {
       await _storageService.storeUserInformation(
           id: response['id'].toString(),
@@ -106,6 +108,11 @@ class AuthenticationService {
   }
 
   Future<bool> verifyOtp(code, phone, otpFor) async {
+    if (_selectedCountryCode == null) {
+      _selectedCountryCode =
+          CountryCode(code: "TZ", country: "Tanzania", phonePrefix: "+255");
+    }
+
     Map response = await _api.verifyOtp(
         code, phone, this._selectedCountryCode.code, otpFor);
     if (response != null && response['success']) {
