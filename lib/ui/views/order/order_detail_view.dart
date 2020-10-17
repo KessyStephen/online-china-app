@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/order.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -83,20 +84,42 @@ class OrderDetailView extends StatelessWidget {
                               color: Colors.white,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 18, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
                                 children: <Widget>[
-                                  Text(
-                                    "Total Amount",
-                                    style: const TextStyle(fontSize: 16),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        "Total Amount",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        order.priceLabel,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    order.priceLabel,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          "Service Charge (${order.serviceChargePercent}%)",
+                                          style: const TextStyle(fontSize: 11),
+                                        ),
+                                        Text(
+                                          Utils.formatNumber(
+                                              order.serviceChargeAmount),
+                                          style: const TextStyle(fontSize: 11),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                             ),

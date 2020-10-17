@@ -1,6 +1,5 @@
 import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/order_item.dart';
-import 'package:online_china_app/core/models/product.dart';
 
 class Order {
   String id;
@@ -10,6 +9,10 @@ class Order {
   String paymentStatus;
   double total;
   String currency;
+  double totalWithServiceCharge;
+  double serviceChargeAmount;
+  double serviceChargePercent;
+
   int itemCount;
   List<OrderItem> products;
   DateTime createdAt;
@@ -26,7 +29,7 @@ class Order {
       : super();
 
   String get priceLabel {
-    return currency + " " + Utils.formatNumber(total);
+    return currency + " " + Utils.formatNumber(totalWithServiceCharge);
   }
 
   Order.fromMap(Map<String, dynamic> map) {
@@ -62,6 +65,17 @@ class Order {
       }
     }
     products = resultItems;
+
+    serviceChargeAmount = map['serviceChargeAmount'] != null
+        ? double.parse(map['serviceChargeAmount'].toString())
+        : 0;
+    totalWithServiceCharge = map['totalWithServiceCharge'] != null
+        ? double.parse(map['totalWithServiceCharge'].toString())
+        : total;
+
+    serviceChargePercent = map['serviceChargePercent'] != null
+        ? double.parse(map['serviceChargePercent'].toString())
+        : 0;
   }
 
   Map<String, dynamic> toMap() {
