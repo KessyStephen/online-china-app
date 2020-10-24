@@ -30,7 +30,7 @@ class _ProductSearchViewState extends State<ProductSearchView> {
   final _toMOQController = TextEditingController();
 
   String sort = "";
-  int page = 2;
+  int page = 1;
   bool showLoading = true;
   String selectedAction = "";
 
@@ -73,23 +73,46 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                             child: SearchBar(
                               autofocus: true,
                               controller: _queryController,
-                              onSubmitPressed: () {
+                              onSubmitPressed: () async {
+                                setState(() {
+                                  page = 1;
+                                  showLoading = true;
+                                });
+
                                 if (_queryController.text != null &&
                                     _queryController.text.isNotEmpty) {
-                                  model.searchProducts(
+                                  FocusScope.of(context).unfocus();
+
+                                  bool flag = await model.searchProducts(
                                       sort: this.sort,
                                       query: _queryController.text);
+                                  if (flag) {
+                                    setState(() {
+                                      page++;
+                                    });
+                                  }
                                 }
                               },
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              setState(() {
+                                page = 1;
+                                showLoading = true;
+                              });
+
                               if (_queryController.text.isNotEmpty) {
-                                model.searchProducts(
+                                FocusScope.of(context).unfocus();
+
+                                bool flag = await model.searchProducts(
                                     sort: this.sort,
                                     query: _queryController.text);
-                                FocusScope.of(context).unfocus();
+                                if (flag) {
+                                  setState(() {
+                                    page++;
+                                  });
+                                }
                               }
                             },
                             icon: Icon(

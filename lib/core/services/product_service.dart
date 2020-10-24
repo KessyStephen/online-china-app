@@ -166,7 +166,9 @@ class ProductService {
         page: page,
         sort: sort);
 
-    _searchedProducts.clear();
+    if (page == 1) {
+      _searchedProducts.clear();
+    }
     if (response != null && response['success']) {
       var tmpArray = response['data'];
 
