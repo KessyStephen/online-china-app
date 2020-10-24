@@ -3,6 +3,7 @@ import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/models/banner_item.dart';
 import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
+import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/category_service.dart';
@@ -45,6 +46,8 @@ class HomeService {
   List<Favorite> get favorites => _productService.favorites;
 
   CompanySettings get companySettings => _settingsService.companySettings;
+
+  List<ExchangeRate> get exchangeRates => _productService.exchangeRates;
 
   Future<bool> getNewArrivalProducts() async {
     return _productService.getNewArrivalProducts();

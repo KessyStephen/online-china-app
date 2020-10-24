@@ -29,7 +29,6 @@ class _HomeTabViewState extends State<HomeTabView> {
 
   @override
   void initState() {
-    recommendedRepository = RecommendedRepository();
     super.initState();
   }
 
@@ -44,12 +43,17 @@ class _HomeTabViewState extends State<HomeTabView> {
     return BaseView<HomeModel>(
       model: HomeModel(homeService: Provider.of(context)),
       onModelReady: (model) async {
-        recommendedRepository.setModel(model);
-
         //get this first it has commissionRates for products
         await model.getAllCategories(hideLoading: true);
 
         await model.getHomeItems(perPage: 30, page: 1);
+
+        if (recommendedRepository == null) {
+          recommendedRepository = RecommendedRepository();
+          recommendedRepository.setLoadFunction(
+              ({hideLoading, page, perPage}) => model.getRecommendedProducts(
+                  perPage: perPage, page: page, hideLoading: hideLoading));
+        }
 
         // await model.getExchangeRates();
 
@@ -347,7 +351,8 @@ class _HomeTabViewState extends State<HomeTabView> {
                   ],
                 )
               ])),
-              if (model.recommendedProducts != null &&
+              if (recommendedRepository != null &&
+                  model.recommendedProducts != null &&
                   model.recommendedProducts.length > 0)
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -386,29 +391,31 @@ class _HomeTabViewState extends State<HomeTabView> {
               //         },
               //         childCount: model?.recommendedProducts?.length,
               //       )),
-              LoadingMoreSliverList(
-                SliverListConfig<Product>(
-                  itemBuilder:
-                      (BuildContext context, Product product, int index) {
-                    // var product = model.recommendedProducts[index];
-                    return ProductGridItem(
-                      title: product.name,
-                      price: product.priceLabel,
-                      minOrderQuantity: product.minOrderLabel,
-                      imageUrl: product.thumbnail,
-                      onPressed: () => Navigator.pushNamed(
-                          context, "/product_detail",
-                          arguments: {"productId": product.id}),
-                    );
-                  },
-                  sourceList: recommendedRepository,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    // crossAxisCount: 2,
-                    maxCrossAxisExtent: 230.0,
-                    childAspectRatio: 0.8,
+
+              if (recommendedRepository != null)
+                LoadingMoreSliverList(
+                  SliverListConfig<Product>(
+                    itemBuilder:
+                        (BuildContext context, Product product, int index) {
+                      // var product = model.recommendedProducts[index];
+                      return ProductGridItem(
+                        title: product.name,
+                        price: product.priceLabel,
+                        minOrderQuantity: product.minOrderLabel,
+                        imageUrl: product.thumbnail,
+                        onPressed: () => Navigator.pushNamed(
+                            context, "/product_detail",
+                            arguments: {"productId": product.id}),
+                      );
+                    },
+                    sourceList: recommendedRepository,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      // crossAxisCount: 2,
+                      maxCrossAxisExtent: 230.0,
+                      childAspectRatio: 0.8,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -426,6 +433,14 @@ class RecommendedRepository extends LoadingMoreBase<Product> {
 
   HomeModel model;
 
+  Future<List<Product>> Function({int perPage, int page, bool hideLoading})
+      getRecommendedProducts;
+
+  void setLoadFunction(
+      Function({int perPage, int page, bool hideLoading}) inFunction) {
+    this.getRecommendedProducts = inFunction;
+  }
+
   void setModel(HomeModel model) {
     this.model = model;
   }
@@ -434,7 +449,14 @@ class RecommendedRepository extends LoadingMoreBase<Product> {
   Future<bool> loadData([bool isloadMoreAction = false]) async {
     bool isSuccess = false;
     try {
-      List<Product> results = await model.getRecommendedProducts(
+      // List<Product> results = await model.getRecommendedProducts(
+      //     perPage: 30, page: _pageIndex, hideLoading: isloadMoreAction);
+
+      if (getRecommendedProducts == null) {
+        isSuccess = true;
+        return isSuccess;
+      }
+      List<Product> results = await getRecommendedProducts(
           perPage: 30, page: _pageIndex, hideLoading: isloadMoreAction);
 
       if (_pageIndex == 1) {

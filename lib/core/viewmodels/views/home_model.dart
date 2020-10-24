@@ -4,6 +4,7 @@ import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/banner_item.dart';
 import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
+import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/services/home_service.dart';
@@ -26,6 +27,8 @@ class HomeModel extends BaseModel {
   List<Favorite> get favorites => _homeService.favorites;
 
   CompanySettings get companySettings => _homeService.companySettings;
+
+  List<ExchangeRate> get exchangeRates => _homeService.exchangeRates;
 
   Future<bool> getAllCategories({hideLoading = false}) async {
     if (hideLoading) {
