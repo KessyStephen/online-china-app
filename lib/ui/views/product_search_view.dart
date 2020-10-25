@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:infinite_widgets/infinite_widgets.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
+import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/product.dart';
 import 'package:online_china_app/core/viewmodels/views/product_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
@@ -383,11 +384,14 @@ class _ProductSearchViewState extends State<ProductSearchView> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    String currency = await LangUtils.getSelectedCurrency();
+
                     model.searchProducts(
                         query: _queryController.text,
                         minPrice: _fromPriceController.text,
                         maxPrice: _toPriceController.text,
+                        currency: currency,
                         minMOQ: _fromMOQController.text,
                         maxMOQ: _toMOQController.text,
                         sort: this.sort,

@@ -64,6 +64,7 @@ class ProductModel extends BaseModel {
       perPage = PER_PAGE_COUNT,
       page = 1,
       sort = "",
+      currency = "",
       minPrice,
       maxPrice,
       minMOQ,
@@ -75,6 +76,7 @@ class ProductModel extends BaseModel {
     }
     bool response = await _productService.searchProducts(
         query: query,
+        currency: currency,
         minPrice: minPrice,
         maxPrice: maxPrice,
         minMOQ: minMOQ,
