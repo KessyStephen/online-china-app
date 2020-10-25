@@ -17,6 +17,7 @@ class Product extends TranslatedModel {
   String currency;
   List<BasePricingRule> pricingRules;
   String categoryId;
+  String unit;
   String quality;
   // int quantity = 1;
   int _quantity = 1;
@@ -218,9 +219,13 @@ class Product extends TranslatedModel {
     return -1;
   }
 
-  Product.fromMap(Map<String, dynamic> map, double commissionRate,
-      List<ExchangeRate> exchangeRates, String toCurrency)
-      : super.fromMap(map) {
+  Product.fromMap(
+    Map<String, dynamic> map,
+    double commissionRate,
+    List<ExchangeRate> exchangeRates,
+    String toCurrency,
+    double seaShippingPrice,
+  ) : super.fromMap(map) {
     if (map == null) {
       return;
     }
@@ -235,9 +240,11 @@ class Product extends TranslatedModel {
     categoryId = map['categoryId'];
     quality = map['quality'];
     quantity = map['quantity'] != null ? map['quantity'] : 1;
+    unit = map['unit'] != null ? map['unit'] : "";
+
     minOrderQuantity =
         map['minOrderQuantity'] != null ? map['minOrderQuantity'] : 0;
-    minOrderUnit = map['minOrderUnit'] != null ? map['minOrderUnit'] : "";
+    minOrderUnit = map['minOrderUnit'] != null ? map['minOrderUnit'] : unit;
     sku = map['sku'];
     canRequestSample = map['canRequestSample'] == true;
     samplePrice = map['samplePrice'] != null
@@ -246,7 +253,7 @@ class Product extends TranslatedModel {
 
     sampleCurrency = map['sampleCurrency'];
     sampleQuantity = map['sampleQuantity'];
-    sampleUnit = map['sampleUnit'];
+    sampleUnit = map['sampleUnit'] != null ? map['sampleUnit'] : unit;
 
     //dimensions
     length = map['length'] != null ? double.parse(map['length'].toString()) : 0;
@@ -270,6 +277,7 @@ class Product extends TranslatedModel {
     var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
         from: currency, to: toCurrency);
 
+    // ###### Price updates
     if (commissionRate != null && exchangeRate != null) {
       var commissionRateFraction = commissionRate / 100;
 
@@ -285,6 +293,15 @@ class Product extends TranslatedModel {
           (exchangeRateSample.value * samplePrice);
       sampleCurrency = exchangeRateSample.to;
     }
+
+    if (seaShippingPrice != null) {
+      price += seaShippingPrice;
+      noDiscountPrice = price;
+      samplePrice += seaShippingPrice;
+    }
+
+    //######## end price updates
+
     //images
     var imagesArr = map['images'];
     List<ImageItem> imageItems = [];
@@ -341,8 +358,8 @@ class Product extends TranslatedModel {
     if (variationsArr != null && variationsArr.length > 0) {
       for (var i = 0; i < variationsArr.length; i++) {
         var varTmp = variationsArr[i];
-        var varItem = Variation.fromMap(
-            varTmp, commissionRate, exchangeRates, toCurrency);
+        var varItem = Variation.fromMap(varTmp, commissionRate, exchangeRates,
+            toCurrency, seaShippingPrice);
         variationItems.add(varItem);
       }
 
@@ -372,8 +389,8 @@ class Product extends TranslatedModel {
       for (var i = 0; i < pricingRulesArr.length; i++) {
         var rule = pricingRulesArr[i];
         if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
-          var ruleItem =
-              BulkPricingRule.fromMap(rule, commissionRate, exchangeRate.value);
+          var ruleItem = BulkPricingRule.fromMap(
+              rule, commissionRate, exchangeRate.value, seaShippingPrice);
           pricingRulesItems.add(ruleItem);
         }
       }
@@ -518,8 +535,13 @@ class Variation {
 
   Variation({this.id, this.price, this.currency}) : super();
 
-  Variation.fromMap(Map<String, dynamic> map, double commissionRate,
-      List<ExchangeRate> exchangeRates, String toCurrency) {
+  Variation.fromMap(
+    Map<String, dynamic> map,
+    double commissionRate,
+    List<ExchangeRate> exchangeRates,
+    String toCurrency,
+    double seaShippingPrice,
+  ) {
     id = map['_id'];
     price = map['price'] != null ? double.parse(map['price'].toString()) : 0;
     noDiscountPrice = price;
@@ -527,6 +549,9 @@ class Variation {
 
     var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
         from: currency, to: toCurrency);
+
+    //######## price updates
+
     if (commissionRate != null && exchangeRate != null) {
       var commissionRateFraction = commissionRate / 100;
 
@@ -534,6 +559,13 @@ class Variation {
       noDiscountPrice = price;
       currency = exchangeRate.to;
     }
+
+    if (seaShippingPrice != null) {
+      price += seaShippingPrice;
+      noDiscountPrice = price;
+    }
+
+    //######## end price updates
 
     //attributes
     var attributesArr = map['attributes'];
@@ -554,8 +586,8 @@ class Variation {
       for (var i = 0; i < pricingRulesArr.length; i++) {
         var rule = pricingRulesArr[i];
         if (rule["ruleType"] == PRICING_RULE_TYPE_BULK) {
-          var ruleItem =
-              BulkPricingRule.fromMap(rule, commissionRate, exchangeRate.value);
+          var ruleItem = BulkPricingRule.fromMap(
+              rule, commissionRate, exchangeRate.value, seaShippingPrice);
           pricingRulesItems.add(ruleItem);
         }
       }

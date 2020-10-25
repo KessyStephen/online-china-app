@@ -170,4 +170,60 @@ class ShippingService {
       "totalCost": totalCost
     };
   }
+
+  Future<double> calculateSeaShippingCostForProduct(Product item) async {
+    if (item == null) {
+      return 0;
+    }
+
+    //convert shipping price from usd
+    double exchangeRateValue = 1;
+    String toCurrency = await LangUtils.getSelectedCurrency();
+    var exchangeRate = ExchangeRate.getExchangeRate(exchangeRates,
+        from: "USD", to: toCurrency);
+    if (exchangeRate?.value != null) {
+      exchangeRateValue = exchangeRate.value;
+    }
+
+    double totalCost = 0;
+    //item CBM
+    double tmpCBM = 0;
+    if (item.shippingCBMQuantity != null &&
+        item.shippingCBMQuantity > 0 &&
+        item.shippingCBMValue != null) {
+      tmpCBM = item.shippingCBMValue / item.shippingCBMQuantity;
+    } else {
+      tmpCBM = Utils.calculateCBM(item.length, item.width, item.height);
+    }
+
+    //item weight
+    double tmpWeight = 0;
+    if (item.shippingWeightQuantity != null &&
+        item.shippingWeightQuantity > 0 &&
+        item.shippingWeightValue != null) {
+      tmpWeight = item.shippingWeightValue / item.shippingWeightQuantity;
+    } else {
+      tmpWeight = item.weight;
+    }
+
+    double totalCBM = tmpCBM;
+    double totalWeight = tmpWeight;
+
+    Category category =
+        Category.getCategory(item.categoryId, _categoryService.allCategories);
+    double shippingPrice = category?.shippingPriceSea ?? 0;
+
+    if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_CBM) {
+      totalCost = shippingPrice * totalCBM * exchangeRateValue;
+    } else if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_KG) {
+      totalCost = shippingPrice * totalWeight * exchangeRateValue;
+    } else if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_FLAT) {
+      totalCost = shippingPrice * exchangeRateValue;
+    } else {
+      //for sea, default to perCBM
+      totalCost = shippingPrice * totalCBM * exchangeRateValue;
+    }
+
+    return totalCost;
+  }
 }

@@ -102,8 +102,15 @@ class ProductService {
         if (tmp != null) {
           double commissionRate = Category.getCategoryCommissionRate(
               tmp["categoryId"], allCategories);
-          _products.add(
-              Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency));
+
+          //shipping calculation
+          var tmpProd = Product.fromMap(
+              tmp, commissionRate, exchangeRates, toCurrency, null);
+          double seaShippingPrice = await _cartService?.shippingService
+              ?.calculateSeaShippingCostForProduct(tmpProd);
+
+          _products.add(Product.fromMap(tmp, commissionRate, exchangeRates,
+              toCurrency, seaShippingPrice));
         }
       }
 
@@ -131,7 +138,15 @@ class ProductService {
         String toCurrency = await LangUtils.getSelectedCurrency();
         double commissionRate = Category.getCategoryCommissionRate(
             obj["categoryId"], allCategories);
-        return Product.fromMap(obj, commissionRate, exchangeRates, toCurrency);
+
+        //shipping calculation
+        var tmpProd = Product.fromMap(
+            obj, commissionRate, exchangeRates, toCurrency, null);
+        double seaShippingPrice = await _cartService?.shippingService
+            ?.calculateSeaShippingCostForProduct(tmpProd);
+
+        return Product.fromMap(
+            obj, commissionRate, exchangeRates, toCurrency, seaShippingPrice);
       }
 
       return null;
@@ -182,8 +197,15 @@ class ProductService {
         if (tmp != null) {
           double commissionRate = Category.getCategoryCommissionRate(
               tmp["categoryId"], allCategories);
-          _searchedProducts.add(
-              Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency));
+
+          //shipping calculation
+          var tmpProd = Product.fromMap(
+              tmp, commissionRate, exchangeRates, toCurrency, null);
+          double seaShippingPrice = await _cartService?.shippingService
+              ?.calculateSeaShippingCostForProduct(tmpProd);
+
+          _searchedProducts.add(Product.fromMap(tmp, commissionRate,
+              exchangeRates, toCurrency, seaShippingPrice));
         }
       }
 
@@ -231,8 +253,14 @@ class ProductService {
       if (tmp != null) {
         double commissionRate = Category.getCategoryCommissionRate(
             tmp["categoryId"], allCategories);
-        _newArrivalProducts.add(
-            Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency));
+
+        //shipping calculation
+        var tmpProd = Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, null);
+        double seaShippingPrice = await _cartService?.shippingService
+            ?.calculateSeaShippingCostForProduct(tmpProd);
+        _newArrivalProducts.add(Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, seaShippingPrice));
       }
     }
 
@@ -275,8 +303,14 @@ class ProductService {
         double commissionRate = Category.getCategoryCommissionRate(
             tmp["categoryId"], allCategories);
 
-        var tmpProduct =
-            Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency);
+        //shipping calculation
+        var tmpProd = Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, null);
+        double seaShippingPrice = await _cartService?.shippingService
+            ?.calculateSeaShippingCostForProduct(tmpProd);
+
+        var tmpProduct = Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, seaShippingPrice);
         _recommendedProducts.add(tmpProduct);
         currentResults.add(tmpProduct);
       }
@@ -315,8 +349,15 @@ class ProductService {
       if (tmp != null) {
         double commissionRate = Category.getCategoryCommissionRate(
             tmp["categoryId"], allCategories);
-        _bestSellingProducts.add(
-            Product.fromMap(tmp, commissionRate, exchangeRates, toCurrency));
+
+        //shipping calculation
+        var tmpProd = Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, null);
+        double seaShippingPrice = await _cartService?.shippingService
+            ?.calculateSeaShippingCostForProduct(tmpProd);
+
+        _bestSellingProducts.add(Product.fromMap(
+            tmp, commissionRate, exchangeRates, toCurrency, seaShippingPrice));
       }
     }
 

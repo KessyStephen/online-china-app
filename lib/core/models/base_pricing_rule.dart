@@ -8,8 +8,8 @@ class BasePricingRule {
 
   BasePricingRule({this.id, this.ruleType, this.discountType, this.amount});
 
-  BasePricingRule.fromMap(
-      Map<String, dynamic> map, double commissionRate, double exchangeRate) {
+  BasePricingRule.fromMap(Map<String, dynamic> map, double commissionRate,
+      double exchangeRate, double seaShippingPrice) {
     if (map == null) {
       return;
     }
@@ -29,6 +29,11 @@ class BasePricingRule {
     if (commissionRate != null) {
       var commissionRateFraction = commissionRate / 100;
       amount = (1 + commissionRateFraction) * amount;
+    }
+
+    //apply sea shipping
+    if (seaShippingPrice != null) {
+      amount += seaShippingPrice;
     }
   }
 

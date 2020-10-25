@@ -57,6 +57,8 @@ class CartService {
   //estimated delivery times
   CompanySettings get companySettings => _settingsService.companySettings;
 
+  ShippingService get shippingService => _shippingService;
+
   double get cartTotal {
     var sum = 0.0;
     _cartProducts.forEach((element) {

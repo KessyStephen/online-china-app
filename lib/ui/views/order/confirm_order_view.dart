@@ -92,10 +92,10 @@ class ConfirmOrderView extends StatelessWidget {
                                       "Total Amount",
                                       style: const TextStyle(fontSize: 16),
                                     ),
-                                    Text(
-                                      "(Without Shipping)",
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
+                                    // Text(
+                                    //   "(Without Shipping)",
+                                    //   style: const TextStyle(fontSize: 11),
+                                    // ),
                                   ],
                                 ),
                                 Text(
@@ -128,24 +128,24 @@ class ConfirmOrderView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      ShippingSummary(
-                        country: shippingDetails.destCountry,
-                        shippingMethod: shippingDetails.shippingMethod,
-                        estimatedPrice: shippingDetails.shippingMethod ==
-                                SHIPPING_METHOD_AIR_VALUE
-                            ? Utils.formatNumber(
-                                shippingDetails.airShippingCost)
-                            : Utils.formatNumber(
-                                shippingDetails.seaShippingCost),
-                        estimatedDeliveryTime: shippingDetails.shippingMethod ==
-                                SHIPPING_METHOD_AIR_VALUE
-                            ? model.companySettings?.estimatedDeliveryTimeByAir
-                            : model
-                                .companySettings?.estimatedDeliveryTimeByShip,
-                        onPressed: () {
-                          navigator.pushNamed("/order_shipping_method");
-                        },
-                      ),
+                      // ShippingSummary(
+                      //   country: shippingDetails.destCountry,
+                      //   shippingMethod: shippingDetails.shippingMethod,
+                      //   estimatedPrice: shippingDetails.shippingMethod ==
+                      //           SHIPPING_METHOD_AIR_VALUE
+                      //       ? Utils.formatNumber(
+                      //           shippingDetails.airShippingCost)
+                      //       : Utils.formatNumber(
+                      //           shippingDetails.seaShippingCost),
+                      //   estimatedDeliveryTime: shippingDetails.shippingMethod ==
+                      //           SHIPPING_METHOD_AIR_VALUE
+                      //       ? model.companySettings?.estimatedDeliveryTimeByAir
+                      //       : model
+                      //           .companySettings?.estimatedDeliveryTimeByShip,
+                      //   onPressed: () {
+                      //     navigator.pushNamed("/order_shipping_method");
+                      //   },
+                      // ),
                       BigButton(
                         buttonTitle: "CONFIRM",
                         functionality: () async {
