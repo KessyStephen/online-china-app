@@ -213,11 +213,11 @@ class ShippingService {
         Category.getCategory(item.categoryId, _categoryService.allCategories);
     double shippingPrice = category?.shippingPriceSea ?? 0;
 
-    if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_CBM) {
+    if (category?.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_CBM) {
       totalCost = shippingPrice * totalCBM * exchangeRateValue;
-    } else if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_KG) {
+    } else if (category?.shippingPriceModeSea == SHIPPING_PRICE_MODE_PER_KG) {
       totalCost = shippingPrice * totalWeight * exchangeRateValue;
-    } else if (category.shippingPriceModeSea == SHIPPING_PRICE_MODE_FLAT) {
+    } else if (category?.shippingPriceModeSea == SHIPPING_PRICE_MODE_FLAT) {
       totalCost = shippingPrice * exchangeRateValue;
     } else {
       //for sea, default to perCBM
