@@ -463,15 +463,17 @@ class RecommendedRepository extends LoadingMoreBase<Product> {
         clear();
       }
 
-      for (final Product item in results) {
-        if (!hasMore) {
-          break;
-        }
+      if (results != null) {
+        for (final Product item in results) {
+          if (!hasMore) {
+            break;
+          }
 
-        add(item);
+          add(item);
+        }
       }
 
-      _hasMore = results?.isNotEmpty;
+      _hasMore = results?.isNotEmpty ?? false;
       _pageIndex++;
       isSuccess = true;
     } catch (exception, stack) {
