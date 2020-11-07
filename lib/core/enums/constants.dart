@@ -9,7 +9,7 @@ const String API_ENDPONT = 'api.shamwaa.com';
 const String FALLBACK_LANG = 'en';
 
 //use this currency if not selected
-const String DEFAULT_CURRENCY = 'USD';
+const String DEFAULT_CURRENCY = 'TZS';
 const String SELECTED_CURRENCY_KEY =
     'prefferedCurrency'; //key for local storage
 
