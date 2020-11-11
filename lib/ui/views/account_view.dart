@@ -24,7 +24,7 @@ class _AccountViewState extends State<AccountView> {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
         setState(() {
-          appVersion = packageInfo.version ?? "";
+          appVersion = packageInfo?.version ?? "";
         });
       },
       builder: (context, model, child) => Scaffold(
