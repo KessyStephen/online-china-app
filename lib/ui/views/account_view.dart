@@ -2,17 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:online_china_app/core/models/user.dart';
 import 'package:online_china_app/core/viewmodels/views/account_model.dart';
 import 'package:online_china_app/ui/shared/app_colors.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 import '../base_widget.dart';
 
-class AccountView extends StatelessWidget {
+class AccountView extends StatefulWidget {
+  @override
+  _AccountViewState createState() => _AccountViewState();
+}
+
+class _AccountViewState extends State<AccountView> {
+  String appVersion = "";
+
   @override
   Widget build(BuildContext context) {
     User currentUser = Provider.of<User>(context);
     return BaseView<AccountModel>(
       model: AccountModel(accountService: Provider.of(context)),
-      onModelReady: (model) => {},
+      onModelReady: (model) async {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+        setState(() {
+          appVersion = packageInfo.version ?? "";
+        });
+      },
       builder: (context, model, child) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
@@ -175,7 +189,18 @@ class AccountView extends StatelessWidget {
                 onPressed: () {
                   model.logout();
                 },
-              )
+              ),
+              SettingListItem(
+                title: 'Version',
+                leading: const Icon(
+                  Icons.info_outline,
+                  color: primaryColor,
+                  size: 30.0,
+                ),
+                trailing: Text(appVersion),
+                onPressed: () => Navigator.pushNamed(context, "/in_app_webview",
+                    arguments: {"title": "About", "body": _getAboutHTML()}),
+              ),
             ],
           ),
         ),
