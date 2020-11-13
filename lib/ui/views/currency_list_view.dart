@@ -64,7 +64,7 @@ class _CurrencyListViewState extends State<CurrencyListView> {
                         await SharedPrefs.setString(
                             SELECTED_CURRENCY_KEY, val.code);
                         Navigator.pushNamedAndRemoveUntil(
-                            context, "/", (Route<dynamic> route) => false,
+                            context, "/home", (Route<dynamic> route) => false,
                             arguments: {"switchToIndex": 0});
                       },
                     );

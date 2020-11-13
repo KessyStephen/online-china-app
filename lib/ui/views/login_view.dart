@@ -209,7 +209,7 @@ class _LoginViewState extends State<LoginView> {
                           model.setNotResetPasswordFlag();
                           // Navigator.pushReplacementNamed(context, '/');
                           Navigator.pushNamedAndRemoveUntil(
-                              context, "/", (Route<dynamic> route) => false,
+                              context, "/home", (Route<dynamic> route) => false,
                               arguments: {"switchToIndex": 0});
                         },
                         child: Container(

@@ -5,6 +5,7 @@ import 'package:online_china_app/ui/views/currency_list_view.dart';
 import 'package:online_china_app/ui/views/favorite_list_view.dart';
 import 'package:online_china_app/ui/views/home_view.dart';
 import 'package:online_china_app/ui/views/in_app_webview.dart';
+import 'package:online_china_app/ui/views/initial_view.dart';
 import 'package:online_china_app/ui/views/login_view.dart';
 import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
 import 'package:online_china_app/ui/views/order/order_address.dart';
@@ -25,10 +26,14 @@ class Router {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
+            builder: (_) => InitialView(),
+            settings: RouteSettings(arguments: settings.arguments));
+        break;
+      case '/home':
+        return MaterialPageRoute(
             builder: (_) => HomeView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
-
       case '/login':
         return MaterialPageRoute(builder: (_) => LoginView());
         break;

@@ -143,7 +143,7 @@ class OrderDetailView extends StatelessWidget {
                                               // Navigator.pop(context);
                                               Navigator.pushNamedAndRemoveUntil(
                                                   context,
-                                                  "/",
+                                                  "/home",
                                                   (Route<dynamic> route) =>
                                                       false,
                                                   arguments: {

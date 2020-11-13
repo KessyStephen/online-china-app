@@ -81,8 +81,24 @@ class _HomeTabViewState extends State<HomeTabView> {
           controller: _refreshController,
           enablePullDown: true,
           onRefresh: () async {
-            await model.getNewArrivalProducts();
-            await model.getBestSellingProducts();
+            //get this first it has commissionRates for products
+            await model.getAllCategories(hideLoading: true);
+
+            await model.getHomeItems(perPage: 30, page: 1);
+
+            //recommended
+            recommendedRepository?.dispose();
+            recommendedRepository = RecommendedRepository();
+            recommendedRepository.setLoadFunction(
+                ({hideLoading, page, perPage}) => model.getRecommendedProducts(
+                    perPage: perPage, page: page, hideLoading: hideLoading));
+
+            if (model.favorites == null || model.favorites.length == 0) {
+              model.getFavorites();
+            }
+
+            // await model.getNewArrivalProducts();
+            // await model.getBestSellingProducts();
 
             _refreshController.refreshCompleted();
           },

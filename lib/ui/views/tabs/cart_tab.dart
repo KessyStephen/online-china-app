@@ -189,8 +189,8 @@ class CartTabView extends StatelessWidget {
                           color: primaryColor,
                           buttonTitle: "GO TO SHOP",
                           functionality: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/", (Route<dynamic> route) => false,
+                            Navigator.pushNamedAndRemoveUntil(context, "/home",
+                                (Route<dynamic> route) => false,
                                 arguments: {"switchToIndex": 0});
                           },
                         ),

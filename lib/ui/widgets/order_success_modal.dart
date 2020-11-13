@@ -43,7 +43,7 @@ class OrderSuccessModal extends StatelessWidget {
                 onPressed: () {
                   // Get.back();
                   Navigator.pushNamedAndRemoveUntil(
-                      context, "/", (Route<dynamic> route) => false,
+                      context, "/home", (Route<dynamic> route) => false,
                       arguments: {"switchToIndex": ORDERS_INDEX});
                 },
               )
@@ -80,7 +80,7 @@ class OrderSuccessModal extends StatelessWidget {
             buttonTitle: 'GO TO SHOP',
             functionality: () {
               Navigator.pushNamedAndRemoveUntil(
-                  context, "/", (Route<dynamic> route) => false);
+                  context, "/home", (Route<dynamic> route) => false);
             },
           ),
         ],

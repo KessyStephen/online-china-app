@@ -99,7 +99,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             BadgeIcon(
               count: model.cartItemCount.toString(),
               onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                  context, "/", (Route<dynamic> route) => false,
+                  context, "/home", (Route<dynamic> route) => false,
                   arguments: {"switchToIndex": CART_INDEX}),
             ),
           ],
@@ -251,14 +251,6 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                           Navigator.pushNamed(
                                               context, '/order_address',
                                               arguments: params);
-
-                                          // Navigator.pushNamedAndRemoveUntil(
-                                          //     context,
-                                          //     "/",
-                                          //     (Route<dynamic> route) => false,
-                                          //     arguments: {
-                                          //       "switchToIndex": CART_INDEX
-                                          //     });
                                         },
                                       ),
                                     ),
