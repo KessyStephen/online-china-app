@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
-import 'package:online_china_app/core/helpers/Utils.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/shipping_details.dart';
 import 'package:online_china_app/core/viewmodels/views/order_model.dart';
 import 'package:online_china_app/ui/widgets/big_button.dart';
 import 'package:online_china_app/ui/widgets/shipping_method_list_item.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+
 
 import '../../base_widget.dart';
 

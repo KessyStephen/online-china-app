@@ -2,6 +2,8 @@ const int PER_PAGE_COUNT = 25;
 const String TERMS_URL = 'https://www.shamwaa.com/terms.html';
 const String APP_NAME = 'Shamwaa';
 const String API_ENDPONT = 'api.shamwaa.com';
+const String SEARCH_URL = 'dc944b05621e4ac89fda6e900aefd61b.ent-search.us-east-1.aws.cloud.es.io';
+const String SEARCH_TOKEN = 'search-z6hid1c7zpdaw1h1rqcd3xt9';
 // const String API_ENDPONT = 'dev.onlinechina.co:3000';
 // const String API_ENDPONT = '127.0.0.1:3000';
 

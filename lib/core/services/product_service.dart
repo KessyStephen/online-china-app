@@ -4,9 +4,11 @@ import 'package:online_china_app/core/helpers/lang_utils.dart';
 import 'package:online_china_app/core/models/category.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
+import 'package:online_china_app/core/models/elastic_product.dart';
 import 'package:online_china_app/core/models/exchange_rate.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/models/suggestion.dart';
 import 'package:online_china_app/core/services/cart_service.dart';
 import 'package:online_china_app/core/services/category_service.dart';
 import 'package:online_china_app/core/services/exchange_rate_service.dart';
@@ -44,6 +46,9 @@ class ProductService {
 
   List<Product> _searchedProducts = [];
   List<Product> get searchedProducts => _searchedProducts;
+
+  List<ElasticProduct> _elasticProducts = [];
+  List<ElasticProduct> get elasticProducts => _elasticProducts;
 
   List<Product> _newArrivalProducts = [];
   List<Product> get newArrivalProducts => _newArrivalProducts;
@@ -223,7 +228,7 @@ class ProductService {
   }
 
   void clearSearchData() {
-    this._searchedProducts.clear();
+    this._elasticProducts.clear();
   }
 
   Future<bool> getNewArrivalProducts() async {
@@ -430,5 +435,80 @@ class ProductService {
 
   void setBuyNowOrder(bool val) {
     _cartService.setBuyNowOrder(val);
+  }
+
+  // Get suggestions
+  Future<List<Suggestion>> getSuggestions(String query) async {
+    print(query);
+    var response = await this._api.getSuggetions(query: query);
+    List<Suggestion> suggestions = [];
+    print(response);
+    if (response != null && response['results']['documents'] != null) {
+      var data = response['results']['documents'];
+      for (int i = 0; i < data.length; i++) {
+        print(data[i]);
+        suggestions.add(Suggestion.fromMap(data[i]));
+      }
+      return suggestions;
+    }
+    return suggestions;
+  }
+
+  // Search products
+  Future<bool> searchElasticProducts(
+      {query = '',
+      String minPrice,
+      String maxPrice,
+      String minMOQ,
+      String maxMOQ,
+      perPage = PER_PAGE_COUNT,
+      page = 1,
+      sort}) async {
+    var response = await this._api.searchElasticProducts(
+        query: query,
+        minMOQ: minMOQ,
+        maxMOQ: maxMOQ,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        sort: sort,
+        perPage: perPage,
+        page: page);
+
+    if (page == 1) {
+      _elasticProducts.clear();
+    }
+    if (response != null && response['results'] != null) {
+      var tmpArray = response['results'];
+
+      if (tmpArray.length == 0) {
+        return false;
+      }
+
+      String toCurrency = await LangUtils.getSelectedCurrency();
+      for (int i = 0; i < tmpArray.length; i++) {
+        var tmp = tmpArray[i];
+        if (tmp != null) {
+          double commissionRate = Category.getCategoryCommissionRate(
+              tmp["category_id"]['raw'], allCategories);
+
+          //shipping calculation
+          var tmpProd = ElasticProduct.fromMap(
+              tmp, commissionRate, exchangeRates, toCurrency, null);
+          double seaShippingPrice = await _cartService?.shippingService
+              ?.calculateSeaShippingCostForElasticProduct(tmpProd);
+
+          _elasticProducts.add(ElasticProduct.fromMap(tmp, commissionRate,
+              exchangeRates, toCurrency, seaShippingPrice));
+        }
+      }
+
+      return true;
+    }
+    _alertService.showAlert(
+          text: response != null
+              ? response['message']
+              : 'It appears you are Offline',
+          error: true);
+      return false;
   }
 }

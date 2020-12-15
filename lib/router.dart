@@ -11,6 +11,7 @@ import 'package:online_china_app/ui/views/order/confirm_order_view.dart';
 import 'package:online_china_app/ui/views/order/order_address.dart';
 import 'package:online_china_app/ui/views/order/order_detail_view.dart';
 import 'package:online_china_app/ui/views/order/order_shipping_method_view.dart';
+import 'package:online_china_app/ui/views/product_elastic_search_view.dart';
 import 'package:online_china_app/ui/views/product_search_view.dart';
 import 'package:online_china_app/ui/views/registration/change_password_view.dart';
 import 'package:online_china_app/ui/views/registration/register_phone.dart';
@@ -21,7 +22,7 @@ import 'package:online_china_app/ui/views/product_detail_view.dart';
 import 'package:online_china_app/ui/views/product_list_view.dart';
 import 'package:online_china_app/ui/views/subcategory_view.dart';
 
-class Router {
+class ShamwaaRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
@@ -123,7 +124,7 @@ class Router {
         break;
       case '/search':
         return MaterialPageRoute(
-            builder: (_) => ProductSearchView(),
+            builder: (_) => ProductElasticSearchView(),
             settings: RouteSettings(arguments: settings.arguments));
         break;
       default:

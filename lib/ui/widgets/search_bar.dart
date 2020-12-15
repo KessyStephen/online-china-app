@@ -9,6 +9,8 @@ class SearchBar extends StatelessWidget {
 
   final TextEditingController controller;
   final Function onSubmitPressed;
+  final Function onChanged;
+  final Function onTaped;
 
   const SearchBar(
       {Key key,
@@ -17,7 +19,9 @@ class SearchBar extends StatelessWidget {
       this.disableTextField,
       this.autofocus,
       this.controller,
-      this.onSubmitPressed})
+      this.onSubmitPressed,
+      this.onChanged,
+      this.onTaped})
       : super(key: key);
 
   @override
@@ -35,18 +39,21 @@ class SearchBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-              flex: 1,
-              child: TextField(
-                autofocus: this.autofocus == true,
-                controller: this.controller,
-                enabled: this.disableTextField == null ||
-                    this.disableTextField == false,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Search Shamwaa',
-                    hintStyle: TextStyle(
-                        color: this.textColor != null ? this.textColor : null)),
-              )),
+            flex: 1,
+            child: TextField(
+              autofocus: this.autofocus == true,
+              controller: this.controller,
+              onChanged: this.onChanged,
+              onTap: this.onTaped,
+              enabled: this.disableTextField == null ||
+                  this.disableTextField == false,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Search Shamwaa',
+                  hintStyle: TextStyle(
+                      color: this.textColor != null ? this.textColor : null)),
+            ),
+          ),
           IconButton(
             onPressed: this.onSubmitPressed,
             icon: Icon(Icons.search, color: Colors.white54),

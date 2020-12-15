@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: '/',
           navigatorKey: Get.key,
-          onGenerateRoute: Router.generateRoute,
+          onGenerateRoute: ShamwaaRouter.generateRoute,
           builder: (context, widget) => Navigator(
             onGenerateRoute: (settings) => MaterialPageRoute(
               builder: (context) => SafeArea(

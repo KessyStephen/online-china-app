@@ -18,6 +18,8 @@ class Api {
   bool isExpired = false;
 
   static const endpoint = API_ENDPONT;
+  static const searchEndpoint = SEARCH_URL;
+  static const searchToken = SEARCH_TOKEN;
 
   // var client;
 
@@ -683,6 +685,103 @@ class Api {
 
       var uri = uriForPath("/api/home", params);
       var response = await client.get(uri);
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> getSuggetions({query, size = 10}) async {
+    try {
+      Map<String, dynamic> data = {
+        'query': query,
+        'types': {
+          'documents': {
+            'fields': ['title']
+          }
+        },
+        'size': size
+      };
+
+      var response = await http.post(
+          Uri.https('$searchEndpoint',
+              '/api/as/v1/engines/shamwaa-products/query_suggestion'),
+          body: jsonEncode(data),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer $searchToken',
+            HttpHeaders.contentTypeHeader: 'application/json'
+          });
+      print(Uri.https('$searchEndpoint',
+          '/api/as/v1/engines/shamwaa-products/query_suggestion'));
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return {
+        'success': false,
+        'message': "Something went wrong, please try again later",
+      };
+    }
+  }
+
+  Future<Map> searchElasticProducts(
+      {query = "",
+      String minPrice,
+      String maxPrice,
+      String minMOQ,
+      String maxMOQ,
+      perPage = PER_PAGE_COUNT,
+      page = 1,
+      Map<String, dynamic> sort}) async {
+    try {
+      Map<String, dynamic> data = {
+        'query': query,
+        'page': {'size': perPage, 'current': page},
+        'filters': {}
+      };
+      //filter params
+      List<Map<String, dynamic>> array = [];
+
+      if ((minMOQ != null && minMOQ.isNotEmpty) ||
+          (maxMOQ != null && maxMOQ.isNotEmpty)) {
+        array.add({
+          'min_order_quantity': {
+            'from':
+                minMOQ != null && minMOQ.isNotEmpty ? double.parse(minMOQ) : 0,
+            'to': maxMOQ != null && maxMOQ.isNotEmpty ? double.parse(maxMOQ) : 0
+          }
+        });
+      }
+
+      if (minPrice != null && minPrice.isNotEmpty)
+        array.add({
+          'min_price': {'from': minPrice != null && minPrice.isNotEmpty? double.parse(minPrice) : 0}
+        });
+
+      if (maxPrice != null && maxPrice.isNotEmpty)
+        array.add({
+          'max_price': {'to': maxPrice != null && maxPrice.isNotEmpty? double.parse(maxPrice) : 0}
+        });
+
+      print(data);
+
+      if (array.length > 0) data['filters']['all'] = array;
+
+      //sort params
+      if (sort.isNotEmpty) data['sort'] = sort;
+
+      var response = await http.post(
+          Uri.https(
+              '$searchEndpoint', '/api/as/v1/engines/shamwaa-products/search'),
+          body: jsonEncode(data),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.authorizationHeader: 'Bearer $searchToken'
+          });
+
       return json.decode(response.body);
     } catch (e) {
       print(e);

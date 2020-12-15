@@ -3,8 +3,10 @@ import 'package:online_china_app/core/enums/constants.dart';
 import 'package:online_china_app/core/enums/viewstate.dart';
 import 'package:online_china_app/core/models/company_settings.dart';
 import 'package:online_china_app/core/models/currency.dart';
+import 'package:online_china_app/core/models/elastic_product.dart';
 import 'package:online_china_app/core/models/favorite.dart';
 import 'package:online_china_app/core/models/product.dart';
+import 'package:online_china_app/core/models/suggestion.dart';
 import 'package:online_china_app/core/services/product_service.dart';
 
 import '../base_model.dart';
@@ -16,11 +18,16 @@ class ProductModel extends BaseModel {
 
   List<Product> get products => _productService.products;
   List<Product> get searchedProducts => _productService.searchedProducts;
+  List<ElasticProduct> get elasticProducts => _productService.elasticProducts;
 
   List<Favorite> get favorites => _productService.favorites;
   bool isSort = false;
 
   List<Currency> get currencies => _productService.currencies;
+
+  List<Suggestion> suggestions = [];
+
+  bool showProductList = false;
 
 //cart
   List<Product> get cartProducts => _productService.cartProducts;
@@ -63,30 +70,30 @@ class ProductModel extends BaseModel {
       {query = '',
       perPage = PER_PAGE_COUNT,
       page = 1,
-      sort = "",
+      sort,
       currency = "",
-      minPrice,
-      maxPrice,
-      minMOQ,
-      maxMOQ,
+      String minPrice,
+      String maxPrice,
+      String minMOQ,
+      String maxMOQ,
       categoryIds,
       hideLoading = false}) async {
     if (!hideLoading) {
       setState(ViewState.Busy);
     }
-    bool response = await _productService.searchProducts(
+    bool result = await _productService.searchElasticProducts(
         query: query,
-        currency: currency,
         minPrice: minPrice,
         maxPrice: maxPrice,
         minMOQ: minMOQ,
         maxMOQ: maxMOQ,
-        categoryIds: categoryIds,
         perPage: perPage,
         page: page,
         sort: sort);
+
+    this.showProductList = true;
     setState(ViewState.Idle);
-    return response;
+    return result;
   }
 
   void clearSearchData() {
@@ -196,4 +203,15 @@ class ProductModel extends BaseModel {
   //   setState(ViewState.Idle);
   //   return result;
   // }
+
+  Future<void> suggest(query) async {
+    setState(ViewState.Busy);
+    suggestions = await this._productService.getSuggestions(query);
+    setState(ViewState.Idle);
+  }
+
+  Future<void> toggleShowResults(bool val) {
+    this.showProductList = val;
+    notifyListeners();
+  }
 }

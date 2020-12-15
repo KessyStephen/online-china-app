@@ -1,6 +1,6 @@
 import 'package:online_china_app/core/enums/constants.dart';
-import 'package:online_china_app/core/helpers/Utils.dart';
 import 'package:online_china_app/core/helpers/lang_utils.dart';
+import 'package:online_china_app/core/helpers/utils.dart';
 import 'package:online_china_app/core/models/translated_model.dart';
 
 class OrderItem extends TranslatedModel {
