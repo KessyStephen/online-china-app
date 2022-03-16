@@ -241,8 +241,8 @@ class _AccountViewState extends State<AccountView> {
         +255 676 888 883 <br /><br />
 
         E-mail: <br />
-        sales@shamwaa.com <br />
-        business@shamwaa.com<br /><br />
+        sales@shamwaa.shop <br />
+        business@shamwaa.shop<br /><br />
 
         Social Media: Instagram, Facebook, WhatsApp
       </p>
